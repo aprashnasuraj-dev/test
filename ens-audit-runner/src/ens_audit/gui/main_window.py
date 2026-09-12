@@ -114,7 +114,7 @@ class AuditWorker(QObject):
                 report = asyncio.run(self.orchestrator.retry_failed())
         except PipelineCancelled:
             self.cancelled.emit()
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 -- worker boundary converts failures to Qt signals.
             self.failed.emit(f"{type(exc).__name__}: {exc}"[:4000])
         else:
             self.report_ready.emit(report)
