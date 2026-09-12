@@ -3,10 +3,11 @@
   "private": true,
   "packageManager": "pnpm@10.27.0",
   "scripts": {
-    "check": "pnpm -r --if-present typecheck && pnpm -r --if-present test",
+    "check": "pnpm -r --if-present typecheck && pnpm -r --if-present test && python3 -m py_compile immunefi-report-maker/immunefi_report_maker.py",
     "mutate:userop": "pnpm --filter @audit/userop-mutator start",
     "stress:ens": "pnpm --filter @audit/ens-normalizer start",
     "hydrate": "pnpm --filter @audit/state-hydrator start",
-    "emulate:worker": "pnpm --filter @workspace/worker-emulator start"
+    "emulate:worker": "pnpm --filter @workspace/worker-emulator start",
+    "report:immunefi": "python3 immunefi-report-maker/immunefi_report_maker.py"
   }
 }
