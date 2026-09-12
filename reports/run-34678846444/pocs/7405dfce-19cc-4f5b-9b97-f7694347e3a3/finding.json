@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Parsed persisted JSON should be schema-validated before trusted use.",
+  "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
+  "id": "7405dfce-19cc-4f5b-9b97-f7694347e3a3",
+  "impact": "",
+  "location": {
+    "column": 15,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/notifications/email-verification-rate-limit.ts",
+    "function": null,
+    "line": 42
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Parsed persisted JSON should be schema-validated before trusted use."
+}

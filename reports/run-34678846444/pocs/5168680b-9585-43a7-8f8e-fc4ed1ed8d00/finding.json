@@ -1,0 +1,26 @@
+{
+  "asset": "explorer",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
+  "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
+  "id": "5168680b-9585-43a7-8f8e-fc4ed1ed8d00",
+  "impact": "",
+  "location": {
+    "column": 45,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/forward-resolution/components/AddressResolution/networks.ts",
+    "function": null,
+    "line": 45
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Chain selection or fallback requires comparison with the connected wallet chain."
+}

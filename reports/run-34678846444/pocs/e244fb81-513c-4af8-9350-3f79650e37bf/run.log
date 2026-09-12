@@ -1,0 +1,11 @@
+finding_id=e244fb81-513c-4af8-9350-3f79650e37bf
+severity=High
+asset=explorer
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=R2-04
+escape_reason=severity_escalation
+source=apps/portal/worker-configuration.d.ts:402
+source_line=declare function fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;
+scanner_evidence=declare function fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

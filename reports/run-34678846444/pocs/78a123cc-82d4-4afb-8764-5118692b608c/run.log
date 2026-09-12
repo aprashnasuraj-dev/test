@@ -1,0 +1,11 @@
+finding_id=78a123cc-82d4-4afb-8764-5118692b608c
+severity=Medium
+asset=transaction-manager
+rule_id=custom-xstate:undefined-target
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/transaction.machine.ts:602
+source_line=target: 'error.cancelled',
+scanner_evidence=retrying -> error.cancelled
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

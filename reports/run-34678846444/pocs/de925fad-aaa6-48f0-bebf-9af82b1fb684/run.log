@@ -1,0 +1,11 @@
+finding_id=de925fad-aaa6-48f0-bebf-9af82b1fb684
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=apps/manager//home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/service/profileNfts.ts:229
+source_line=chainId = DEFAULT_CHAIN_ID,
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

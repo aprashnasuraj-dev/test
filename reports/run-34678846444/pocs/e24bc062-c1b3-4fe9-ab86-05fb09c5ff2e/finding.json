@@ -1,0 +1,26 @@
+{
+  "asset": "transaction-manager",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
+  "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
+  "id": "e24bc062-c1b3-4fe9-ab86-05fb09c5ff2e",
+  "impact": "",
+  "location": {
+    "column": 13,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.ts",
+    "function": null,
+    "line": 52
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-eip712-domain-missing-binding",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-eip712-domain-missing-binding",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "EIP-712 domain construction requires review for chainId and verifyingContract binding."
+}

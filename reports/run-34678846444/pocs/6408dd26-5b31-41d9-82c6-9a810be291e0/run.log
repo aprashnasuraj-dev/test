@@ -1,0 +1,11 @@
+finding_id=6408dd26-5b31-41d9-82c6-9a810be291e0
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/manager//home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/utils/xstate-store.ts:28
+source_line=? (JSON.parse(persistedContext) as TContext)
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

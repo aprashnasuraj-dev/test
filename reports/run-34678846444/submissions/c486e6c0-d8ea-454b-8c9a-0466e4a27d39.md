@@ -1,0 +1,29 @@
+# EIP-712 domain construction requires review for chainId and verifyingContract binding.
+
+**Severity:** Medium
+**Asset:** transaction-manager
+**Impact:** Impact requires reviewer confirmation from the supplied trace.
+
+## Summary
+EIP-712 domain construction requires review for chainId and verifyingContract binding.
+
+## Vulnerability Detail
+EIP-712 domain construction requires review for chainId and verifyingContract binding.
+
+- Root cause: `home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-eip712-domain-missing-binding`
+- Rule: `home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-eip712-domain-missing-binding`
+- Location: `/home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:38`
+
+## Impact
+Impact requires reviewer confirmation from the supplied trace.
+
+## Proof of Concept
+```text
+EIP-712 domain construction requires review for chainId and verifyingContract binding.
+```
+
+## Recommendation
+Add a fail-closed validation at the identified trust boundary and add a regression test.
+
+## References
+- None recorded

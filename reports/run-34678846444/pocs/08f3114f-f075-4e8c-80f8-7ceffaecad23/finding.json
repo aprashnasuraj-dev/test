@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.6,
+  "cwe": null,
+  "description": "An LLM call is near prompt/message construction that references untrusted application or repository content, with no observed sanitizer or explicit data delimiter.",
+  "evidence": "    system_fingerprint?: string | null;\n    service_tier?: \"auto\" | \"default\" | \"flex\" | \"scale\" | \"priority\" | null;\n};\n/**\n * Workers AI support for OpenAI's Responses API",
+  "id": "08f3114f-f075-4e8c-80f8-7ceffaecad23",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "api-worker/worker-configuration.gen.d.ts",
+    "function": null,
+    "line": 4846
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "untrusted_prompt_content_not_separated",
+  "rule_id": "custom-llm:prompt-injection-surface",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Untrusted text appears to reach LLM prompt construction without explicit separation"
+}

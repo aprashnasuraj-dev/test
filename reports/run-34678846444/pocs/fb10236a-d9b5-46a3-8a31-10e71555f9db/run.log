@@ -1,0 +1,11 @@
+finding_id=fb10236a-d9b5-46a3-8a31-10e71555f9db
+severity=High
+asset=manager
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/profile/service/profileImageUpload.ts:150
+source_line=const response = await fetch(endpoint, {
+scanner_evidence=const response = await fetch(endpoint, {
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

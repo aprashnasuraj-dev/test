@@ -1,0 +1,26 @@
+{
+  "asset": "transaction-manager",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
+  "evidence": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
+  "id": "b54de8b5-6a0c-45c2-871b-5d7f1cb78404",
+  "impact": "",
+  "location": {
+    "column": 4,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/types/signer.types.ts",
+    "function": null,
+    "line": 39
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unscoped-session-authority",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unscoped-session-authority",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping."
+}

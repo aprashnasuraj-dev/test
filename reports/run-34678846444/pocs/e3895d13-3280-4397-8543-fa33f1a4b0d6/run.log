@@ -1,0 +1,11 @@
+finding_id=e3895d13-3280-4397-8543-fa33f1a4b0d6
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=apps/manager//home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/service/v1SubgraphClient.ts:89
+source_line=const response = await fetch(V1_SUBGRAPH_URL, {
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

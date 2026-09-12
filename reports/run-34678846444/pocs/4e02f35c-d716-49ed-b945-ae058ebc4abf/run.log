@@ -1,0 +1,11 @@
+finding_id=4e02f35c-d716-49ed-b945-ae058ebc4abf
+severity=High
+asset=explorer
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=R2-04
+escape_reason=severity_escalation
+source=apps/portal/src/hooks/useFundWallet.ts:12
+source_line=const response = await fetch(`${WALLET_FUND_API_URL}/wallet/fund`, {
+scanner_evidence=const response = await fetch(`${WALLET_FUND_API_URL}/wallet/fund`, {
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

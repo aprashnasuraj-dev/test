@@ -1,0 +1,11 @@
+finding_id=c84e24e0-c4a3-41da-9b2d-4b7ee9b175f8
+severity=Medium
+asset=workers
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-webhook-fail-open
+matched_known_id=None
+escape_reason=None
+source=workers//home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/worker-configuration.gen.d.ts:42
+source_line=interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "CHAIN" | "BASE_URL" | "ENS_INDEXER_GRAPHQL_URL" | "MANAGER_APP_URL" | "VAPID_SUBJECT" | "VAPID_PUBLIC_KEY" | "SENDGRID_BROADCAST_LIST_ID" | "SENDGRID_TEMPLATE_IDS" | "TELEGRAM_WEBHOOK_SECRET" | "JWT_SECRET" | "POSTHOG_PERSONAL_API_KEY" | "TELEGRAM_BOT_TOKEN" | "SENDGRID_API_KEY" | "EMAIL_FROM_ADDRESS" | "ETH_PRIVATE_KEY" | "SEPOLIA_RPC_URL" | "DATABASE_URL" | "SENDGRID_WEBHOOK_VERIFICATION_KEY" | "VAPID_PRIVATE_KEY">> {}
+scanner_evidence=Signature-verification path requires fail-closed constant-time verification.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

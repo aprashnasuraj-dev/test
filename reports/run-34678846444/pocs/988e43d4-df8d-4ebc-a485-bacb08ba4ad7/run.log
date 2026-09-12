@@ -1,0 +1,11 @@
+finding_id=988e43d4-df8d-4ebc-a485-bacb08ba4ad7
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/manager//home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/utils/validateAbi.ts:21
+source_line=const parsed: unknown = JSON.parse(trimmed)
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

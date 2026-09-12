@@ -1,0 +1,11 @@
+finding_id=d1b5dc5e-51eb-421c-9ca0-97c414dcffe3
+severity=Medium
+asset=workers
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=workers//home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/expiry-discovery/cursors.test.ts:90
+source_line=expect(JSON.parse(stored!)).toEqual({
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced
