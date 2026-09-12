@@ -43,6 +43,7 @@ class SASTStage:
 
     def __init__(self, custom_rules: Path) -> None:
         self.custom_rules = custom_rules
+        self.codeql_config = custom_rules.parent / "codeql-config.yml"
         self.ts_analyzer = TypeScriptAnalyzer()
         self.ssrf_analyzer = SSRFAnalyzer()
         self.prompt_analyzer = PromptInjectionAnalyzer()
@@ -63,7 +64,11 @@ class SASTStage:
         findings = self._run_local_analyzers(asset)
 
         if shutil.which("codeql"):
+            if not self.codeql_config.is_file():
+                raise RuntimeError(f"CodeQL configuration is missing: {self.codeql_config}")
             database = output_dir / "codeql-db"
+            if database.exists():
+                shutil.rmtree(database)
             self._tool(
                 [
                     "codeql",
@@ -72,6 +77,7 @@ class SASTStage:
                     str(database),
                     "--language=javascript",
                     f"--source-root={asset.path}",
+                    f"--codescanning-config={self.codeql_config}",
                 ],
                 cwd=asset.path,
                 timeout_s=1800,
@@ -83,7 +89,6 @@ class SASTStage:
                     "database",
                     "analyze",
                     str(database),
-                    "javascript-security-extended.qls",
                     "--format=sarif-latest",
                     f"--output={codeql_sarif}",
                 ],
