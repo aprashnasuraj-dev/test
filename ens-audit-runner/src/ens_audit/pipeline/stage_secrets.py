@@ -39,23 +39,29 @@ class SecretStage:
 
         if self.tool_runner.available("trufflehog"):
             argv, cwd, include_file = self._trufflehog_command(asset, output_dir)
+            scans: list[tuple[list[str], Path]] = [(argv, cwd)]
+            if len(argv) > 1 and argv[1] == "git":
+                scans.append(
+                    (["trufflehog", "filesystem", str(asset.path), "--json"], asset.path)
+                )
             try:
-                completed = self._tool(argv, cwd=cwd, timeout_s=900)
+                for scan_argv, scan_cwd in scans:
+                    completed = self._tool(scan_argv, cwd=scan_cwd, timeout_s=1200)
+                    scanner_findings, scanner_metadata = self._parse_trufflehog_text(
+                        completed.stdout,
+                        asset,
+                    )
+                    findings.extend(scanner_findings)
+                    sanitized.extend(scanner_metadata)
             finally:
                 if include_file is not None:
                     include_file.unlink(missing_ok=True)
-            scanner_findings, scanner_metadata = self._parse_trufflehog_text(
-                completed.stdout,
-                asset,
-            )
-            findings.extend(scanner_findings)
-            sanitized.extend(scanner_metadata)
 
         if self.tool_runner.available("detect-secrets"):
             completed = self._tool(
                 ["detect-secrets", "scan", str(asset.path), "--all-files"],
                 cwd=asset.path,
-                timeout_s=900,
+                timeout_s=1200,
             )
             scanner_findings, scanner_metadata = self._parse_detect_secrets_text(
                 completed.stdout,
@@ -64,6 +70,8 @@ class SecretStage:
             findings.extend(scanner_findings)
             sanitized.extend(scanner_metadata)
 
+        findings = self._dedupe_findings(findings)
+        sanitized = self._dedupe_metadata(sanitized)
         (output_dir / "secret-findings-sanitized.json").write_text(
             json.dumps(sanitized, indent=2, sort_keys=True),
             encoding="utf-8",
@@ -232,3 +240,36 @@ class SecretStage:
                     )
                 )
         return findings, metadata
+
+    @staticmethod
+    def _dedupe_findings(findings: list[Finding]) -> list[Finding]:
+        """Collapse overlapping history/filesystem scanner results without hiding confidence."""
+
+        unique: dict[tuple[str, str, int], Finding] = {}
+        for finding in findings:
+            key = (
+                finding.rule_id,
+                finding.location.file.replace("\\", "/"),
+                finding.location.line,
+            )
+            current = unique.get(key)
+            if current is None or finding.confidence > current.confidence:
+                unique[key] = finding
+        return list(unique.values())
+
+    @staticmethod
+    def _dedupe_metadata(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """Collapse metadata-only duplicates while preferring verified TruffleHog records."""
+
+        unique: dict[tuple[str, str, str, int], dict[str, Any]] = {}
+        for record in records:
+            key = (
+                str(record.get("scanner", "")),
+                str(record.get("detector", "")),
+                str(record.get("file", "")).replace("\\", "/"),
+                int(record.get("line", 0) or 0),
+            )
+            current = unique.get(key)
+            if current is None or bool(record.get("verified")) > bool(current.get("verified")):
+                unique[key] = record
+        return list(unique.values())

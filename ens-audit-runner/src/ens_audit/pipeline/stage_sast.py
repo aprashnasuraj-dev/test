@@ -107,13 +107,17 @@ class SASTStage:
                     "semgrep",
                     "--config=p/typescript",
                     "--config=p/javascript",
+                    "--config=p/security-audit",
                     f"--config={self.custom_rules}",
+                    "--timeout=30",
+                    "--timeout-threshold=0",
+                    "--max-target-bytes=5000000",
                     "--sarif",
                     f"--output={semgrep_sarif}",
                     str(asset.path),
                 ],
                 cwd=asset.path,
-                timeout_s=1800,
+                timeout_s=2400,
             )
             sarif_files.append(semgrep_sarif)
 

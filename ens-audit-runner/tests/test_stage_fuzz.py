@@ -128,6 +128,6 @@ def test_run_sync_normalizes_forge_and_echidna_failures(
         "echidna-property-violation",
     }
     config = tmp_path / "results/smart-account/fuzz/echidna-config.yaml"
-    assert "testLimit: 50000" in config.read_text(encoding="utf-8")
+    assert "testLimit: 100000" in config.read_text(encoding="utf-8")
     echidna_output = tmp_path / "results/smart-account/fuzz/echidna.txt"
     assert "property failedshrunk trace" == echidna_output.read_text(encoding="utf-8")

@@ -90,24 +90,52 @@ location = finding.get("location") or {}
 relative_file = str(location.get("file", "")).replace("\\", "/")
 if not relative_file:
     raise SystemExit("POC_FAIL finding has no source file")
-source = (asset_root / relative_file).resolve()
-if not source.is_relative_to(asset_root):
-    raise SystemExit("POC_FAIL source path escaped asset root")
-if not source.is_file():
-    raise SystemExit(f"POC_FAIL source file missing: {source}")
+
+raw_path = Path(relative_file)
+source_candidates: list[Path] = []
+if raw_path.is_absolute():
+    source_candidates.append(raw_path.resolve())
+    marker = f"/{relative_asset.strip('/')}/"
+    normalized = raw_path.as_posix()
+    if marker in normalized:
+        suffix = normalized.split(marker, 1)[1]
+        source_candidates.append((asset_root / suffix).resolve())
+else:
+    source_candidates.append((root / raw_path).resolve())
+    source_candidates.append((asset_root / raw_path).resolve())
+
+source: Path | None = None
+contained_candidates: list[Path] = []
+for candidate in source_candidates:
+    if not candidate.is_relative_to(asset_root):
+        continue
+    contained_candidates.append(candidate)
+    if candidate.is_file():
+        source = candidate
+        break
+if source is None:
+    if not contained_candidates:
+        raise SystemExit("POC_FAIL source path escaped asset root")
+    attempted = ", ".join(str(path) for path in contained_candidates)
+    raise SystemExit(f"POC_FAIL source file missing; tried: {attempted}")
+
 lines = source.read_text(encoding="utf-8", errors="replace").splitlines()
 line_number = int(location.get("line", 0) or 0)
 if line_number < 1 or line_number > len(lines):
     raise SystemExit(f"POC_FAIL invalid source line: {line_number}")
 source_line = lines[line_number - 1].strip()
 evidence = str(finding.get("evidence", "")).strip()
+try:
+    source_label = source.relative_to(root).as_posix()
+except ValueError:
+    source_label = source.as_posix()
 print(f"finding_id={finding.get('id')}")
 print(f"severity={finding.get('severity')}")
 print(f"asset={asset}")
 print(f"rule_id={finding.get('rule_id')}")
 print(f"matched_known_id={finding.get('matched_known_id')}")
 print(f"escape_reason={finding.get('escape_reason')}")
-print(f"source={relative_asset}/{relative_file}:{line_number}")
+print(f"source={source_label}:{line_number}")
 print(f"source_line={source_line}")
 if evidence:
     print(f"scanner_evidence={evidence}")
