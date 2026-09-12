@@ -46,7 +46,7 @@ class SecretStage:
                 )
             try:
                 for scan_argv, scan_cwd in scans:
-                    completed = self._tool(scan_argv, cwd=scan_cwd, timeout_s=1200)
+                    completed = self._tool(scan_argv, cwd=scan_cwd, timeout_s=3600)
                     scanner_findings, scanner_metadata = self._parse_trufflehog_text(
                         completed.stdout,
                         asset,
@@ -61,7 +61,7 @@ class SecretStage:
             completed = self._tool(
                 ["detect-secrets", "scan", str(asset.path), "--all-files"],
                 cwd=asset.path,
-                timeout_s=1200,
+                timeout_s=3600,
             )
             scanner_findings, scanner_metadata = self._parse_detect_secrets_text(
                 completed.stdout,
