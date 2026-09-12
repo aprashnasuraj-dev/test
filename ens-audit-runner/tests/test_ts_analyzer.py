@@ -16,17 +16,13 @@ def test_tainted_values_propagate_to_all_modeled_sinks(tmp_path: Path) -> None:
 
     source = tmp_path / "flow.ts"
     source.write_text(
-        "\n".join(
-            [
-                "const supplied = request.url;",
-                "let forwarded = supplied;",
-                "fetch(forwarded);",
-                "window.open(forwarded);",
-                "channel.postMessage(forwarded, '*');",
-                "const sender = request.from;",
-                "signPayload(sender);",
-            ]
-        ),
+        "const supplied = request.url;\n"
+        "let forwarded = supplied;\n"
+        "fetch(forwarded);\n"
+        "window.open(forwarded);\n"
+        "channel.postMessage(forwarded, '*');\n"
+        "const sender = request.from;\n"
+        "signPayload(sender);",
         encoding="utf-8",
     )
     asset = Asset("manager", tmp_path, "a" * 40)
