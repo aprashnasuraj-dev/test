@@ -53,3 +53,51 @@ rules:
     metadata:
       root_cause: request_from_not_bound_to_signer
     pattern-regex: '(?i)request\.from.{0,400}(sign|account|wallet)|(sign|account|wallet).{0,400}request\.from'
+
+  - id: ens-ssrf-untrusted-url
+    message: Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+    severity: ERROR
+    languages: [typescript, javascript]
+    metadata:
+      root_cause: server_side_fetch_of_untrusted_avatar_url
+    pattern-either:
+      - pattern: fetch($URL, ...)
+      - pattern: axios($URL, ...)
+      - pattern: axios.get($URL, ...)
+      - pattern: http.get($URL, ...)
+      - pattern: https.get($URL, ...)
+
+  - id: ens-shell-true-or-interpolated-command
+    message: Child process execution uses shell mode or a constructed command string.
+    severity: ERROR
+    languages: [typescript, javascript]
+    metadata:
+      root_cause: unsafe_process_execution
+    pattern-either:
+      - pattern-regex: '(?i)shell\s*:\s*true'
+      - pattern-regex: '(?i)(exec|execSync)\s*\(\s*`[^`]*\$\{'
+      - pattern-regex: '(?i)(exec|execSync)\s*\(\s*[^,]+\+'
+
+  - id: ens-webhook-fail-open
+    message: Signature-verification path requires fail-closed constant-time verification.
+    severity: ERROR
+    languages: [typescript, javascript, python]
+    metadata:
+      root_cause: webhook_signature_fail_open
+    pattern-regex: '(?i)(webhook|signature).{0,700}(secret|verification.?key).{0,700}(if|optional|unset|missing)'
+
+  - id: ens-unscoped-session-authority
+    message: Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.
+    severity: WARNING
+    languages: [typescript, javascript]
+    metadata:
+      root_cause: unscoped_session_owner
+    pattern-regex: '(?i)(session.?key|sessionKey).{0,800}(owner|co.?owner|permission|authority)'
+
+  - id: ens-local-revoke-without-chain-revoke
+    message: Local session clearing may not revoke on-chain authority.
+    severity: WARNING
+    languages: [typescript, javascript]
+    metadata:
+      root_cause: local_only_session_revocation
+    pattern-regex: '(?i)(revoke|disconnect|clear).{0,500}(localStorage|sessionStorage|removeItem|clear\()'
