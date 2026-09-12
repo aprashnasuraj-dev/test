@@ -101,6 +101,7 @@ class PipelineOrchestrator:
     """
 
     STAGES = ("sast", "symbolic", "fuzz", "deps", "secrets", "known_filter", "report")
+    ANALYSIS_STAGES = ("sast", "symbolic", "fuzz", "deps", "secrets")
 
     def __init__(
         self,
@@ -139,11 +140,21 @@ class PipelineOrchestrator:
         freshly recorded immutable commit identifier.
         """
 
+        return await self.run_selected(list(self.ANALYSIS_STAGES))
+
+    async def run_selected(self, stages: list[str]) -> AuditReport:
+        """Run a validated subset of analysis stages, then filter and report.
+
+        Security invariant: caller-supplied stage names must belong to the closed analysis-stage
+        vocabulary; unknown names cannot select arbitrary functions.
+        """
+
+        selected = self._validate_stage_selection(stages)
         self.control.reset()
         assets = await download_all_repos()
         run_id = self.store.begin_run(ACTIVE_UPSTREAM_COMMIT)
         self.current_run_id = run_id
-        return await self._run_assets(run_id, assets)
+        return await self._run_assets(run_id, assets, selected_stages=selected)
 
     async def resume(self, run_id: UUID) -> AuditReport:
         """Resume a prior run, skipping only successful per-asset checkpoints.
@@ -167,17 +178,27 @@ class PipelineOrchestrator:
             raise RuntimeError("no audit run is available to retry")
         return await self.resume(self.current_run_id)
 
-    async def _run_assets(self, run_id: UUID, assets: list[Asset]) -> AuditReport:
-        """Execute analyzer stages, filter known issues, and generate reports."""
+    async def _run_assets(
+        self,
+        run_id: UUID,
+        assets: list[Asset],
+        *,
+        selected_stages: tuple[str, ...] | None = None,
+    ) -> AuditReport:
+        """Execute selected analyzers, filter known issues, and generate reports.
 
+        Security invariant: stage selection is validated before this method receives it.
+        """
+
+        selected = selected_stages or self.ANALYSIS_STAGES
         results: dict[str, list[Finding]] = {}
-        total_steps = len(assets) * 6 + 1
+        total_steps = len(assets) * (len(selected) + 1) + 1
         current = 0
 
         for asset in assets:
             findings: list[Finding] = []
             completed = self.store.completed_stages(run_id, asset.name)
-            for stage_name, stage in self._analysis_stages():
+            for stage_name, stage in self._analysis_stages(selected):
                 await self.control.checkpoint()
                 current += 1
                 self._emit_progress(asset.name, stage_name, current, total_steps)
@@ -219,20 +240,38 @@ class PipelineOrchestrator:
         self.store.save_stage(run_id, "__all__", "report", [], succeeded=True)
         return report
 
-    def _analysis_stages(self) -> tuple[tuple[str, object], ...]:
-        """Return analyzer stages in mandatory dependency order.
+    def _analysis_stages(self, selected: tuple[str, ...]) -> tuple[tuple[str, object], ...]:
+        """Return selected analyzer stages in mandatory dependency order.
 
         Security invariant: dependency order is fixed in code and cannot be supplied by scan
-        output.
+        output or reordered by caller input.
         """
 
-        return (
+        available: tuple[tuple[str, object], ...] = (
             ("sast", self.stage_sast),
             ("symbolic", self.stage_symbolic),
             ("fuzz", self.stage_fuzz),
             ("deps", self.stage_deps),
             ("secrets", self.stage_secrets),
         )
+        selected_set = set(selected)
+        return tuple(item for item in available if item[0] in selected_set)
+
+    @classmethod
+    def _validate_stage_selection(cls, stages: list[str]) -> tuple[str, ...]:
+        """Validate and canonicalize caller-selected analysis stages.
+
+        Security invariant: empty, duplicate, or unknown input cannot escape the closed stage
+        registry or alter execution order.
+        """
+
+        requested = {stage.strip().lower() for stage in stages if stage.strip()}
+        unknown = requested - set(cls.ANALYSIS_STAGES)
+        if unknown:
+            raise ValueError(f"unknown analysis stages: {', '.join(sorted(unknown))}")
+        if not requested:
+            raise ValueError("at least one analysis stage must be selected")
+        return tuple(stage for stage in cls.ANALYSIS_STAGES if stage in requested)
 
     async def _run_stage(
         self,
