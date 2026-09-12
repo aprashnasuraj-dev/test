@@ -113,33 +113,43 @@ class ReportStage:
 
     @staticmethod
     def _immunefi_markdown(finding: Finding) -> str:
-        """Render one unsuppressed finding in the requested Immunefi submission layout."""
+        """Render one unsuppressed finding in the required submission layout."""
 
         impact = finding.impact or "Impact requires reviewer confirmation from the supplied trace."
         recommendation = finding.recommendation or (
             "Add a fail-closed validation at the identified trust boundary and add a regression test."
         )
         references = "\n".join(f"- {value}" for value in finding.references) or "- None recorded"
+        vulnerability_detail = "\n".join(
+            [
+                finding.description,
+                "",
+                f"- Root cause: `{finding.root_cause}`",
+                f"- Rule: `{finding.rule_id}`",
+                f"- Location: `{finding.location.file}:{finding.location.line}`",
+            ]
+        )
         return "\n".join(
             [
                 f"# {finding.title}",
                 "",
-                "## Severity",
-                finding.severity.value,
+                f"**Severity:** {finding.severity.value}",
+                f"**Asset:** {finding.asset}",
+                f"**Impact:** {impact}",
                 "",
-                "## Asset affected",
-                finding.asset,
+                "## Summary",
+                finding.description,
                 "",
-                "## Root cause",
-                finding.root_cause,
-                "",
-                "## Proof of Concept (code trace)",
-                "```text",
-                ReportStage._fence_safe(finding.evidence),
-                "```",
+                "## Vulnerability Detail",
+                vulnerability_detail,
                 "",
                 "## Impact",
                 impact,
+                "",
+                "## Proof of Concept",
+                "```text",
+                ReportStage._fence_safe(finding.evidence),
+                "```",
                 "",
                 "## Recommendation",
                 recommendation,
