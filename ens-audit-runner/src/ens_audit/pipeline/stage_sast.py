@@ -18,6 +18,7 @@ from ens_audit.analyzers import (
 )
 from ens_audit.config import RESULTS_DIR
 from ens_audit.models import Asset, Finding, Location, Severity
+from ens_audit.tooling import DEFAULT_TOOL_RUNNER
 
 _ROOT_CAUSE_BY_RULE = {
     "ens-bearer-configurable-base-url": "bearer_token_cross_origin",
@@ -44,6 +45,7 @@ class SASTStage:
     def __init__(self, custom_rules: Path) -> None:
         self.custom_rules = custom_rules
         self.codeql_config = custom_rules.parent / "codeql-config.yml"
+        self.tool_runner = DEFAULT_TOOL_RUNNER
         self.ts_analyzer = TypeScriptAnalyzer()
         self.ssrf_analyzer = SSRFAnalyzer()
         self.prompt_analyzer = PromptInjectionAnalyzer()
@@ -63,7 +65,7 @@ class SASTStage:
         sarif_files: list[Path] = []
         findings = self._run_local_analyzers(asset)
 
-        if shutil.which("codeql"):
+        if self.tool_runner.available("codeql"):
             if not self.codeql_config.is_file():
                 raise RuntimeError(f"CodeQL configuration is missing: {self.codeql_config}")
             database = output_dir / "codeql-db"
@@ -97,7 +99,7 @@ class SASTStage:
             )
             sarif_files.append(codeql_sarif)
 
-        if shutil.which("semgrep"):
+        if self.tool_runner.available("semgrep"):
             semgrep_sarif = output_dir / "semgrep.sarif"
             self._tool(
                 [
@@ -114,7 +116,7 @@ class SASTStage:
             )
             sarif_files.append(semgrep_sarif)
 
-        if asset.has_solidity and shutil.which("slither"):
+        if asset.has_solidity and self.tool_runner.available("slither"):
             slither_sarif = output_dir / "slither.sarif"
             self._tool(
                 ["slither", str(asset.path), "--sarif", str(slither_sarif)],
@@ -123,7 +125,7 @@ class SASTStage:
             )
             sarif_files.append(slither_sarif)
 
-        if self._contains_suffix(asset.path, ".py") and shutil.which("bandit"):
+        if self._contains_suffix(asset.path, ".py") and self.tool_runner.available("bandit"):
             bandit_json = output_dir / "bandit.json"
             self._tool(
                 ["bandit", "-r", str(asset.path), "-f", "json", "-o", str(bandit_json)],
@@ -150,25 +152,22 @@ class SASTStage:
             findings.extend(self.solidity_analyzer.analyze(asset))
         return findings
 
-    @staticmethod
     def _tool(
+        self,
         argv: list[str],
         *,
         cwd: Path,
         timeout_s: int,
         accepted_codes: set[int] | None = None,
     ) -> subprocess.CompletedProcess[str]:
-        """Execute one external analyzer without shell interpretation."""
+        """Execute one analyzer natively or through WSL without shell interpretation."""
 
         accepted = accepted_codes or {0}
-        completed = subprocess.run(
-            argv,
+        completed = self.tool_runner.run(
+            argv[0],
+            argv[1:],
             cwd=cwd,
-            shell=False,
-            check=False,
-            capture_output=True,
-            text=True,
-            timeout=timeout_s,
+            timeout_s=timeout_s,
         )
         if completed.returncode not in accepted:
             message = completed.stderr.strip() or completed.stdout.strip() or "tool failed"
