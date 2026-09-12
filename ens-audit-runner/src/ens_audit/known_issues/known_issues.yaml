@@ -1,0 +1,116 @@
+- id: "R2-01"
+  severity: "Medium"
+  asset: ["manager", "explorer"]
+  title: "Secrets remediation incomplete: .env files still tracked, provider keys unrotated"
+  root_cause: "committed_credentials"
+  match_patterns:
+    - file_glob: "**/.env*"
+    - rule_id: "trufflehog:*"
+    - rule_id: "detect-secrets:*"
+  suppress_if: ["provider_key_rotated_after:2026-08-10"]
+  notes: "Client-side VITE_* are public identifiers; blast radius and key hygiene are the known issue."
+
+- id: "R2-02"
+  severity: "Medium"
+  asset: ["manager"]
+  title: "No Content-Security-Policy or security headers"
+  root_cause: "missing_security_headers"
+  match_patterns:
+    - content_regex: "(?i)content-security-policy|x-frame-options|referrer-policy|x-content-type-options"
+  notes: "An actual injection sink is a separate finding."
+
+- id: "SEC-MGR-003"
+  severity: "High"
+  asset: ["manager"]
+  title: "API base-URL override can send bearer token to an arbitrary host"
+  root_cause: "bearer_token_cross_origin"
+  match_patterns:
+    - rule_id: "ens-bearer-configurable-base-url"
+    - content_regex: "(?i)bearer.*base.?url|authorization.*arbitrary host"
+  notes: "Persisted API base URL can redirect authenticated requests to another host."
+
+- id: "SEC-MGR-008/011"
+  severity: "High"
+  asset: ["manager"]
+  title: "Debug routes and router devtools ship to production"
+  root_cause: "production_debug_surface"
+  match_patterns:
+    - content_regex: "(?i)debug route|router devtools|localhost.*siwe"
+  notes: "Debug route group, localhost SIWE flow, and router devtools share one fix."
+
+- id: "SEC-MGR-010"
+  severity: "Low"
+  asset: ["manager"]
+  title: "Avatar-upload EIP-712 domain omits chainId and verifyingContract"
+  root_cause: "underspecified_eip712_domain"
+  match_patterns:
+    - rule_id: "ens-eip712-domain-missing-binding"
+    - content_regex: "(?i)eip.?712.*chainid|verifyingcontract"
+  notes: "Practical cross-context replay was not confirmed in the disclosed issue."
+
+- id: "EXP-INPUT-003"
+  severity: "Medium"
+  asset: ["manager"]
+  title: "Persisted store state is parsed without validating value shapes"
+  root_cause: "unvalidated_persisted_state"
+  match_patterns:
+    - rule_id: "ens-json-parse-without-schema"
+    - content_regex: "(?i)json\.parse.*schema|persisted.*state.*validat"
+  notes: "Unexpected locally-writable value types can reach code that assumes validated shapes."
+
+- id: "EXP-INPUT-008"
+  severity: "Low"
+  asset: ["manager"]
+  title: "Avatar uploads retain EXIF metadata, including GPS"
+  root_cause: "image_metadata_not_stripped"
+  match_patterns:
+    - content_regex: "(?i)exif|gps.*avatar|avatar.*metadata"
+  notes: "Browser-reported MIME type is also relied upon."
+
+- id: "EXP-INPUT-009"
+  severity: "Low"
+  asset: ["manager"]
+  title: "Push notification click opens a backend-supplied URL unvalidated"
+  root_cause: "unvalidated_navigation_url"
+  match_patterns:
+    - rule_id: "ens-unvalidated-open-url"
+    - content_regex: "(?i)notification.*open.*url|openwindow.*unvalidated"
+  notes: "Requires control of or injection into the notification payload."
+
+- id: "EXP-INPUT-005"
+  severity: "Medium"
+  asset: ["manager", "explorer"]
+  title: "ENS name validators accept homoglyphs, bidi and control characters"
+  root_cause: "insufficient_ens_name_normalization"
+  match_patterns:
+    - content_regex: "(?i)homoglyph|bidirectional|bidi|control character|leading.*dot|trailing.*dot"
+  notes: "Known impact is display confusion rather than incorrect resolution."
+
+- id: "EXP-4337-002"
+  severity: "High"
+  asset: ["transaction-manager"]
+  title: "Transports do not validate chainId; silent fallback to Sepolia"
+  root_cause: "chain_id_not_bound_to_wallet"
+  match_patterns:
+    - rule_id: "ens-chainid-not-validated"
+    - content_regex: "(?i)chainid.*not.*validat|fallback.*sepolia"
+  notes: "Request chainId is not compared against the connected wallet chain."
+
+- id: "EXP-4337-003"
+  severity: "High"
+  asset: ["transaction-manager"]
+  title: "request.from is not checked against the connected signer"
+  root_cause: "request_from_not_bound_to_signer"
+  match_patterns:
+    - rule_id: "ens-request-from-not-validated"
+    - content_regex: "(?i)request\.from.*signer|from.*connected account"
+  notes: "Most wallets reject a mismatch, so exploitability depends on the wallet."
+
+- id: "SEC-TXM-002"
+  severity: "High"
+  asset: ["smart-account"]
+  title: "Cached smart-account address is used without matching the live SDK address"
+  root_cause: "cached_address_not_cross_checked"
+  match_patterns:
+    - content_regex: "(?i)cached.*smart.?account.*address|sdk.*derived.*address"
+  notes: "The missing live-address cross-check is confirmed; a concrete attack path was not."
