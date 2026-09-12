@@ -10,6 +10,7 @@ package_root = source_root / "ens_audit"
 datas = [
     (str(package_root / "known_issues" / "known_issues.yaml"), "ens_audit/known_issues"),
     (str(package_root / "rules" / "ens-custom.yaml"), "ens_audit/rules"),
+    (str(package_root / "rules" / "codeql-config.yml"), "ens_audit/rules"),
 ]
 
 a = Analysis(
