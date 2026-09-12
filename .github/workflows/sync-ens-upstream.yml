@@ -1,0 +1,80 @@
+name: Sync ENS Audit Target
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-ens-upstream.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-ens-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      UPSTREAM_REPO: https://github.com/immunefi-team/audit-comp-ens.git
+      UPSTREAM_BRANCH: audit-comp-ready
+      UPSTREAM_REF: 1c9b47f18fcddd2e864dfe385c4171061c9811ae
+
+    steps:
+      - name: Checkout workspace repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Clone pinned upstream source
+        run: |
+          set -euo pipefail
+          git clone --branch "$UPSTREAM_BRANCH" --single-branch "$UPSTREAM_REPO" /tmp/ens-upstream
+          git -C /tmp/ens-upstream checkout --detach "$UPSTREAM_REF"
+          test "$(git -C /tmp/ens-upstream rev-parse HEAD)" = "$UPSTREAM_REF"
+
+      - name: Mirror upstream into repository root
+        run: |
+          set -euo pipefail
+          # Keep this repository's audit automation/tooling. Do not import the
+          # upstream workflow directory; those workflows are intended for the
+          # upstream project and would consume Actions minutes in this mirror.
+          rsync -a --delete \
+            --exclude='.git/' \
+            --exclude='.github/workflows/' \
+            --exclude='tooling/' \
+            --exclude='scripts/bootstrap-audit-workspace.sh' \
+            --exclude='scripts/dev-audit-stack.sh' \
+            /tmp/ens-upstream/ ./
+
+          cat > AUDIT_UPSTREAM.lock <<EOF
+          repository=$UPSTREAM_REPO
+          branch=$UPSTREAM_BRANCH
+          commit=$UPSTREAM_REF
+          synced_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          EOF
+
+      - name: Verify mirrored package manager metadata
+        run: |
+          set -euo pipefail
+          test -f package.json
+          test -f pnpm-lock.yaml
+          test -d packages/smart-account
+          test -d packages/transaction-manager
+          node -e "const p=require('./package.json'); if (p.packageManager !== 'pnpm@10.27.0') { throw new Error('Unexpected packageManager: '+p.packageManager) }"
+
+      - name: Commit synchronized source
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'Already synchronized.'
+            exit 0
+          fi
+          git commit -m "chore: sync ENS audit target ${UPSTREAM_REF:0:12}"
+          git push origin HEAD:main
