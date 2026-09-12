@@ -68,12 +68,19 @@ jobs:
         shell: pwsh
         run: |
           $env:QT_QPA_PLATFORM = 'offscreen'
-          $process = Start-Process -FilePath '.\dist\ENSAuditRunner.exe' -PassThru
-          Start-Sleep -Seconds 15
-          if ($process.HasExited) {
-            throw "ENSAuditRunner.exe exited during startup smoke test with code $($process.ExitCode)"
+          $log = Join-Path $env:LOCALAPPDATA 'ens-audit\logs\startup.log'
+          Remove-Item -Force -ErrorAction SilentlyContinue $log
+          $process = Start-Process -FilePath '.\dist\ENSAuditRunner.exe' -ArgumentList '--smoke-test' -Wait -PassThru
+          if ($process.ExitCode -ne 0) {
+            throw "ENSAuditRunner.exe --smoke-test exited with code $($process.ExitCode)"
           }
-          Stop-Process -Id $process.Id -Force
+          if (-not (Test-Path $log)) {
+            throw "Smoke-test log was not written: $log"
+          }
+          $content = Get-Content -Raw -Path $log
+          if ($content -notmatch 'SMOKE_TEST_OK') {
+            throw "Smoke-test marker missing from $log"
+          }
 
       - name: Upload Windows executable
         uses: actions/upload-artifact@v7
