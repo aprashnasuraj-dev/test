@@ -26,13 +26,15 @@ The canonical pipeline order is:
 
 1. **SAST** — local ENS analyzers plus CodeQL, Semgrep, Slither, and Bandit when available.
 2. **Symbolic** — bounded Mythril and Halmos execution for Solidity-bearing assets.
-3. **Fuzz** — Foundry invariants, Echidna, and deterministic fast-check execution when applicable.
-4. **Dependencies** — npm audit, Snyk, and pip-audit normalization.
+3. **Fuzz** — bounded Foundry invariants and Echidna for Solidity-bearing assets; TypeScript property fuzzing is used only when the target supplies a real property-test harness.
+4. **Dependencies** — npm audit, Snyk, and pip-audit normalization when their required manifests/tools are available.
 5. **Secrets** — TruffleHog and detect-secrets with secret values discarded before persistence.
 6. **Known issue filter** — suppression requires matching asset, root cause, and a narrow structural matcher.
 7. **Report** — aggregate JSON, Markdown, and one Immunefi-style Markdown file per open finding.
 
 A failed analyzer is isolated by default and remains retryable. Strict mode propagates the failure immediately. Successful per-asset stages are checkpointed in SQLite for resume.
+
+External analyzer execution is Windows-first but not Windows-only: the resolver prefers native binaries and transparently falls back to verified WSL executables with argv-only execution and Windows-to-WSL path conversion.
 
 ## Built-in analyzers
 
@@ -57,7 +59,8 @@ These are triage aids, not proof of exploitability. A scanner match must still b
 - Secret scanner output is sanitized in memory; detected secret values are not stored in SQLite or reports.
 - Known-issue suppression never triggers from area similarity alone. Asset and root cause must match first.
 - A bypass of a known fix, a materially different consequence, or a different root cause remains open.
-- Scanner credentials entered in Settings are session-only.
+- Scanner credentials entered in Settings are session-only and scrubbed after the audit worker exits.
+- CodeQL is disabled for an audit session unless its terms-confirmation checkbox is selected.
 
 ## Quick start on Windows
 
