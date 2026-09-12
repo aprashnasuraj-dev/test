@@ -20,6 +20,8 @@ class DependencyStage:
     the pinned asset directory; no scanner is implicitly downloaded through ``npx``.
     """
 
+    _EXCLUDED_DIRS = {".git", ".venv", "venv", "node_modules"}
+
     def __init__(self) -> None:
         self.tool_runner = DEFAULT_TOOL_RUNNER
 
@@ -34,38 +36,40 @@ class DependencyStage:
         output_dir = RESULTS_DIR / asset.name / "deps"
         output_dir.mkdir(parents=True, exist_ok=True)
         findings: list[Finding] = []
-        package_json = asset.path / "package.json"
-        npm_lock = asset.path / "package-lock.json"
-        shrinkwrap = asset.path / "npm-shrinkwrap.json"
 
-        if package_json.is_file() and (npm_lock.is_file() or shrinkwrap.is_file()) and self.tool_runner.available("npm"):
-            completed = self._tool(
-                ["npm", "audit", "--json"],
-                cwd=asset.path,
-                timeout_s=600,
-                accepted_codes={0, 1},
-            )
-            npm_path = output_dir / "npm-audit.json"
-            npm_path.write_text(completed.stdout, encoding="utf-8")
-            findings.extend(self._parse_npm(npm_path, asset))
+        if self.tool_runner.available("npm"):
+            for index, package_root in enumerate(self._npm_project_roots(asset.path)):
+                completed = self._tool(
+                    ["npm", "audit", "--json"],
+                    cwd=package_root,
+                    timeout_s=1200,
+                    accepted_codes={0, 1},
+                )
+                npm_path = output_dir / f"npm-audit-{index:03d}.json"
+                npm_path.write_text(completed.stdout, encoding="utf-8")
+                findings.extend(self._parse_npm(npm_path, asset))
 
-        if package_json.is_file() and self.tool_runner.available("snyk"):
+        if self.tool_runner.available("snyk") and self._contains_package_manifest(asset.path):
             completed = self._tool(
-                ["snyk", "test", "--json"],
+                ["snyk", "test", "--all-projects", "--json"],
                 cwd=asset.path,
-                timeout_s=600,
+                timeout_s=1200,
                 accepted_codes={0, 1, 2, 3},
             )
             snyk_path = output_dir / "snyk.json"
             snyk_path.write_text(completed.stdout, encoding="utf-8")
             findings.extend(self._parse_snyk(snyk_path, asset))
 
-        requirements = asset.path / "requirements.txt"
-        if requirements.is_file() and self.tool_runner.available("pip-audit"):
+        requirements = self._requirement_files(asset.path)
+        if requirements and self.tool_runner.available("pip-audit"):
+            args = ["pip-audit"]
+            for requirement in requirements:
+                args.extend(["-r", str(requirement)])
+            args.append("--format=json")
             completed = self._tool(
-                ["pip-audit", "-r", str(requirements), "--format=json"],
+                args,
                 cwd=asset.path,
-                timeout_s=600,
+                timeout_s=1200,
                 accepted_codes={0, 1},
             )
             pip_path = output_dir / "pip-audit.json"
@@ -73,6 +77,50 @@ class DependencyStage:
             findings.extend(self._parse_pip(pip_path, asset))
 
         return findings
+
+    @classmethod
+    def _npm_project_roots(cls, root: Path) -> list[Path]:
+        """Return package roots that have an npm lockfile, including nested projects."""
+
+        roots: set[Path] = set()
+        for lock_name in ("package-lock.json", "npm-shrinkwrap.json"):
+            for lock in root.rglob(lock_name):
+                if lock.is_symlink() or cls._excluded(root, lock):
+                    continue
+                package_json = lock.parent / "package.json"
+                if package_json.is_file() and not package_json.is_symlink():
+                    roots.add(lock.parent.resolve())
+        return sorted(roots, key=lambda path: path.as_posix())
+
+    @classmethod
+    def _requirement_files(cls, root: Path) -> list[Path]:
+        """Return all in-scope requirements text files for one asset."""
+
+        files = {
+            path.resolve()
+            for path in root.rglob("requirements*.txt")
+            if path.is_file() and not path.is_symlink() and not cls._excluded(root, path)
+        }
+        return sorted(files, key=lambda path: path.as_posix())
+
+    @classmethod
+    def _contains_package_manifest(cls, root: Path) -> bool:
+        """Return whether an in-scope JavaScript package manifest exists."""
+
+        return any(
+            path.is_file() and not path.is_symlink() and not cls._excluded(root, path)
+            for path in root.rglob("package.json")
+        )
+
+    @classmethod
+    def _excluded(cls, root: Path, path: Path) -> bool:
+        """Exclude dependency caches, virtual environments, and VCS internals."""
+
+        try:
+            relative = path.relative_to(root)
+        except ValueError:
+            return True
+        return any(part in cls._EXCLUDED_DIRS for part in relative.parts)
 
     def _tool(
         self,
@@ -120,21 +168,29 @@ class DependencyStage:
 
     @staticmethod
     def _parse_snyk(path: Path, asset: Asset) -> list[Finding]:
-        """Normalize Snyk vulnerability records."""
+        """Normalize Snyk vulnerability records from single or multi-project output."""
 
         payload = DependencyStage._json(path)
-        records = payload.get("vulnerabilities", []) if isinstance(payload, dict) else []
-        return [
-            DependencyStage._finding(
-                asset,
-                str(record.get("title", "Snyk dependency vulnerability")),
-                DependencyStage._severity(str(record.get("severity", "medium"))),
-                str(record.get("id", "snyk")),
-                json.dumps(record, sort_keys=True)[:12000],
+        projects = payload if isinstance(payload, list) else [payload]
+        findings: list[Finding] = []
+        for project in projects:
+            if not isinstance(project, dict):
+                continue
+            records = project.get("vulnerabilities", [])
+            if not isinstance(records, list):
+                continue
+            findings.extend(
+                DependencyStage._finding(
+                    asset,
+                    str(record.get("title", "Snyk dependency vulnerability")),
+                    DependencyStage._severity(str(record.get("severity", "medium"))),
+                    str(record.get("id", "snyk")),
+                    json.dumps(record, sort_keys=True)[:12000],
+                )
+                for record in records
+                if isinstance(record, dict)
             )
-            for record in records
-            if isinstance(record, dict)
-        ]
+        return findings
 
     @staticmethod
     def _parse_pip(path: Path, asset: Asset) -> list[Finding]:
