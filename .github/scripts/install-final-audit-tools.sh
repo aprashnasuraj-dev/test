@@ -5,10 +5,6 @@ if [[ "$(uname -s)" != "Linux" ]]; then
   echo "final audit tool installer requires Linux" >&2
   exit 2
 fi
-if [[ "${ACCEPT_CODEQL_TERMS:-false}" != "true" ]]; then
-  echo "CodeQL terms were not explicitly accepted for this final-audit run." >&2
-  exit 3
-fi
 
 export DEBIAN_FRONTEND=noninteractive
 export PATH="$HOME/.local/bin:$HOME/.foundry/bin:$HOME/.cargo/bin:$PATH"
@@ -116,8 +112,13 @@ install_archive_binary() {
   rm -rf "$temp_dir"
 }
 
-install_archive_binary \
-  "github/codeql-cli-binaries" '^codeql-linux64\.zip$' "codeql" "zip"
+if [[ "${ACCEPT_CODEQL_TERMS:-false}" == "true" ]]; then
+  install_archive_binary \
+    "github/codeql-cli-binaries" '^codeql-linux64\.zip$' "codeql" "zip"
+else
+  echo "SKIP codeql: CodeQL terms were not explicitly accepted for this run."
+fi
+
 install_archive_binary \
   "trufflesecurity/trufflehog" '^trufflehog_[0-9.]+_linux_amd64\.tar\.gz$' "trufflehog" "tar"
 install_archive_binary \
@@ -146,6 +147,8 @@ fi
 
 if [[ -n "${SNYK_TOKEN:-}" ]] && ! command -v snyk >/dev/null 2>&1; then
   npm install -g snyk
+elif [[ -z "${SNYK_TOKEN:-}" ]]; then
+  echo "SKIP snyk: SNYK_TOKEN is not configured."
 fi
 
-printf '%s\n' "Final-audit tool installation completed."
+printf '%s\n' "External analyzer tool installation completed."
