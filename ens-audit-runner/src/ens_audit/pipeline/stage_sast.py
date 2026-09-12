@@ -9,19 +9,45 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from ens_audit.analyzers import (
+    PromptInjectionAnalyzer,
+    SolidityAnalyzer,
+    SSRFAnalyzer,
+    TypeScriptAnalyzer,
+    XStateAnalyzer,
+)
 from ens_audit.config import RESULTS_DIR
 from ens_audit.models import Asset, Finding, Location, Severity
 
+_ROOT_CAUSE_BY_RULE = {
+    "ens-bearer-configurable-base-url": "bearer_token_cross_origin",
+    "ens-unvalidated-open-url": "unvalidated_navigation_url",
+    "ens-json-parse-without-schema": "unvalidated_persisted_state",
+    "ens-eip712-domain-missing-binding": "underspecified_eip712_domain",
+    "ens-chainid-not-validated": "chain_id_not_bound_to_wallet",
+    "ens-request-from-not-validated": "request_from_not_bound_to_signer",
+    "ens-ssrf-untrusted-url": "server_side_fetch_of_untrusted_avatar_url",
+    "ens-shell-true-or-interpolated-command": "unsafe_process_execution",
+    "ens-webhook-fail-open": "webhook_signature_fail_open",
+    "ens-unscoped-session-authority": "unscoped_session_owner",
+    "ens-local-revoke-without-chain-revoke": "local_only_session_revocation",
+}
+
 
 class SASTStage:
-    """Run CodeQL, Semgrep, Slither, and Bandit and normalize their findings.
+    """Run local analyzers plus CodeQL, Semgrep, Slither, and Bandit.
 
     Security invariant: external tools receive only argv lists and fixed output paths; shell
-    interpretation is never enabled.
+    interpretation is never enabled, and local analyzers only read source text.
     """
 
     def __init__(self, custom_rules: Path) -> None:
         self.custom_rules = custom_rules
+        self.ts_analyzer = TypeScriptAnalyzer()
+        self.ssrf_analyzer = SSRFAnalyzer()
+        self.prompt_analyzer = PromptInjectionAnalyzer()
+        self.xstate_analyzer = XStateAnalyzer()
+        self.solidity_analyzer = SolidityAnalyzer()
 
     async def run(self, asset: Asset) -> list[Finding]:
         """Run all applicable SAST tools for one asset and return normalized findings."""
@@ -29,11 +55,12 @@ class SASTStage:
         return await asyncio.to_thread(self._run_sync, asset)
 
     def _run_sync(self, asset: Asset) -> list[Finding]:
-        """Execute the synchronous SAST workflow for one asset."""
+        """Execute local and external SAST analysis for one asset."""
 
         output_dir = RESULTS_DIR / asset.name / "sast"
         output_dir.mkdir(parents=True, exist_ok=True)
         sarif_files: list[Path] = []
+        findings = self._run_local_analyzers(asset)
 
         if shutil.which("codeql"):
             database = output_dir / "codeql-db"
@@ -100,9 +127,22 @@ class SASTStage:
                 accepted_codes={0, 1},
             )
 
-        findings: list[Finding] = []
         for sarif_path in sarif_files:
             findings.extend(self._parse_sarif(sarif_path, asset))
+        return self._dedupe(findings)
+
+    def _run_local_analyzers(self, asset: Asset) -> list[Finding]:
+        """Run source-only analyzers that do not require external binaries."""
+
+        findings = [
+            *self.ts_analyzer.analyze(asset),
+            *self.ssrf_analyzer.analyze(asset),
+            *self.prompt_analyzer.analyze(asset),
+        ]
+        if asset.name == "transaction-manager":
+            findings.extend(self.xstate_analyzer.analyze(asset))
+        if asset.has_solidity:
+            findings.extend(self.solidity_analyzer.analyze(asset))
         return findings
 
     @staticmethod
@@ -132,7 +172,7 @@ class SASTStage:
 
     @staticmethod
     def _contains_suffix(root: Path, suffix: str) -> bool:
-        """Return whether a source suffix exists without following symlink directories."""
+        """Return whether a source suffix exists without following file symlinks."""
 
         return any(path.is_file() for path in root.rglob(f"*{suffix}") if not path.is_symlink())
 
@@ -165,7 +205,7 @@ class SASTStage:
                         asset=asset.name,
                         stage="sast",
                         rule_id=rule_id,
-                        root_cause=rule_id,
+                        root_cause=_ROOT_CAUSE_BY_RULE.get(rule_id, rule_id),
                         location=Location(
                             file=artifact,
                             line=int(region.get("startLine", 0) or 0),
@@ -176,3 +216,18 @@ class SASTStage:
                     )
                 )
         return findings
+
+    @staticmethod
+    def _dedupe(findings: list[Finding]) -> list[Finding]:
+        """Remove duplicate analyzer reports for the same rule and source location."""
+
+        unique: dict[tuple[str, str, int, str], Finding] = {}
+        for finding in findings:
+            key = (
+                finding.rule_id,
+                finding.location.file.replace("\\", "/"),
+                finding.location.line,
+                finding.title,
+            )
+            unique.setdefault(key, finding)
+        return list(unique.values())
