@@ -7,10 +7,19 @@ from pathlib import Path
 
 from ens_audit.models import Asset, Finding, Location, Severity
 
-_LLM = re.compile(r"\b(?:openai|anthropic|chat\.completions|responses\.create|messages\.create)\b", re.IGNORECASE)
-_UNTRUSTED = re.compile(r"\b(?:userInput|notes|description|content|body|request|issue|finding|source|repo|fileContent)\b")
+_LLM = re.compile(
+    r"\b(?:openai|anthropic|chat\.completions|responses\.create|messages\.create)\b",
+    re.IGNORECASE,
+)
+_UNTRUSTED = re.compile(
+    r"\b(?:userInput|notes|description|content|body|request|issue|finding|source|repo|fileContent)\b"
+)
 _PROMPT = re.compile(r"\b(?:prompt|messages|system|user)\b", re.IGNORECASE)
-_GUARD = re.compile(r"\b(?:sanitize|escape|untrusted_notes|untrusted_data|delimiter|structuredClone|JSON\.stringify)\b", re.IGNORECASE)
+_GUARD = re.compile(
+    r"\b(?:sanitize|escape|untrusted_notes|untrusted_data|delimiter|structuredClone|JSON\.stringify)\b",
+    re.IGNORECASE,
+)
+_PLAIN_STRING = re.compile(r'''(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')''')
 
 
 class PromptInjectionAnalyzer:
@@ -43,7 +52,11 @@ class PromptInjectionAnalyzer:
 
     @staticmethod
     def _analyze_file(asset: Asset, path: Path) -> list[Finding]:
-        """Analyze one file with a bounded context window around LLM calls."""
+        """Analyze one file with a bounded context window around LLM calls.
+
+        Security invariant: quoted static text is excluded from untrusted-token matching while
+        template literals remain visible so interpolated identifiers cannot hide from detection.
+        """
 
         lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
         findings: list[Finding] = []
@@ -52,7 +65,8 @@ class PromptInjectionAnalyzer:
                 continue
             start = max(0, index - 30)
             context = "\n".join(lines[start : index + 1])
-            if not (_PROMPT.search(context) and _UNTRUSTED.search(context)):
+            code_context = _PLAIN_STRING.sub("", context)
+            if not (_PROMPT.search(context) and _UNTRUSTED.search(code_context)):
                 continue
             if _GUARD.search(context):
                 continue
@@ -68,7 +82,11 @@ class PromptInjectionAnalyzer:
                         file=str(path.relative_to(asset.path)),
                         line=index + 1,
                     ),
-                    description="An LLM call is near prompt/message construction that references untrusted application or repository content, with no observed sanitizer or explicit data delimiter.",
+                    description=(
+                        "An LLM call is near prompt/message construction that references untrusted "
+                        "application or repository content, with no observed sanitizer or explicit "
+                        "data delimiter."
+                    ),
                     evidence="\n".join(lines[max(0, index - 4) : index + 1])[:4000],
                     confidence=0.6,
                 )
