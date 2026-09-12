@@ -32,13 +32,16 @@ class _Rule:
 _RPC_MARKER = re.compile(
     r"\b(?:jsonrpc|rpc|provider\.request|wallet_|eth_|personal_|net_|web3_|"
     r"viem|ethers|JsonRpcProvider|request\(\s*\{\s*method)",
-    re.I,
+    re.IGNORECASE,
 )
 
 _RULES = (
     _Rule(
         "rpc-dynamic-method",
-        re.compile(r"(?:provider\.)?request\s*\(\s*\{\s*method\s*:\s*(?![\"'`])", re.I | re.S),
+        re.compile(
+            r"(?:provider\.)?request\s*\(\s*\{\s*method\s*:\s*(?![\"'`])",
+            re.IGNORECASE | re.DOTALL,
+        ),
         "RPC method name is dynamically selected",
         Severity.HIGH,
         "dynamic_rpc_method_without_local_allowlist",
@@ -50,7 +53,10 @@ _RULES = (
     ),
     _Rule(
         "rpc-dynamic-fetch-url",
-        re.compile(r"\bfetch\s*\(\s*(?![\"'`])(?:req(?:uest)?|body|input|params|query|url|endpoint)\b", re.I),
+        re.compile(
+            r"\bfetch\s*\(\s*(?![\"'`])(?:req(?:uest)?|body|input|params|query|url|endpoint)\b",
+            re.IGNORECASE,
+        ),
         "Request-derived value is used as an outbound fetch target",
         Severity.HIGH,
         "request_controlled_rpc_upstream",
@@ -62,7 +68,7 @@ _RULES = (
     ),
     _Rule(
         "rpc-dynamic-websocket-url",
-        re.compile(r"\bnew\s+WebSocket\s*\(\s*(?![\"'`])", re.I),
+        re.compile(r"\bnew\s+WebSocket\s*\(\s*(?![\"'`])", re.IGNORECASE),
         "Dynamic value selects a WebSocket endpoint",
         Severity.MEDIUM,
         "dynamic_websocket_endpoint",
@@ -77,7 +83,7 @@ _RULES = (
         re.compile(
             r"(?:Access-Control-Allow-Origin[\"']?\s*[:=]\s*[\"']\*[\"']|"
             r"cors\s*\(\s*\{\s*origin\s*:\s*(?:true|[\"']\*[\"']))",
-            re.I | re.S,
+            re.IGNORECASE | re.DOTALL,
         ),
         "RPC-capable code permits wildcard cross-origin access",
         Severity.MEDIUM,
@@ -93,7 +99,7 @@ _RULES = (
         re.compile(
             r"(?:req(?:uest)?\.(?:body|json)|body|payload)\s*"
             r"(?:as\s+[^;\n]+)?[,\)]",
-            re.I,
+            re.IGNORECASE,
         ),
         "Raw request payload reaches RPC-capable code",
         Severity.MEDIUM,
@@ -110,7 +116,7 @@ _ALLOWLIST = re.compile(
     r"(?:allowedMethods|allowed_methods|methodAllowlist|method_allowlist|"
     r"supportedMethods|supported_methods|switch\s*\(\s*(?:method|request\.method)|"
     r"\b(?:method|request\.method)\s+in\s+)",
-    re.I,
+    re.IGNORECASE,
 )
 
 
