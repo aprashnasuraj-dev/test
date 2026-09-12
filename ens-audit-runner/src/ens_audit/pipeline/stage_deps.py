@@ -42,7 +42,7 @@ class DependencyStage:
                 completed = self._tool(
                     ["npm", "audit", "--json"],
                     cwd=package_root,
-                    timeout_s=1200,
+                    timeout_s=2400,
                     accepted_codes={0, 1},
                 )
                 npm_path = output_dir / f"npm-audit-{index:03d}.json"
@@ -53,7 +53,7 @@ class DependencyStage:
             completed = self._tool(
                 ["snyk", "test", "--all-projects", "--json"],
                 cwd=asset.path,
-                timeout_s=1200,
+                timeout_s=2400,
                 accepted_codes={0, 1, 2, 3},
             )
             snyk_path = output_dir / "snyk.json"
@@ -69,7 +69,7 @@ class DependencyStage:
             completed = self._tool(
                 args,
                 cwd=asset.path,
-                timeout_s=1200,
+                timeout_s=2400,
                 accepted_codes={0, 1},
             )
             pip_path = output_dir / "pip-audit.json"
