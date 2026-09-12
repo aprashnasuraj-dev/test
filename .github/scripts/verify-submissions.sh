@@ -1,90 +1,121 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-OUT="${OUT_DIR:-${GITHUB_WORKSPACE}/out}"
-RUNNER_OUT="${GITHUB_WORKSPACE}/ens-audit-runner/out"
-
-if [[ ! -d "$OUT" && -d "$RUNNER_OUT" ]]; then
-  OUT="$RUNNER_OUT"
-fi
-
-if [[ ! -d "$OUT" ]]; then
-  echo "::error::No output directory found at ${GITHUB_WORKSPACE}/out or $RUNNER_OUT"
-  exit 1
-fi
-
-ESC="$OUT/findings_escaped.json"
-[[ -f "$ESC" ]] || ESC="$OUT/findings/findings_escaped.json"
-
-if [[ ! -f "$ESC" ]]; then
-  echo "::error::findings_escaped.json not produced; submission completeness cannot be verified"
-  exit 1
-fi
-
-export ESC_PATH="$ESC"
-export OUT_DIR="$OUT"
-
-REQUIRED=$(python - <<'PY'
-import json, os
-p = os.environ["ESC_PATH"]
-try:
-    data = json.load(open(p, encoding="utf-8"))
-except Exception:
-    print(0)
-    raise SystemExit
-items = data if isinstance(data, list) else data.get("findings", [])
-n = sum(1 for f in items
-        if str(f.get("severity", "")).lower() in {"critical", "high", "medium"})
-print(n)
-PY
-)
-
-echo "Escaped findings requiring submissions: $REQUIRED"
-
-if [[ "$REQUIRED" -eq 0 ]]; then
-  echo "No Critical/High/Medium escaped findings. Nothing to verify."
-  exit 0
-fi
+ROOT="${OUT_DIR:-${GITHUB_WORKSPACE}/staging}"
+[[ -d "$ROOT" ]] || { echo "::error::Submission root not found: $ROOT"; exit 1; }
+export SUBMISSION_ROOT="$ROOT"
 
 python - <<'PY'
-import json, os, sys
+from __future__ import annotations
+
+import json
+import os
+import sys
 from pathlib import Path
+from typing import Any
 
-out = Path(os.environ["OUT_DIR"])
-esc = Path(os.environ["ESC_PATH"])
-data = json.loads(esc.read_text(encoding="utf-8"))
-items = data if isinstance(data, list) else data.get("findings", [])
-required = [f for f in items
-            if str(f.get("severity", "")).lower() in {"critical", "high", "medium"}]
+root = Path(os.environ["SUBMISSION_ROOT"]).resolve()
+findings_dir = root / "findings"
+subs_dir = root / "submissions"
+pocs_dir = root / "pocs"
 
-subs_dir = out / "submissions"
-pocs_dir = out / "pocs"
-required_poc_files = ("README.md", "run.ps1", "run.sh", "run.log")
-missing = []
-for finding in required:
-    fid = finding.get("id") or finding.get("finding_id") or finding.get("rule_id")
-    if not fid:
-        missing.append(("unknown", "missing id field"))
-        continue
-    sub = subs_dir / f"{fid}.md"
-    poc = pocs_dir / str(fid)
-    if not sub.is_file():
-        missing.append((fid, f"missing submissions/{fid}.md"))
-    if not poc.is_dir():
-        missing.append((fid, f"missing pocs/{fid}/"))
-        continue
-    for name in required_poc_files:
-        if not (poc / name).is_file():
-            missing.append((fid, f"missing pocs/{fid}/{name}"))
-    log = poc / "run.log"
-    if log.is_file() and "POC_OK" not in log.read_text(encoding="utf-8", errors="replace"):
-        missing.append((fid, f"pocs/{fid}/run.log does not contain POC_OK"))
-
-if missing:
-    print("::error::Submission artifacts incomplete:")
-    for fid, why in missing:
-        print(f"  - {fid}: {why}")
+required_files = [
+    root / "MANIFEST.json",
+    root / "SUBMISSION-CHECKLIST.md",
+    findings_dir / "findings_escaped.json",
+    findings_dir / "findings_new.json",
+]
+missing_root = [str(p.relative_to(root)) for p in required_files if not p.is_file()]
+if missing_root:
+    print("::error::Missing required staged files: " + ", ".join(missing_root))
     sys.exit(1)
 
-print(f"OK — {len(required)} escaped findings have submission + runnable PoC artifacts.")
+required_markers = [
+    "**Severity:**",
+    "**Asset:**",
+    "**Impact:**",
+    "## Summary",
+    "## Vulnerability Detail",
+    "## Impact",
+    "## Proof of Concept",
+    "## Recommendation",
+    "## References",
+]
+
+print("file | sections_ok | missing")
+print("--- | --- | ---")
+section_failures: list[str] = []
+for path in sorted(subs_dir.glob("*.md")):
+    text = path.read_text(encoding="utf-8", errors="replace")
+    first_line = text.splitlines()[0] if text.splitlines() else ""
+    missing: list[str] = []
+    if not first_line.startswith("# ") or first_line.startswith("## "):
+        missing.append("# <title>")
+    positions = []
+    for marker in required_markers:
+        pos = text.find(marker)
+        positions.append(pos)
+        if pos < 0:
+            missing.append(marker)
+    present_positions = [pos for pos in positions if pos >= 0]
+    if not missing and present_positions != sorted(present_positions):
+        missing.append("heading order")
+    ok = not missing
+    print(f"{path.name} | {'yes' if ok else 'no'} | {', '.join(missing) if missing else '-'}")
+    if not ok:
+        section_failures.append(path.name)
+
+
+def load(name: str) -> list[dict[str, Any]]:
+    path = findings_dir / name
+    data = json.loads(path.read_text(encoding="utf-8"))
+    items = data if isinstance(data, list) else data.get("findings", [])
+    if not isinstance(items, list):
+        raise SystemExit(f"{path} must contain a findings list")
+    return [item for item in items if isinstance(item, dict)]
+
+
+def fid(finding: dict[str, Any]) -> str:
+    return str(
+        finding.get("id") or finding.get("finding_id") or finding.get("rule_id") or ""
+    ).strip()
+
+required: dict[str, dict[str, Any]] = {}
+for finding in load("findings_new.json") + load("findings_escaped.json"):
+    if str(finding.get("severity", "")).lower() not in {"critical", "high", "medium"}:
+        continue
+    status = str(finding.get("status", "open")).lower()
+    if status in {"suppressed", "false_positive", "duplicate"} or finding.get("duplicate") is True:
+        continue
+    finding_id = fid(finding)
+    if not finding_id:
+        print("::error::Actionable finding is missing an id")
+        sys.exit(1)
+    required.setdefault(finding_id, finding)
+
+artifact_failures: list[str] = []
+for finding_id in sorted(required):
+    submission = subs_dir / f"{finding_id}.md"
+    poc = pocs_dir / finding_id
+    if not submission.is_file():
+        artifact_failures.append(f"{finding_id}: missing submissions/{finding_id}.md")
+    if not poc.is_dir():
+        artifact_failures.append(f"{finding_id}: missing pocs/{finding_id}/")
+        continue
+    for name in ("README.md", "finding.json", "verify.py", "run.sh", "run.ps1", "run.log"):
+        if not (poc / name).is_file():
+            artifact_failures.append(f"{finding_id}: missing pocs/{finding_id}/{name}")
+    log = poc / "run.log"
+    if log.is_file() and "POC_OK" not in log.read_text(encoding="utf-8", errors="replace"):
+        artifact_failures.append(f"{finding_id}: pocs/{finding_id}/run.log missing POC_OK")
+
+if section_failures or artifact_failures:
+    for failure in artifact_failures:
+        print(f"::error::{failure}")
+    if section_failures:
+        print("::error::Submission section validation failed: " + ", ".join(section_failures))
+    sys.exit(1)
+
+print(f"OK — {len(list(subs_dir.glob('*.md')))} submissions validated.")
+print(f"OK — {len(required)} non-duplicate Critical/High/Medium finding(s) have PoCs.")
 PY
