@@ -18,9 +18,24 @@ on:
         required: true
         default: 'manager,portal,workers,transaction-manager,smart-account'
       stages:
-        description: 'Requested stages; unavailable optional stages are reported and skipped'
+        description: 'Implemented analysis stages to execute'
         required: true
-        default: 'sast,symbolic,fuzz,deps,secrets,ui,rpc,diff,known-filter,report'
+        default: 'sast,symbolic,fuzz,deps,secrets,known-filter,report'
+      final_audit:
+        description: 'Install and require the full external analyzer toolchain; fail closed on analyzer errors'
+        type: boolean
+        required: true
+        default: false
+      accept_codeql_terms:
+        description: 'Confirm CodeQL CLI terms have been reviewed and accepted for this run'
+        type: boolean
+        required: true
+        default: false
+      require_snyk:
+        description: 'Require Snyk CLI and SNYK_TOKEN for the final run'
+        type: boolean
+        required: true
+        default: false
 
 permissions:
   contents: read
@@ -36,7 +51,7 @@ env:
 jobs:
   analysis:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 240
 
     steps:
       - name: Checkout repository
@@ -72,11 +87,41 @@ jobs:
       - name: Prepare output
         run: mkdir -p "$GITHUB_WORKSPACE/out/runs"
 
+      - name: Validate final-audit runner glue
+        run: |
+          bash -n .github/scripts/install-final-audit-tools.sh
+          bash -n .github/scripts/verify-final-audit-tools.sh
+
+      - name: Install final-audit analyzer toolchain
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.final_audit }}
+        env:
+          ACCEPT_CODEQL_TERMS: ${{ inputs.accept_codeql_terms }}
+          GITHUB_TOKEN: ${{ github.token }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: bash .github/scripts/install-final-audit-tools.sh
+
+      - name: Verify final-audit analyzer toolchain
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.final_audit }}
+        env:
+          STRICT_TOOLCHAIN: '1'
+          REQUIRE_SNYK: ${{ inputs.require_snyk }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: bash .github/scripts/verify-final-audit-tools.sh
+
+      - name: Snapshot lightweight runner toolchain
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.final_audit != true }}
+        env:
+          STRICT_TOOLCHAIN: '0'
+          REQUIRE_SNYK: 'false'
+        run: bash .github/scripts/verify-final-audit-tools.sh
+
       - name: Run analysis
         env:
           TARGET_REPO: ${{ github.event.inputs.repo || 'https://github.com/immunefi-team/audit-comp-ens.git' }}
           TARGET_ASSETS: ${{ github.event.inputs.assets || 'manager,portal,workers,transaction-manager,smart-account' }}
-          TARGET_STAGES: ${{ github.event.inputs.stages || 'sast,symbolic,fuzz,deps,secrets,ui,rpc,diff,known-filter,report' }}
+          TARGET_STAGES: ${{ github.event.inputs.stages || 'sast,symbolic,fuzz,deps,secrets,known-filter,report' }}
+          AUDIT_STRICT: ${{ github.event_name == 'workflow_dispatch' && inputs.final_audit }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         working-directory: ens-audit-runner
         run: |
           set -euo pipefail
@@ -131,11 +176,13 @@ jobs:
           if not selected:
               raise SystemExit("no implemented analysis stages were selected")
 
+          strict = os.environ.get("AUDIT_STRICT", "false").lower() in {"1", "true", "yes"}
           print(f"configured repository: {UPSTREAM_REPOSITORY}")
           print(f"configured assets: {', '.join(sorted(configured_assets))}")
           print(f"analysis stages: {', '.join(selected)}")
+          print(f"strict analyzer failures: {strict}")
 
-          orchestrator = PipelineOrchestrator(logger=print)
+          orchestrator = PipelineOrchestrator(logger=print, strict=strict)
           report = asyncio.run(orchestrator.run_selected(selected))
 
           source_json = report.output_dir / "audit-report.json"
