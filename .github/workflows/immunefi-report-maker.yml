@@ -1,0 +1,61 @@
+name: Immunefi Report Maker
+
+on:
+  pull_request:
+    paths:
+      - 'tooling/immunefi-report-maker/**'
+      - 'tooling/package.json'
+      - '.github/workflows/immunefi-report-maker.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tooling/immunefi-report-maker/**'
+      - 'tooling/package.json'
+      - '.github/workflows/immunefi-report-maker.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: tooling/immunefi-report-maker/pyproject.toml
+
+      - name: Install report maker
+        run: python -m pip install -e tooling/immunefi-report-maker
+
+      - name: Compile Python source
+        run: python -m py_compile tooling/immunefi-report-maker/immunefi_report_maker.py
+
+      - name: Generate and validate example input
+        run: |
+          immunefi-report-maker --write-example /tmp/finding.json
+          immunefi-report-maker --input /tmp/finding.json --validate-only
+
+      - name: Render deterministic report
+        run: |
+          immunefi-report-maker \
+            --input /tmp/finding.json \
+            --output /tmp/report.md \
+            --no-polish
+
+      - name: Assert mandatory report sections
+        run: |
+          grep -Fq '## Bug Description' /tmp/report.md
+          grep -Fq '### Brief' /tmp/report.md
+          grep -Fq '### Details' /tmp/report.md
+          grep -Fq '## Impact' /tmp/report.md
+          grep -Fq '## Recommendation' /tmp/report.md
+          grep -Fq '## Proof of Concept' /tmp/report.md
+          grep -Fq '## References' /tmp/report.md
