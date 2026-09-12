@@ -29,6 +29,9 @@ PIPELINE_STAGES = (
     "fuzz",
     "deps",
     "secrets",
+    "ui",
+    "rpc",
+    "diff",
     "known_filter",
     "report",
 )

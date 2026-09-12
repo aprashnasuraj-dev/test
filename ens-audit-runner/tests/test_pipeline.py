@@ -18,7 +18,6 @@ from ens_audit.pipeline.store import AnalysisStore
 
 def _finding() -> Finding:
     """Build one normalized finding for persistence tests."""
-
     return Finding(
         title="Example finding",
         severity=Severity.MEDIUM,
@@ -34,7 +33,6 @@ def _finding() -> Finding:
 
 def test_store_round_trip_and_checkpoint(tmp_path: Path) -> None:
     """A committed stage preserves findings and becomes resumable."""
-
     store = AnalysisStore(tmp_path / "audit.sqlite3")
     run_id = store.begin_run("a" * 40, ("sast", "deps"))
     finding = _finding()
@@ -49,7 +47,6 @@ def test_store_round_trip_and_checkpoint(tmp_path: Path) -> None:
 
 def test_failed_checkpoint_is_not_completed(tmp_path: Path) -> None:
     """A failed stage is persisted as retryable rather than completed."""
-
     store = AnalysisStore(tmp_path / "audit.sqlite3")
     run_id = store.begin_run("b" * 40)
     store.save_stage(run_id, "manager", "sast", [], succeeded=False)
@@ -58,7 +55,6 @@ def test_failed_checkpoint_is_not_completed(tmp_path: Path) -> None:
 
 def test_legacy_database_is_migrated_with_full_stage_default(tmp_path: Path) -> None:
     """Pre-stage-selection databases must migrate without losing existing run rows."""
-
     database = tmp_path / "legacy.sqlite3"
     run_id = uuid4()
     with sqlite3.connect(database) as connection:
@@ -80,13 +76,33 @@ def test_legacy_database_is_migrated_with_full_stage_default(tmp_path: Path) -> 
         "fuzz",
         "deps",
         "secrets",
+        "ui",
+        "rpc",
+        "diff",
+    )
+
+
+def test_full_stage_registry_contains_structural_analyzers(tmp_path: Path) -> None:
+    """UI, RPC, and diff are first-class analysis stages, never compatibility aliases."""
+    orchestrator = PipelineOrchestrator(store=AnalysisStore(tmp_path / "audit.sqlite3"))
+    assert orchestrator.ANALYSIS_STAGES == (
+        "sast",
+        "symbolic",
+        "fuzz",
+        "deps",
+        "secrets",
+        "ui",
+        "rpc",
+        "diff",
+    )
+    assert [name for name, _stage in orchestrator._analysis_stages(orchestrator.ANALYSIS_STAGES)] == list(
+        orchestrator.ANALYSIS_STAGES
     )
 
 
 class _SuccessStage:
     async def run(self, asset: Asset) -> list[Finding]:
         """Return one deterministic finding."""
-
         del asset
         return [_finding()]
 
@@ -94,7 +110,6 @@ class _SuccessStage:
 class _FailingStage:
     async def run(self, asset: Asset) -> list[Finding]:
         """Raise a deterministic analyzer failure."""
-
         del asset
         raise RuntimeError("scanner crashed")
 
@@ -102,7 +117,6 @@ class _FailingStage:
 class _InvalidSchemaStage:
     async def run(self, asset: Asset) -> list[Finding]:
         """Return a deliberately invalid payload through the typed stage boundary."""
-
         del asset
         return cast(list[Finding], [{"not": "a Finding"}])
 
@@ -110,7 +124,6 @@ class _InvalidSchemaStage:
 @pytest.mark.asyncio
 async def test_run_stage_reports_success(tmp_path: Path) -> None:
     """Successful analyzer execution returns findings with success=true."""
-
     orchestrator = PipelineOrchestrator(store=AnalysisStore(tmp_path / "audit.sqlite3"))
     asset = Asset("manager", tmp_path, "d" * 40)
     findings, succeeded = await orchestrator._run_stage("sast", _SuccessStage(), asset)
@@ -121,7 +134,6 @@ async def test_run_stage_reports_success(tmp_path: Path) -> None:
 @pytest.mark.asyncio
 async def test_run_stage_rejects_non_finding_payload(tmp_path: Path) -> None:
     """Every engine must cross the orchestrator boundary as unified Finding objects."""
-
     messages: list[str] = []
     orchestrator = PipelineOrchestrator(
         store=AnalysisStore(tmp_path / "audit.sqlite3"),
@@ -137,7 +149,6 @@ async def test_run_stage_rejects_non_finding_payload(tmp_path: Path) -> None:
 @pytest.mark.asyncio
 async def test_run_stage_isolates_failure_when_not_strict(tmp_path: Path) -> None:
     """Non-strict mode returns a failed status instead of a false successful empty scan."""
-
     orchestrator = PipelineOrchestrator(store=AnalysisStore(tmp_path / "audit.sqlite3"))
     asset = Asset("manager", tmp_path, "e" * 40)
     findings, succeeded = await orchestrator._run_stage("sast", _FailingStage(), asset)
@@ -148,7 +159,6 @@ async def test_run_stage_isolates_failure_when_not_strict(tmp_path: Path) -> Non
 @pytest.mark.asyncio
 async def test_run_stage_raises_in_strict_mode(tmp_path: Path) -> None:
     """Strict mode propagates analyzer failures to the caller."""
-
     orchestrator = PipelineOrchestrator(
         store=AnalysisStore(tmp_path / "audit.sqlite3"),
         strict=True,
@@ -158,13 +168,32 @@ async def test_run_stage_raises_in_strict_mode(tmp_path: Path) -> None:
         await orchestrator._run_stage("sast", _FailingStage(), asset)
 
 
+def test_complete_scope_gate_rejects_any_missing_stage(tmp_path: Path) -> None:
+    """A full audit cannot pass if one analyzer failed or was skipped on one asset."""
+    store = AnalysisStore(tmp_path / "audit.sqlite3")
+    orchestrator = PipelineOrchestrator(store=store)
+    stages = orchestrator.ANALYSIS_STAGES
+    run_id = store.begin_run(ACTIVE_UPSTREAM_COMMIT, stages)
+    assets = [
+        Asset("manager", tmp_path, ACTIVE_UPSTREAM_COMMIT),
+        Asset("explorer", tmp_path, ACTIVE_UPSTREAM_COMMIT),
+    ]
+    for asset in assets:
+        for stage in stages:
+            if asset.name == "explorer" and stage == "rpc":
+                continue
+            store.save_stage(run_id, asset.name, stage, [], succeeded=True)
+
+    with pytest.raises(RuntimeError, match=r"explorer=rpc"):
+        orchestrator._assert_complete_scope(run_id, assets, stages)
+
+
 @pytest.mark.asyncio
 async def test_resume_rejects_commit_drift_before_download(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
     """A run from another revision must never be resumed against the active checkout."""
-
     store = AnalysisStore(tmp_path / "audit.sqlite3")
     run_id = store.begin_run("0" * 40, ("sast",))
     orchestrator = PipelineOrchestrator(store=store)
@@ -188,7 +217,6 @@ async def test_resume_uses_persisted_stage_selection(
     tmp_path: Path,
 ) -> None:
     """Resume must not expand a selected-stage run into all analysis stages."""
-
     store = AnalysisStore(tmp_path / "audit.sqlite3")
     run_id = store.begin_run(ACTIVE_UPSTREAM_COMMIT, ("deps", "secrets"))
     orchestrator = PipelineOrchestrator(store=store)

@@ -9,7 +9,16 @@ from uuid import UUID, uuid4
 
 from ens_audit.models import Finding, FindingStatus, Location, Severity
 
-_DEFAULT_ANALYSIS_STAGES = ("sast", "symbolic", "fuzz", "deps", "secrets")
+_DEFAULT_ANALYSIS_STAGES = (
+    "sast",
+    "symbolic",
+    "fuzz",
+    "deps",
+    "secrets",
+    "ui",
+    "rpc",
+    "diff",
+)
 _DEFAULT_ANALYSIS_STAGES_JSON = json.dumps(_DEFAULT_ANALYSIS_STAGES, separators=(",", ":"))
 
 
@@ -27,7 +36,6 @@ class AnalysisStore:
 
     def _connect(self) -> sqlite3.Connection:
         """Open a hardened SQLite connection for one operation."""
-
         connection = sqlite3.connect(self.path)
         connection.execute("PRAGMA foreign_keys=ON")
         connection.row_factory = sqlite3.Row
@@ -35,7 +43,6 @@ class AnalysisStore:
 
     def _initialize(self) -> None:
         """Create required tables and migrate legacy run metadata in place."""
-
         with self._connect() as connection:
             connection.executescript(
                 """
@@ -80,7 +87,6 @@ class AnalysisStore:
         analysis_stages: tuple[str, ...] = _DEFAULT_ANALYSIS_STAGES,
     ) -> UUID:
         """Create a new immutable audit run with its intended analysis-stage selection."""
-
         run_id = uuid4()
         stage_json = json.dumps(analysis_stages, separators=(",", ":"))
         with self._connect() as connection:
@@ -92,7 +98,6 @@ class AnalysisStore:
 
     def run_commit(self, run_id: UUID) -> str:
         """Return the immutable source commit associated with a run."""
-
         with self._connect() as connection:
             row = connection.execute(
                 "SELECT commit_sha FROM runs WHERE id=?",
@@ -104,7 +109,6 @@ class AnalysisStore:
 
     def run_analysis_stages(self, run_id: UUID) -> tuple[str, ...]:
         """Return the canonical analysis-stage selection stored for a run."""
-
         with self._connect() as connection:
             row = connection.execute(
                 "SELECT analysis_stages FROM runs WHERE id=?",
@@ -126,12 +130,7 @@ class AnalysisStore:
         *,
         succeeded: bool,
     ) -> None:
-        """Atomically persist a stage's findings and checkpoint.
-
-        Security invariant: either every finding and the checkpoint commit together or none
-        of them do.
-        """
-
+        """Atomically persist a stage's findings and checkpoint."""
         with self._connect() as connection:
             connection.execute("BEGIN IMMEDIATE")
             for finding in findings:
@@ -155,7 +154,6 @@ class AnalysisStore:
 
     def completed_stages(self, run_id: UUID, asset: str) -> set[str]:
         """Return successful stage names already checkpointed for one asset."""
-
         with self._connect() as connection:
             rows = connection.execute(
                 "SELECT stage FROM stage_checkpoints "
@@ -166,7 +164,6 @@ class AnalysisStore:
 
     def load_findings(self, run_id: UUID) -> list[Finding]:
         """Load normalized findings for one run in insertion order."""
-
         with self._connect() as connection:
             rows = connection.execute(
                 "SELECT payload FROM findings WHERE run_id=? ORDER BY rowid",
@@ -177,7 +174,6 @@ class AnalysisStore:
     @staticmethod
     def _decode_finding(payload: str) -> Finding:
         """Reconstruct a finding from its inert JSON representation."""
-
         data = json.loads(payload)
         location_data = data.pop("location")
         data["id"] = UUID(data["id"])

@@ -1,4 +1,4 @@
-"""Stateful orchestration for the seven-stage ENS audit pipeline."""
+"""Stateful orchestration for the ten-stage ENS audit pipeline."""
 
 from __future__ import annotations
 
@@ -13,12 +13,15 @@ from ens_audit.config import ACTIVE_UPSTREAM_COMMIT, DATABASE_PATH
 from ens_audit.downloader import download_all_repos
 from ens_audit.models import Asset, AuditReport, Finding
 from ens_audit.pipeline.stage_deps import DependencyStage
+from ens_audit.pipeline.stage_diff import DiffStage
 from ens_audit.pipeline.stage_fuzz import FuzzStage
 from ens_audit.pipeline.stage_known_filter import KnownIssueFilterStage
 from ens_audit.pipeline.stage_report import ReportStage
+from ens_audit.pipeline.stage_rpc import RPCStage
 from ens_audit.pipeline.stage_sast import SASTStage
 from ens_audit.pipeline.stage_secrets import SecretStage
 from ens_audit.pipeline.stage_symbolic import SymbolicStage
+from ens_audit.pipeline.stage_ui import UIStage
 from ens_audit.pipeline.store import AnalysisStore
 
 ProgressCallback = Callable[[str, str, int, int], None]
@@ -46,29 +49,24 @@ class PipelineControl:
 
     def pause(self) -> None:
         """Pause before the next stage boundary without terminating an in-flight scanner."""
-
         self._resume_gate.clear()
 
     def resume(self) -> None:
         """Allow execution to proceed past the next stage boundary."""
-
         self._resume_gate.set()
 
     def cancel(self) -> None:
         """Request cancellation at the next cooperative boundary."""
-
         self._cancelled.set()
         self._resume_gate.set()
 
     def reset(self) -> None:
         """Reset control state for a new or retried run."""
-
         self._cancelled.clear()
         self._resume_gate.set()
 
     async def checkpoint(self) -> None:
         """Wait while paused and raise if cancellation was requested."""
-
         await asyncio.to_thread(self._resume_gate.wait)
         if self._cancelled.is_set():
             raise PipelineCancelled("audit cancelled")
@@ -77,12 +75,24 @@ class PipelineControl:
 class PipelineOrchestrator:
     """Execute and checkpoint the complete audit workflow.
 
-    Security invariant: only downloader-validated assets enter analyzers; failed stages are
-    checkpointed as failed, remain eligible for resume, and never cause shell fallback.
+    Security invariant: only downloader-validated assets enter analyzers. A complete full
+    audit is accepted only when every analysis stage has a successful checkpoint for every
+    configured asset, so a silent stage skip cannot masquerade as coverage.
     """
 
-    STAGES = ("sast", "symbolic", "fuzz", "deps", "secrets", "known_filter", "report")
-    ANALYSIS_STAGES = ("sast", "symbolic", "fuzz", "deps", "secrets")
+    STAGES = (
+        "sast",
+        "symbolic",
+        "fuzz",
+        "deps",
+        "secrets",
+        "ui",
+        "rpc",
+        "diff",
+        "known_filter",
+        "report",
+    )
+    ANALYSIS_STAGES = ("sast", "symbolic", "fuzz", "deps", "secrets", "ui", "rpc", "diff")
 
     def __init__(
         self,
@@ -94,7 +104,6 @@ class PipelineOrchestrator:
         control: PipelineControl | None = None,
     ) -> None:
         """Initialize pipeline stages and cooperative execution state."""
-
         self.store = store or AnalysisStore(DATABASE_PATH)
         self.strict = strict
         self.progress = progress
@@ -107,31 +116,30 @@ class PipelineOrchestrator:
         self.stage_fuzz = FuzzStage()
         self.stage_deps = DependencyStage()
         self.stage_secrets = SecretStage()
+        self.stage_ui = UIStage()
+        self.stage_rpc = RPCStage()
+        self.stage_diff = DiffStage()
         self.stage_known_filter = KnownIssueFilterStage()
         self.stage_report = ReportStage()
 
     async def run_full_audit(self) -> AuditReport:
-        """Download the pinned source and execute all seven stages end to end."""
-
+        """Download pinned source and execute all eight analysis stages end to end."""
         return await self.run_selected(list(self.ANALYSIS_STAGES))
 
     async def run_selected(self, stages: list[str]) -> AuditReport:
         """Run a validated subset of analysis stages, then filter and report."""
-
         selected = self._validate_stage_selection(stages)
         self.control.reset()
         assets = await download_all_repos()
         run_id = self.store.begin_run(ACTIVE_UPSTREAM_COMMIT, selected)
         self.current_run_id = run_id
-        return await self._run_assets(run_id, assets, selected_stages=selected)
+        report = await self._run_assets(run_id, assets, selected_stages=selected)
+        if selected == self.ANALYSIS_STAGES:
+            self._assert_complete_scope(run_id, assets, selected)
+        return report
 
     async def resume(self, run_id: UUID) -> AuditReport:
-        """Resume exactly the source commit and analysis stages recorded for a prior run.
-
-        Security invariant: source revision drift is rejected before repository acquisition, so
-        findings from different commits can never be merged into one audit run.
-        """
-
+        """Resume exactly the source commit and analysis stages recorded for a prior run."""
         stored_commit = self.store.run_commit(run_id)
         if stored_commit != ACTIVE_UPSTREAM_COMMIT:
             raise RuntimeError(
@@ -142,11 +150,13 @@ class PipelineOrchestrator:
         self.control.reset()
         self.current_run_id = run_id
         assets = await download_all_repos()
-        return await self._run_assets(run_id, assets, selected_stages=selected)
+        report = await self._run_assets(run_id, assets, selected_stages=selected)
+        if selected == self.ANALYSIS_STAGES:
+            self._assert_complete_scope(run_id, assets, selected)
+        return report
 
     async def retry_failed(self) -> AuditReport:
         """Retry incomplete stages for the current run identifier."""
-
         if self.current_run_id is None:
             raise RuntimeError("no audit run is available to retry")
         return await self.resume(self.current_run_id)
@@ -159,7 +169,6 @@ class PipelineOrchestrator:
         selected_stages: tuple[str, ...] | None = None,
     ) -> AuditReport:
         """Execute selected analyzers, filter known issues, and generate reports."""
-
         selected = selected_stages or self.ANALYSIS_STAGES
         results: dict[str, list[Finding]] = {}
         total_steps = len(assets) * (len(selected) + 1) + 1
@@ -184,6 +193,7 @@ class PipelineOrchestrator:
                     stage_findings,
                     succeeded=succeeded,
                 )
+
             persisted = [
                 finding
                 for finding in self.store.load_findings(run_id)
@@ -217,13 +227,15 @@ class PipelineOrchestrator:
         selected: tuple[str, ...],
     ) -> tuple[tuple[str, AnalysisStage], ...]:
         """Return selected analyzer stages in mandatory dependency order."""
-
         available: tuple[tuple[str, AnalysisStage], ...] = (
             ("sast", self.stage_sast),
             ("symbolic", self.stage_symbolic),
             ("fuzz", self.stage_fuzz),
             ("deps", self.stage_deps),
             ("secrets", self.stage_secrets),
+            ("ui", self.stage_ui),
+            ("rpc", self.stage_rpc),
+            ("diff", self.stage_diff),
         )
         selected_set = set(selected)
         return tuple(item for item in available if item[0] in selected_set)
@@ -231,7 +243,6 @@ class PipelineOrchestrator:
     @classmethod
     def _validate_stage_selection(cls, stages: list[str]) -> tuple[str, ...]:
         """Validate and canonicalize caller-selected analysis stages."""
-
         requested = {stage.strip().lower() for stage in stages if stage.strip()}
         unknown = requested - set(cls.ANALYSIS_STAGES)
         if unknown:
@@ -240,6 +251,29 @@ class PipelineOrchestrator:
             raise ValueError("at least one analysis stage must be selected")
         return tuple(stage for stage in cls.ANALYSIS_STAGES if stage in requested)
 
+    def _assert_complete_scope(
+        self,
+        run_id: UUID,
+        assets: list[Asset],
+        selected: tuple[str, ...],
+    ) -> None:
+        """Fail a full audit unless every selected stage succeeded for every asset."""
+        missing: dict[str, list[str]] = {}
+        for asset in assets:
+            completed = self.store.completed_stages(run_id, asset.name)
+            absent = [stage for stage in selected if stage not in completed]
+            if absent:
+                missing[asset.name] = absent
+        if missing:
+            detail = "; ".join(
+                f"{asset}={','.join(stages)}" for asset, stages in sorted(missing.items())
+            )
+            raise RuntimeError(f"incomplete full-scope audit; unsuccessful stages: {detail}")
+        self._log(
+            "full-scope coverage complete; "
+            f"assets={len(assets)} stages={len(selected)} checks={len(assets) * len(selected)}"
+        )
+
     async def _run_stage(
         self,
         name: str,
@@ -247,15 +281,19 @@ class PipelineOrchestrator:
         asset: Asset,
     ) -> tuple[list[Finding], bool]:
         """Run one analyzer and enforce the unified finding schema at the stage boundary."""
-
         try:
             findings = await stage.run(asset)
             if not isinstance(findings, list):
                 raise TypeError(f"{name} returned {type(findings).__name__}; expected list[Finding]")
-            invalid = [type(finding).__name__ for finding in findings if not isinstance(finding, Finding)]
+            invalid = [
+                type(finding).__name__
+                for finding in findings
+                if not isinstance(finding, Finding)
+            ]
             if invalid:
                 raise TypeError(
-                    f"{name} returned non-Finding result(s): {', '.join(sorted(set(invalid)))}"
+                    f"{name} returned non-Finding result(s): "
+                    f"{', '.join(sorted(set(invalid)))}"
                 )
             self._log(f"complete {asset.name}:{name}; findings={len(findings)}")
             return findings, True
@@ -270,18 +308,15 @@ class PipelineOrchestrator:
     @staticmethod
     def _dedupe_by_id(findings: list[Finding]) -> list[Finding]:
         """Keep the latest representation for each immutable finding id."""
-
         by_id = {finding.id: finding for finding in findings}
         return list(by_id.values())
 
     def _emit_progress(self, asset: str, stage: str, current: int, total: int) -> None:
         """Emit progress data to the GUI callback when configured."""
-
         if self.progress is not None:
             self.progress(asset, stage, current, total)
 
     def _log(self, message: str) -> None:
         """Emit a pipeline log line without evaluating its contents."""
-
         if self.logger is not None:
             self.logger(message)
