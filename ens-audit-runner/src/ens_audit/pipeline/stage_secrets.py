@@ -16,8 +16,8 @@ from ens_audit.models import Asset, Finding, Location, Severity
 class SecretStage:
     """Run TruffleHog and detect-secrets without retaining discovered secret values.
 
-    Security invariant: raw secret values are never copied into normalized findings, logs,
-    evidence, or report data.
+    Security invariant: raw scanner output is parsed only in memory; persisted artifacts,
+    normalized findings, logs, evidence, and reports never contain matched secret material.
     """
 
     async def run(self, asset: Asset) -> list[Finding]:
@@ -26,11 +26,12 @@ class SecretStage:
         return await asyncio.to_thread(self._run_sync, asset)
 
     def _run_sync(self, asset: Asset) -> list[Finding]:
-        """Execute available secret scanners and normalize metadata-only findings."""
+        """Execute available secret scanners and persist metadata-only results."""
 
         output_dir = RESULTS_DIR / asset.name / "secrets"
         output_dir.mkdir(parents=True, exist_ok=True)
         findings: list[Finding] = []
+        sanitized: list[dict[str, Any]] = []
 
         if shutil.which("trufflehog"):
             completed = self._tool(
@@ -38,9 +39,9 @@ class SecretStage:
                 cwd=asset.path,
                 timeout_s=900,
             )
-            raw_path = output_dir / "trufflehog.jsonl"
-            raw_path.write_text(completed.stdout, encoding="utf-8")
-            findings.extend(self._parse_trufflehog(raw_path, asset))
+            scanner_findings, scanner_metadata = self._parse_trufflehog_text(completed.stdout, asset)
+            findings.extend(scanner_findings)
+            sanitized.extend(scanner_metadata)
 
         if shutil.which("detect-secrets"):
             completed = self._tool(
@@ -48,10 +49,17 @@ class SecretStage:
                 cwd=asset.path,
                 timeout_s=900,
             )
-            raw_path = output_dir / "detect-secrets.json"
-            raw_path.write_text(completed.stdout, encoding="utf-8")
-            findings.extend(self._parse_detect_secrets(raw_path, asset))
+            scanner_findings, scanner_metadata = self._parse_detect_secrets_text(
+                completed.stdout,
+                asset,
+            )
+            findings.extend(scanner_findings)
+            sanitized.extend(scanner_metadata)
 
+        (output_dir / "secret-findings-sanitized.json").write_text(
+            json.dumps(sanitized, indent=2, sort_keys=True),
+            encoding="utf-8",
+        )
         return findings
 
     @staticmethod
@@ -73,13 +81,15 @@ class SecretStage:
         return completed
 
     @staticmethod
-    def _parse_trufflehog(path: Path, asset: Asset) -> list[Finding]:
-        """Normalize TruffleHog JSON-lines records while discarding raw secret fields."""
+    def _parse_trufflehog_text(
+        text: str,
+        asset: Asset,
+    ) -> tuple[list[Finding], list[dict[str, Any]]]:
+        """Normalize TruffleHog JSON-lines text while discarding all secret-bearing fields."""
 
         findings: list[Finding] = []
-        if not path.exists():
-            return findings
-        for line in path.read_text(encoding="utf-8").splitlines():
+        metadata: list[dict[str, Any]] = []
+        for line in text.splitlines():
             if not line.strip():
                 continue
             record: dict[str, Any] = json.loads(line)
@@ -90,6 +100,15 @@ class SecretStage:
             git_data = data.get("Git") if isinstance(data, dict) else {}
             file_name = str(git_data.get("file", "")) if isinstance(git_data, dict) else ""
             line_number = int(git_data.get("line", 0) or 0) if isinstance(git_data, dict) else 0
+            metadata.append(
+                {
+                    "scanner": "trufflehog",
+                    "detector": detector,
+                    "verified": verified,
+                    "file": file_name,
+                    "line": line_number,
+                }
+            )
             findings.append(
                 Finding(
                     title=f"Potential secret detected: {detector}",
@@ -97,28 +116,41 @@ class SecretStage:
                     asset=asset.name,
                     stage="secrets",
                     rule_id=f"trufflehog:{detector}",
-                    root_cause="committed-credential",
+                    root_cause="committed_credentials",
                     location=Location(file=file_name, line=line_number),
                     description="Secret scanner identified credential-like material.",
                     evidence=f"detector={detector}; verified={verified}",
                     confidence=1.0 if verified else 0.7,
                 )
             )
-        return findings
+        return findings, metadata
 
     @staticmethod
-    def _parse_detect_secrets(path: Path, asset: Asset) -> list[Finding]:
-        """Normalize detect-secrets results without retaining matched values."""
+    def _parse_detect_secrets_text(
+        text: str,
+        asset: Asset,
+    ) -> tuple[list[Finding], list[dict[str, Any]]]:
+        """Normalize detect-secrets JSON text without retaining matched or hashed values."""
 
-        if not path.exists() or not path.read_text(encoding="utf-8").strip():
-            return []
-        payload: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
+        if not text.strip():
+            return [], []
+        payload: dict[str, Any] = json.loads(text)
         findings: list[Finding] = []
+        metadata: list[dict[str, Any]] = []
         for file_name, records in (payload.get("results") or {}).items():
             for record in records:
                 if not isinstance(record, dict):
                     continue
                 detector = str(record.get("type", "Secret"))
+                line_number = int(record.get("line_number", 0) or 0)
+                metadata.append(
+                    {
+                        "scanner": "detect-secrets",
+                        "detector": detector,
+                        "file": str(file_name),
+                        "line": line_number,
+                    }
+                )
                 findings.append(
                     Finding(
                         title=f"Potential secret detected: {detector}",
@@ -126,14 +158,11 @@ class SecretStage:
                         asset=asset.name,
                         stage="secrets",
                         rule_id=f"detect-secrets:{detector}",
-                        root_cause="committed-credential",
-                        location=Location(
-                            file=str(file_name),
-                            line=int(record.get("line_number", 0) or 0),
-                        ),
+                        root_cause="committed_credentials",
+                        location=Location(file=str(file_name), line=line_number),
                         description="detect-secrets identified credential-like material.",
                         evidence=f"detector={detector}",
                         confidence=0.7,
                     )
                 )
-        return findings
+        return findings, metadata
