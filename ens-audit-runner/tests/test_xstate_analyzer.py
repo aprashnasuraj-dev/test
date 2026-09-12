@@ -78,8 +78,10 @@ def test_graph_reports_undefined_target_and_unreachable_state(tmp_path: Path) ->
 
     assert by_rule["custom-xstate:undefined-target"].location.function == "working"
     assert by_rule["custom-xstate:undefined-target"].evidence == "working -> missing"
+    assert by_rule["custom-xstate:undefined-target"].location.file == "src/machines/flow.ts"
     assert by_rule["custom-xstate:unreachable-state"].location.function == "orphan"
     assert by_rule["custom-xstate:unreachable-state"].severity is Severity.LOW
+    assert by_rule["custom-xstate:unreachable-state"].location.file == "src/machines/flow.ts"
 
 
 def test_reachable_graph_has_no_graph_findings(tmp_path: Path) -> None:
