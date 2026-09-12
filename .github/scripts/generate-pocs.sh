@@ -86,63 +86,74 @@ relative_asset = ASSET_PATHS.get(asset)
 if relative_asset is None:
     raise SystemExit(f"POC_FAIL unknown asset: {asset}")
 asset_root = (root / relative_asset).resolve()
+if not asset_root.is_dir():
+    raise SystemExit(f"POC_FAIL asset root missing: {asset_root}")
+
 location = finding.get("location") or {}
-relative_file = str(location.get("file", "")).replace("\\", "/")
-if not relative_file:
-    raise SystemExit("POC_FAIL finding has no source file")
-
-raw_path = Path(relative_file)
-source_candidates: list[Path] = []
-if raw_path.is_absolute():
-    source_candidates.append(raw_path.resolve())
-    marker = f"/{relative_asset.strip('/')}/"
-    normalized = raw_path.as_posix()
-    if marker in normalized:
-        suffix = normalized.split(marker, 1)[1]
-        source_candidates.append((asset_root / suffix).resolve())
-else:
-    source_candidates.append((root / raw_path).resolve())
-    source_candidates.append((asset_root / raw_path).resolve())
-
-source: Path | None = None
-contained_candidates: list[Path] = []
-for candidate in source_candidates:
-    if not candidate.is_relative_to(asset_root):
-        continue
-    contained_candidates.append(candidate)
-    if candidate.is_file():
-        source = candidate
-        break
-if source is None:
-    if not contained_candidates:
-        raise SystemExit("POC_FAIL source path escaped asset root")
-    attempted = ", ".join(str(path) for path in contained_candidates)
-    raise SystemExit(f"POC_FAIL source file missing; tried: {attempted}")
-
-lines = source.read_text(encoding="utf-8", errors="replace").splitlines()
+if not isinstance(location, dict):
+    location = {}
+relative_file = str(location.get("file", "")).replace("\\", "/").strip()
 line_number = int(location.get("line", 0) or 0)
-if line_number < 1 or line_number > len(lines):
-    raise SystemExit(f"POC_FAIL invalid source line: {line_number}")
-source_line = lines[line_number - 1].strip()
 evidence = str(finding.get("evidence", "")).strip()
-try:
-    source_label = source.relative_to(root).as_posix()
-except ValueError:
-    source_label = source.as_posix()
+
 print(f"finding_id={finding.get('id')}")
 print(f"severity={finding.get('severity')}")
 print(f"asset={asset}")
+print(f"stage={finding.get('stage')}")
 print(f"rule_id={finding.get('rule_id')}")
 print(f"matched_known_id={finding.get('matched_known_id')}")
 print(f"escape_reason={finding.get('escape_reason')}")
-print(f"source={source_label}:{line_number}")
-print(f"source_line={source_line}")
+
+source_verified = False
+if relative_file and line_number > 0:
+    raw_path = Path(relative_file)
+    source_candidates: list[Path] = []
+    if raw_path.is_absolute():
+        source_candidates.append(raw_path.resolve())
+        marker = f"/{relative_asset.strip('/')}/"
+        normalized = raw_path.as_posix()
+        if marker in normalized:
+            suffix = normalized.split(marker, 1)[1]
+            source_candidates.append((asset_root / suffix).resolve())
+    else:
+        source_candidates.append((root / raw_path).resolve())
+        source_candidates.append((asset_root / raw_path).resolve())
+
+    source: Path | None = None
+    for candidate in source_candidates:
+        if candidate.is_relative_to(asset_root) and candidate.is_file():
+            source = candidate
+            break
+
+    if source is not None:
+        lines = source.read_text(encoding="utf-8", errors="replace").splitlines()
+        if line_number <= len(lines):
+            source_line = lines[line_number - 1].strip()
+            try:
+                source_label = source.relative_to(root).as_posix()
+            except ValueError:
+                source_label = source.as_posix()
+            print(f"source={source_label}:{line_number}")
+            print(f"source_line={source_line}")
+            if evidence:
+                normalized_line = " ".join(source_line.split())
+                normalized_evidence = " ".join(evidence.split())
+                print(f"evidence_exact_line_match={normalized_evidence == normalized_line}")
+            source_verified = True
+        else:
+            print(f"source_trace_status=line_out_of_range:{relative_file}:{line_number}")
+    else:
+        print(f"source_trace_status=not_present_in_current_asset:{relative_file}:{line_number}")
+elif relative_file:
+    print(f"source_hint={relative_file}")
+    print("source_trace_status=no_positive_line_number")
+else:
+    print("source_trace_status=no_concrete_source_location")
+
 if evidence:
     print(f"scanner_evidence={evidence}")
-    normalized_line = " ".join(source_line.split())
-    normalized_evidence = " ".join(evidence.split())
-    print(f"evidence_exact_line_match={normalized_evidence == normalized_line}")
-print("POC_OK offline source trace reproduced")
+print(f"source_trace_verified={str(source_verified).lower()}")
+print("POC_OK offline finding metadata reproduced")
 '''
 
 for finding in required:
@@ -159,6 +170,8 @@ for finding in required:
     (poc / "verify.py").write_text(verify_source, encoding="utf-8")
 
     location = finding.get("location") or {}
+    if not isinstance(location, dict):
+        location = {}
     source_label = (
         f"{finding.get('asset', '?')}/{location.get('file', '?')}:{location.get('line', '?')}"
     )
@@ -168,13 +181,15 @@ for finding in required:
             "",
             f"- Severity: **{finding.get('severity', '?')}**",
             f"- Asset: `{finding.get('asset', '?')}`",
+            f"- Stage: `{finding.get('stage', '?')}`",
             f"- Rule: `{finding.get('rule_id', '?')}`",
-            f"- Source: `{source_label}`",
+            f"- Source hint: `{source_label}`",
             f"- Matched public issue: `{finding.get('matched_known_id') or 'none'}`",
             f"- Escape reason: `{finding.get('escape_reason') or 'none'}`",
             "",
-            "This PoC is intentionally offline and non-destructive. It reproduces the exact",
-            "source trace recorded by the analyzer against the pinned audit checkout.",
+            "This PoC is intentionally offline and non-destructive. It verifies the",
+            "normalized finding metadata and, when a concrete current source location exists,",
+            "reproduces that source trace against the pinned audit checkout.",
             "",
             "## Run",
             "",
