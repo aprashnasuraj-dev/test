@@ -7,11 +7,12 @@ if [[ "$(uname -s)" != "Linux" ]]; then
 fi
 
 export DEBIAN_FRONTEND=noninteractive
-export PATH="$HOME/.local/bin:$HOME/.foundry/bin:$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.foundry/bin:$HOME/.config/.foundry/bin:$HOME/.cargo/bin:$PATH"
 mkdir -p "$HOME/.local/bin" "$HOME/.local/share/ens-audit-tools"
 
 echo "$HOME/.local/bin" >> "${GITHUB_PATH:-/dev/null}"
 echo "$HOME/.foundry/bin" >> "${GITHUB_PATH:-/dev/null}"
+echo "$HOME/.config/.foundry/bin" >> "${GITHUB_PATH:-/dev/null}"
 echo "$HOME/.cargo/bin" >> "${GITHUB_PATH:-/dev/null}"
 
 sudo apt-get update
@@ -141,7 +142,19 @@ if ! command -v forge >/dev/null 2>&1; then
   curl -fL https://foundry.paradigm.xyz -o "$temp_dir/foundryup.sh"
   bash "$temp_dir/foundryup.sh"
   rm -rf "$temp_dir"
-  export PATH="$HOME/.foundry/bin:$PATH"
+
+  for foundry_dir in "$HOME/.foundry/bin" "$HOME/.config/.foundry/bin"; do
+    if [[ -x "$foundry_dir/foundryup" ]]; then
+      export PATH="$foundry_dir:$PATH"
+      echo "$foundry_dir" >> "${GITHUB_PATH:-/dev/null}"
+      break
+    fi
+  done
+
+  if ! command -v foundryup >/dev/null 2>&1; then
+    echo "foundryup installer completed but foundryup was not found in a supported install path" >&2
+    exit 6
+  fi
   foundryup
 fi
 
