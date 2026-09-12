@@ -6,12 +6,7 @@ RUNNER_OUT="${GITHUB_WORKSPACE}/ens-audit-runner/out"
 [[ -d "$OUT" ]] || OUT="$RUNNER_OUT"
 [[ -d "$OUT" ]] || { echo "::error::No output directory found"; exit 1; }
 
-ESC="$OUT/findings_escaped.json"
-[[ -f "$ESC" ]] || ESC="$OUT/findings/findings_escaped.json"
-[[ -f "$ESC" ]] || { echo "::error::findings_escaped.json is required before PoC generation"; exit 1; }
-
 export OUT_DIR="$OUT"
-export ESC_PATH="$ESC"
 python - <<'PY'
 from __future__ import annotations
 
@@ -23,7 +18,6 @@ from pathlib import Path
 from typing import Any
 
 out = Path(os.environ["OUT_DIR"]).resolve()
-esc = Path(os.environ["ESC_PATH"]).resolve()
 repo_root = (Path.home() / "ens-audit" / "repos" / "audit-comp-ens").resolve()
 pocs_root = out / "pocs"
 pocs_root.mkdir(parents=True, exist_ok=True)
@@ -37,18 +31,35 @@ asset_paths = {
     "smart-account": "packages/smart-account",
 }
 
-def findings_from(path: Path) -> list[dict[str, Any]]:
+def load_bucket(name: str) -> list[dict[str, Any]]:
+    candidates = [out / name, out / "findings" / name]
+    path = next((p for p in candidates if p.is_file()), None)
+    if path is None:
+        return []
     data = json.loads(path.read_text(encoding="utf-8"))
     items = data if isinstance(data, list) else data.get("findings", [])
     if not isinstance(items, list):
-        raise SystemExit("findings_escaped.json must contain a findings list")
+        raise SystemExit(f"{path} must contain a findings list")
     return [item for item in items if isinstance(item, dict)]
 
-required = [
-    finding
-    for finding in findings_from(esc)
-    if str(finding.get("severity", "")).lower() in {"critical", "high", "medium"}
-]
+def finding_id(finding: dict[str, Any]) -> str:
+    return str(
+        finding.get("id") or finding.get("finding_id") or finding.get("rule_id") or ""
+    ).strip()
+
+candidates = load_bucket("findings_new.json") + load_bucket("findings_escaped.json")
+required_by_id: dict[str, dict[str, Any]] = {}
+for finding in candidates:
+    if str(finding.get("severity", "")).lower() not in {"critical", "high", "medium"}:
+        continue
+    status = str(finding.get("status", "open")).lower()
+    if status in {"suppressed", "false_positive", "duplicate"} or finding.get("duplicate") is True:
+        continue
+    fid = finding_id(finding)
+    if not fid:
+        raise SystemExit("actionable finding is missing an id")
+    required_by_id.setdefault(fid, finding)
+required = list(required_by_id.values())
 
 verify_source = r'''from __future__ import annotations
 
@@ -107,18 +118,22 @@ print("POC_OK offline source trace reproduced")
 '''
 
 for finding in required:
-    fid = str(finding.get("id") or finding.get("finding_id") or finding.get("rule_id") or "").strip()
-    if not fid or "/" in fid or "\\" in fid or fid in {".", ".."}:
+    fid = finding_id(finding)
+    if "/" in fid or "\\" in fid or fid in {".", ".."}:
         raise SystemExit(f"invalid finding id for PoC directory: {fid!r}")
     poc = (pocs_root / fid).resolve()
     if not poc.is_relative_to(pocs_root.resolve()):
         raise SystemExit(f"PoC path escaped output root: {fid}")
     poc.mkdir(parents=True, exist_ok=True)
-    (poc / "finding.json").write_text(json.dumps(finding, indent=2, sort_keys=True), encoding="utf-8")
+    (poc / "finding.json").write_text(
+        json.dumps(finding, indent=2, sort_keys=True), encoding="utf-8"
+    )
     (poc / "verify.py").write_text(verify_source, encoding="utf-8")
 
     location = finding.get("location") or {}
-    source_label = f"{finding.get('asset', '?')}/{location.get('file', '?')}:{location.get('line', '?')}"
+    source_label = (
+        f"{finding.get('asset', '?')}/{location.get('file', '?')}:{location.get('line', '?')}"
+    )
     readme = "\n".join(
         [
             f"# Offline PoC — {fid}",
@@ -131,24 +146,14 @@ for finding in required:
             f"- Escape reason: `{finding.get('escape_reason') or 'none'}`",
             "",
             "This PoC is intentionally offline and non-destructive. It reproduces the exact",
-            "source trace recorded by the analyzer against the pinned audit checkout. It does",
-            "not contact a live service, wallet, RPC endpoint, or third-party host.",
+            "source trace recorded by the analyzer against the pinned audit checkout.",
             "",
             "## Run",
-            "",
-            "Linux/macOS/WSL:",
             "",
             "```bash",
             "bash run.sh /path/to/audit-comp-ens",
             "```",
             "",
-            "Windows PowerShell:",
-            "",
-            "```powershell",
-            ".\\run.ps1 C:\\path\\to\\audit-comp-ens",
-            "```",
-            "",
-            "With no argument the scripts use `~/ens-audit/repos/audit-comp-ens`.",
             "A successful reproduction prints `POC_OK`.",
             "",
         ]
