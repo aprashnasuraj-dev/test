@@ -25,8 +25,8 @@ LogCallback = Callable[[str], None]
 class PipelineOrchestrator:
     """Execute and checkpoint the complete audit workflow.
 
-    Security invariant: only downloader-validated assets enter analyzers; failed stages do not
-    mutate another stage's checkpoint and never cause shell fallback.
+    Security invariant: only downloader-validated assets enter analyzers; failed stages are
+    checkpointed as failed, remain eligible for resume, and never cause shell fallback.
     """
 
     STAGES = ("sast", "symbolic", "fuzz", "deps", "secrets", "known_filter", "report")
@@ -60,7 +60,7 @@ class PipelineOrchestrator:
         return await self._run_assets(run_id, assets)
 
     async def resume(self, run_id: UUID) -> AuditReport:
-        """Resume a prior run, skipping successful per-asset checkpoints."""
+        """Resume a prior run, skipping only successful per-asset checkpoints."""
 
         assets = await download_all_repos()
         return await self._run_assets(run_id, assets)
@@ -81,14 +81,14 @@ class PipelineOrchestrator:
                 if stage_name in completed:
                     self._log(f"skip {asset.name}:{stage_name}; checkpoint already complete")
                     continue
-                stage_findings = await self._run_stage(stage_name, stage, asset)
+                stage_findings, succeeded = await self._run_stage(stage_name, stage, asset)
                 findings.extend(stage_findings)
                 self.store.save_stage(
                     run_id,
                     asset.name,
                     stage_name,
                     stage_findings,
-                    succeeded=True,
+                    succeeded=succeeded,
                 )
             persisted = [
                 finding for finding in self.store.load_findings(run_id) if finding.asset == asset.name
@@ -123,19 +123,28 @@ class PipelineOrchestrator:
             ("secrets", self.stage_secrets),
         )
 
-    async def _run_stage(self, name: str, stage: object, asset: Asset) -> list[Finding]:
-        """Run one analyzer with exception isolation unless strict mode is enabled."""
+    async def _run_stage(
+        self,
+        name: str,
+        stage: object,
+        asset: Asset,
+    ) -> tuple[list[Finding], bool]:
+        """Run one analyzer and return findings plus an explicit success state.
+
+        Security invariant: an isolated exception can never be represented as a successful
+        empty scan.
+        """
 
         try:
             run_method = getattr(stage, "run")
             findings: list[Finding] = await run_method(asset)
             self._log(f"complete {asset.name}:{name}; findings={len(findings)}")
-            return findings
+            return findings, True
         except Exception as exc:
             self._log(f"failed {asset.name}:{name}; {type(exc).__name__}: {exc}")
             if self.strict:
                 raise
-            return []
+            return [], False
 
     @staticmethod
     def _dedupe_by_id(findings: list[Finding]) -> list[Finding]:
