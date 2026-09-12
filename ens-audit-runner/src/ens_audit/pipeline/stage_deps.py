@@ -4,21 +4,24 @@ from __future__ import annotations
 
 import asyncio
 import json
-import shutil
 import subprocess
 from pathlib import Path
 from typing import Any
 
 from ens_audit.config import RESULTS_DIR
 from ens_audit.models import Asset, Finding, Location, Severity
+from ens_audit.tooling import DEFAULT_TOOL_RUNNER
 
 
 class DependencyStage:
     """Run npm/Snyk/pip dependency checks and normalize machine-readable findings.
 
     Security invariant: package managers and scanners execute as argv-only subprocesses in
-    the pinned asset directory; their output is treated strictly as data.
+    the pinned asset directory; no scanner is implicitly downloaded through ``npx``.
     """
+
+    def __init__(self) -> None:
+        self.tool_runner = DEFAULT_TOOL_RUNNER
 
     async def run(self, asset: Asset) -> list[Finding]:
         """Run dependency scanners applicable to one asset."""
@@ -31,8 +34,11 @@ class DependencyStage:
         output_dir = RESULTS_DIR / asset.name / "deps"
         output_dir.mkdir(parents=True, exist_ok=True)
         findings: list[Finding] = []
+        package_json = asset.path / "package.json"
+        npm_lock = asset.path / "package-lock.json"
+        shrinkwrap = asset.path / "npm-shrinkwrap.json"
 
-        if (asset.path / "package.json").is_file() and shutil.which("npm"):
+        if package_json.is_file() and (npm_lock.is_file() or shrinkwrap.is_file()) and self.tool_runner.available("npm"):
             completed = self._tool(
                 ["npm", "audit", "--json"],
                 cwd=asset.path,
@@ -43,9 +49,9 @@ class DependencyStage:
             npm_path.write_text(completed.stdout, encoding="utf-8")
             findings.extend(self._parse_npm(npm_path, asset))
 
-        if (asset.path / "package.json").is_file() and shutil.which("npx"):
+        if package_json.is_file() and self.tool_runner.available("snyk"):
             completed = self._tool(
-                ["npx", "snyk", "test", "--json"],
+                ["snyk", "test", "--json"],
                 cwd=asset.path,
                 timeout_s=600,
                 accepted_codes={0, 1, 2, 3},
@@ -55,7 +61,7 @@ class DependencyStage:
             findings.extend(self._parse_snyk(snyk_path, asset))
 
         requirements = asset.path / "requirements.txt"
-        if requirements.is_file() and shutil.which("pip-audit"):
+        if requirements.is_file() and self.tool_runner.available("pip-audit"):
             completed = self._tool(
                 ["pip-audit", "-r", str(requirements), "--format=json"],
                 cwd=asset.path,
@@ -68,24 +74,21 @@ class DependencyStage:
 
         return findings
 
-    @staticmethod
     def _tool(
+        self,
         argv: list[str],
         *,
         cwd: Path,
         timeout_s: int,
         accepted_codes: set[int],
     ) -> subprocess.CompletedProcess[str]:
-        """Execute one dependency scanner without a shell."""
+        """Execute one dependency scanner natively or through WSL without a shell."""
 
-        completed = subprocess.run(
-            argv,
+        completed = self.tool_runner.run(
+            argv[0],
+            argv[1:],
             cwd=cwd,
-            shell=False,
-            check=False,
-            capture_output=True,
-            text=True,
-            timeout=timeout_s,
+            timeout_s=timeout_s,
         )
         if completed.returncode not in accepted_codes:
             detail = completed.stderr.strip() or completed.stdout.strip() or "tool failed"
