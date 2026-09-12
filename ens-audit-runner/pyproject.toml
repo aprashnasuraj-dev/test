@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ens-audit-runner"
+version = "0.1.0"
+description = "Windows-native GUI runner for source-only ENS audit competition analysis"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "PySide6",
+  "PyYAML",
+  "httpx",
+  "networkx",
+  "pydantic>=2",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-asyncio",
+  "pytest-cov",
+  "ruff",
+  "mypy",
+  "bandit",
+  "pip-audit",
+  "pyinstaller",
+]
+
+[project.scripts]
+ens-audit-runner = "ens_audit.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ens_audit = ["known_issues/*.yaml", "rules/*.yaml"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+branch = true
+source = ["ens_audit"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["ens_audit"]
