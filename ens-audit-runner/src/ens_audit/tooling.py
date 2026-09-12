@@ -32,6 +32,7 @@ class ToolRunner:
     """
 
     session_environment: dict[str, str] = field(default_factory=dict)
+    disabled_tools: set[str] = field(default_factory=set)
     _cache: dict[str, ResolvedTool | None] = field(default_factory=dict, init=False)
     _wsl_path_cache: dict[str, str | None] = field(default_factory=dict, init=False)
 
@@ -39,6 +40,12 @@ class ToolRunner:
         """Replace in-memory tool credentials without persisting or logging their values."""
 
         self.session_environment = {key: value for key, value in values.items() if value}
+
+    def set_disabled_tools(self, tools: Sequence[str]) -> None:
+        """Disable selected tools for this process session without changing PATH or disk state."""
+
+        self.disabled_tools = {tool for tool in tools if tool}
+        self._cache.clear()
 
     def clear_cache(self) -> None:
         """Discard executable discovery results after tools are installed or PATH changes."""
@@ -77,6 +84,8 @@ class ToolRunner:
     def resolve(self, tool: str) -> ResolvedTool | None:
         """Resolve a command on native PATH or inside the default WSL distribution."""
 
+        if tool in self.disabled_tools:
+            return None
         if tool in self._cache:
             return self._cache[tool]
 
@@ -96,7 +105,7 @@ class ToolRunner:
         return None
 
     def available(self, tool: str) -> bool:
-        """Return whether a native or WSL executable is available."""
+        """Return whether a native or WSL executable is available and enabled."""
 
         return self.resolve(tool) is not None
 
@@ -113,7 +122,7 @@ class ToolRunner:
 
         resolved = self.resolve(tool)
         if resolved is None:
-            raise FileNotFoundError(f"required analyzer is not installed: {tool}")
+            raise FileNotFoundError(f"required analyzer is not installed or enabled: {tool}")
 
         merged_env = os.environ.copy()
         merged_env.update(self.session_environment)
@@ -128,9 +137,8 @@ class ToolRunner:
             converted = [convert_argument_for_wsl(value) for value in args]
             argv = [resolved.executable, "--cd", wsl_cwd, "-e", tool, *converted]
             process_cwd = None
-            merged_env["WSLENV"] = _merge_wslenv(
-                merged_env.get("WSLENV", ""), tuple(self.session_environment) + tuple(extra_environment or {})
-            )
+            forwarded = tuple(self.session_environment) + tuple(extra_environment or {})
+            merged_env["WSLENV"] = _merge_wslenv(merged_env.get("WSLENV", ""), forwarded)
 
         return subprocess.run(
             argv,
