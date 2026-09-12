@@ -104,10 +104,9 @@ jobs:
           bash -n .github/scripts/stage-output.sh
           bash -n .github/scripts/verify-submissions.sh
 
-      - name: Install final-audit analyzer toolchain
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.final_audit }}
+      - name: Install external analyzer toolchain
         env:
-          ACCEPT_CODEQL_TERMS: ${{ inputs.accept_codeql_terms }}
+          ACCEPT_CODEQL_TERMS: ${{ github.event_name == 'workflow_dispatch' && inputs.accept_codeql_terms }}
           GITHUB_TOKEN: ${{ github.token }}
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: bash .github/scripts/install-final-audit-tools.sh
