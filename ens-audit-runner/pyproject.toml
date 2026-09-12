@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=83.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -28,6 +28,7 @@ dev = [
   "bandit",
   "pip-audit",
   "pyinstaller",
+  "setuptools>=83.0.0",
 ]
 
 [project.scripts]
