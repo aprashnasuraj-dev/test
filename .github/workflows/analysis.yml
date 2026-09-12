@@ -73,10 +73,12 @@ jobs:
           import asyncio
           import json
           import os
+          import re
           import shutil
           from pathlib import Path
 
           from ens_audit.config import ASSETS, UPSTREAM_REPOSITORY
+          from ens_audit.known_issues import load_known_issues
           from ens_audit.pipeline.orchestrator import PipelineOrchestrator
 
           workspace = Path(os.environ["GITHUB_WORKSPACE"])
@@ -131,21 +133,90 @@ jobs:
               raise SystemExit(f"analysis completed without report JSON: {source_json}")
 
           payload = json.loads(source_json.read_text(encoding="utf-8"))
+          findings = payload.get("findings", [])
+          if not isinstance(findings, list):
+              raise SystemExit("analysis report findings must be a list")
+
           (out / "findings.json").write_text(
               json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8"
           )
           if source_md.is_file():
               shutil.copy2(source_md, out / "audit-report.md")
 
+          def normalize_root(value):
+              return re.sub(r"[^a-z0-9]+", "_", str(value).lower()).strip("_")
+
+          severity_rank = {"info": 0, "low": 1, "medium": 2, "high": 3, "critical": 4}
+          known = load_known_issues()
+          escaped = []
+          suppressed = []
+          informational = []
+          rejected = []
+          new = []
+
+          for finding in findings:
+              status = str(finding.get("status", "open")).lower()
+              severity = str(finding.get("severity", "")).lower()
+              asset = str(finding.get("asset", ""))
+              root = normalize_root(finding.get("root_cause", ""))
+
+              if status == "suppressed":
+                  suppressed.append(finding)
+                  continue
+              if status == "false_positive":
+                  rejected.append(finding)
+                  continue
+
+              candidates = [
+                  issue
+                  for issue in known
+                  if asset in issue.asset and root == normalize_root(issue.root_cause)
+              ]
+              if candidates:
+                  issue = candidates[0]
+                  enriched = dict(finding)
+                  enriched["matched_known_id"] = issue.id
+                  enriched["known_severity"] = issue.severity
+                  if severity_rank.get(severity, -1) > severity_rank.get(issue.severity.lower(), -1):
+                      enriched["escape_reason"] = "severity_escalation"
+                  else:
+                      enriched["escape_reason"] = "known_root_cause_variant_not_suppressed"
+                  escaped.append(enriched)
+              elif severity == "info":
+                  informational.append(finding)
+              else:
+                  new.append(finding)
+
+          buckets = {
+              "findings_new.json": new,
+              "findings_escaped.json": escaped,
+              "findings_suppressed.json": suppressed,
+              "findings_informational.json": informational,
+              "findings_rejected.json": rejected,
+          }
+          for name, items in buckets.items():
+              (out / name).write_text(
+                  json.dumps({"findings": items}, indent=2, sort_keys=True), encoding="utf-8"
+              )
+
           generated_submissions = report.output_dir / "findings"
           if generated_submissions.is_dir():
               submissions = out / "submissions"
               submissions.mkdir(parents=True, exist_ok=True)
-              for path in generated_submissions.glob("*.md"):
-                  shutil.copy2(path, submissions / path.name)
+              for index, finding in enumerate(findings, start=1):
+                  if str(finding.get("status", "open")).lower() != "open":
+                      continue
+                  matches = list(generated_submissions.glob(f"{index:03d}-*.md"))
+                  if len(matches) == 1 and finding.get("id"):
+                      shutil.copy2(matches[0], submissions / f"{finding['id']}.md")
 
           print(f"normalized report output: {out}")
-          print(f"finding count: {len(payload.get('findings', []))}")
+          print(f"finding count: {len(findings)}")
+          print(
+              "finding buckets: "
+              f"new={len(new)} escaped={len(escaped)} suppressed={len(suppressed)} "
+              f"informational={len(informational)} rejected={len(rejected)}"
+          )
           PY
 
       - name: Verify submission artifacts
