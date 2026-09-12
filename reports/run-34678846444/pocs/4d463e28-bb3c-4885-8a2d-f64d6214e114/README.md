@@ -1,0 +1,19 @@
+# Offline PoC — 4d463e28-bb3c-4885-8a2d-f64d6214e114
+
+- Severity: **Medium**
+- Asset: `workers`
+- Rule: `home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url`
+- Source: `workers//home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/posthog/name-search-stats.ts:95`
+- Matched public issue: `none`
+- Escape reason: `none`
+
+This PoC is intentionally offline and non-destructive. It reproduces the exact
+source trace recorded by the analyzer against the pinned audit checkout.
+
+## Run
+
+```bash
+bash run.sh /path/to/audit-comp-ens
+```
+
+A successful reproduction prints `POC_OK`.

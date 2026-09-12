@@ -1,0 +1,11 @@
+finding_id=88832571-1294-46cd-a1de-9c7be1e85bac
+severity=Medium
+asset=transaction-manager
+rule_id=custom-xstate:undefined-target
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/transaction.machine.ts:519
+source_line=target: 'error.timeout',
+scanner_evidence=pending -> error.timeout
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

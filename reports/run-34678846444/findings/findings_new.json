@@ -6,7 +6,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "const response = await fetch(V1_SUBGRAPH_URL, {",
-      "id": "c3998f2e-a3da-409b-a89d-be894cbc3778",
+      "id": "83926a43-96d0-494b-9dc0-b8ec52e1768c",
       "impact": "",
       "location": {
         "column": 0,
@@ -32,7 +32,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "const response = await fetch(V1_SUBGRAPH_URL, {",
-      "id": "d3d680ec-79b4-419d-9395-3df874599fbc",
+      "id": "5275900d-5960-40a3-83ca-e7c0a8adbaf0",
       "impact": "",
       "location": {
         "column": 0,
@@ -58,7 +58,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "const response = await fetch(endpoint, {",
-      "id": "fb10236a-d9b5-46a3-8a31-10e71555f9db",
+      "id": "750142ee-26f0-40f9-a4b9-132747bc1462",
       "impact": "",
       "location": {
         "column": 0,
@@ -84,7 +84,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "? await fetch(new Request(resolvedUrl, input), init)",
-      "id": "e3f0fc40-05df-4065-bc7c-6ef9759a1cf6",
+      "id": "b1fd64cc-48f9-4b8f-93d4-92235317c596",
       "impact": "",
       "location": {
         "column": 0,
@@ -110,7 +110,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": ": await fetch(resolvedUrl, init)",
-      "id": "108bdd5d-1d95-4a16-a818-084dfd4a7767",
+      "id": "0186ed1e-7ea8-4b82-af5a-5ffa3b92727f",
       "impact": "",
       "location": {
         "column": 0,
@@ -136,7 +136,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;",
-      "id": "35ba61d0-f338-4428-b700-a509b05325b3",
+      "id": "bad6ecde-998b-4b06-a19a-8d75a1c4f7a3",
       "impact": "",
       "location": {
         "column": 0,
@@ -162,7 +162,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "declare function fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;",
-      "id": "f350fba6-751d-4ad2-8ce4-c27a4cb5ffa1",
+      "id": "e6600305-dcf3-4d44-a79f-005dcfe1a7ff",
       "impact": "",
       "location": {
         "column": 0,
@@ -188,7 +188,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;",
-      "id": "78604737-9137-4868-a1b1-00d0e8d173df",
+      "id": "3fcbecce-1043-4f44-b331-a7b052c29f45",
       "impact": "",
       "location": {
         "column": 0,
@@ -214,7 +214,7 @@
       "cwe": null,
       "description": "An LLM call is near prompt/message construction that references untrusted application or repository content, with no observed sanitizer or explicit data delimiter.",
       "evidence": "    system_fingerprint?: string | null;\n    service_tier?: \"auto\" | \"default\" | \"flex\" | \"scale\" | \"priority\" | null;\n};\n/**\n * Workers AI support for OpenAI's Responses API",
-      "id": "25c615c9-7190-469b-91d2-90322ad61f4d",
+      "id": "e9ea296f-4f60-48de-81fe-04b8f3bbf5ab",
       "impact": "",
       "location": {
         "column": 0,
@@ -240,7 +240,7 @@
       "cwe": null,
       "description": "An LLM call is near prompt/message construction that references untrusted application or repository content, with no observed sanitizer or explicit data delimiter.",
       "evidence": "    service_tier?: \"auto\" | \"default\" | \"flex\" | \"scale\" | \"priority\" | null;\n};\n/**\n * Workers AI support for OpenAI's Responses API\n * Reference: https://github.com/openai/openai-node/blob/master/src/resources/responses/responses.ts",
-      "id": "dc0eb987-e70a-4e99-9fde-c93fa7f3ed10",
+      "id": "be57f5d4-041d-40a7-bba8-4f4111144927",
       "impact": "",
       "location": {
         "column": 0,
@@ -266,7 +266,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "de02b73a-0aef-41c6-82a1-d9b97c2474a2",
+      "id": "af673049-b525-41d0-ad57-d73968ce4b52",
       "impact": "",
       "location": {
         "column": 21,
@@ -292,7 +292,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "38f3ec19-cc66-46f1-8561-9f662f88528f",
+      "id": "c21e488f-f1b3-4842-9921-6bdfa36f9594",
       "impact": "",
       "location": {
         "column": 3,
@@ -318,7 +318,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "8806c711-9a99-4c5c-bf27-912a63dd86fa",
+      "id": "3381e113-af21-4adf-922b-25d9be28d6fa",
       "impact": "",
       "location": {
         "column": 22,
@@ -344,7 +344,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "f572c62a-1266-4b71-8ee1-012a189dacb8",
+      "id": "131dd8ae-07a7-404f-9e38-a3f8b47b7c2a",
       "impact": "",
       "location": {
         "column": 5,
@@ -370,7 +370,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "4ffcee17-c7ba-4f38-8746-f34d6486708b",
+      "id": "ecd8d482-53bd-4fc0-93f3-05e8e6383baa",
       "impact": "",
       "location": {
         "column": 42,
@@ -396,7 +396,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "5d041c57-c955-4c07-b17e-75bb83d91d1d",
+      "id": "717f0b46-728a-4f3d-901c-bc86c09d993c",
       "impact": "",
       "location": {
         "column": 20,
@@ -422,7 +422,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "497f1f57-7611-457b-b1c8-848b4becb550",
+      "id": "5ac95fcb-ec04-47a4-87c9-f212874a541d",
       "impact": "",
       "location": {
         "column": 7,
@@ -448,7 +448,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "5c38835f-d83e-4fce-a0d0-9b6fe1d443c3",
+      "id": "1f0ceae7-dbe8-430f-8c50-29d9745060b4",
       "impact": "",
       "location": {
         "column": 28,
@@ -474,7 +474,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "84692e11-e08a-4e8e-9efa-8078c023ef00",
+      "id": "ddb4ec31-98db-44b5-9eea-da9fdc634335",
       "impact": "",
       "location": {
         "column": 3,
@@ -500,7 +500,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "e3895d13-3280-4397-8543-fa33f1a4b0d6",
+      "id": "5f5cf678-3bc1-4cdf-9a60-c5d31f059083",
       "impact": "",
       "location": {
         "column": 26,
@@ -526,7 +526,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "c3562ccb-a5eb-4e6e-b127-d8013fed7c46",
+      "id": "7b82422a-432f-4c33-b1e0-1be33e0b759e",
       "impact": "",
       "location": {
         "column": 26,
@@ -552,7 +552,7 @@
       "cwe": null,
       "description": "URL passed to open/postMessage requires scheme and origin validation.",
       "evidence": "URL passed to open/postMessage requires scheme and origin validation.",
-      "id": "73cc64f8-e0d0-436a-a82b-9025423db6f8",
+      "id": "7b0a11ec-ec97-4a09-b9d0-792b9325084f",
       "impact": "",
       "location": {
         "column": 19,
@@ -578,7 +578,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "87799bc0-beab-4863-bf26-6952d7a9f5d6",
+      "id": "d777d370-3117-4567-8417-677dadcbacd7",
       "impact": "",
       "location": {
         "column": 22,
@@ -604,7 +604,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "2f05e087-f62c-4d04-bd87-061178868de1",
+      "id": "16a7ca24-aa06-4f36-b1f2-bec6f07bfcfc",
       "impact": "",
       "location": {
         "column": 12,
@@ -630,7 +630,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "f68fbc72-11b1-4211-8578-344bf482589f",
+      "id": "e2abaf6c-8594-4220-815b-85530c74ace5",
       "impact": "",
       "location": {
         "column": 22,
@@ -656,7 +656,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "ba653c75-6521-4c24-ab52-75f12ab6e715",
+      "id": "340009d5-f60a-4cf4-8d7e-fcfeb62891b3",
       "impact": "",
       "location": {
         "column": 3,
@@ -682,7 +682,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "f9047c2f-5573-45b5-a5d2-ad0d24942713",
+      "id": "1061d88f-f0f1-45ea-9128-27343f1f40b7",
       "impact": "",
       "location": {
         "column": 26,
@@ -708,7 +708,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "ee455fcc-659c-483c-93fe-451245b94cfc",
+      "id": "6bfc534d-41de-4bef-91e4-e406fb2dc3d5",
       "impact": "",
       "location": {
         "column": 33,
@@ -734,7 +734,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "0e915d92-fe2f-48da-8dca-5db8de661b2e",
+      "id": "78f0ea1f-c440-4a74-9661-3e75d5753788",
       "impact": "",
       "location": {
         "column": 26,
@@ -760,7 +760,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "de925fad-aaa6-48f0-bebf-9af82b1fb684",
+      "id": "2385b786-60e0-40ee-8772-a10b023915e3",
       "impact": "",
       "location": {
         "column": 3,
@@ -786,7 +786,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "9a357f0f-5fce-4271-83bf-e21c86f1af19",
+      "id": "e5ed17f4-d055-4b94-a3e7-714c68f48b7a",
       "impact": "",
       "location": {
         "column": 7,
@@ -812,7 +812,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "a468abbe-8de4-4164-996c-418ed6d590c7",
+      "id": "f9b09eb1-5dea-46a5-b367-b014e400eaaa",
       "impact": "",
       "location": {
         "column": 14,
@@ -838,7 +838,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "4acdfe89-ac3b-4e12-b22a-34a1731508cd",
+      "id": "5360dc97-6614-4863-b039-75c6d972ed54",
       "impact": "",
       "location": {
         "column": 22,
@@ -864,7 +864,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "9350795c-351d-4268-9cc0-6784a8e79816",
+      "id": "309ad12f-b759-466b-a466-3682b72a79a2",
       "impact": "",
       "location": {
         "column": 11,
@@ -890,7 +890,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "988e43d4-df8d-4ebc-a485-bacb08ba4ad7",
+      "id": "f525d188-a612-4f12-9908-947269f8b1d0",
       "impact": "",
       "location": {
         "column": 29,
@@ -916,7 +916,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "b8cebea8-95b5-4876-923e-d718d264e719",
+      "id": "50943dbf-5cbb-41dc-97e0-9106f8e1c6cc",
       "impact": "",
       "location": {
         "column": 5,
@@ -942,7 +942,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "8228cfbd-d740-454e-b625-d198a7c4b8f6",
+      "id": "c8ddf598-2567-41e8-a04b-45d3212b1f85",
       "impact": "",
       "location": {
         "column": 9,
@@ -968,7 +968,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "81db0c5f-94cf-405c-8a2a-71553891ae1d",
+      "id": "23f3d733-b5cd-47c8-8a23-7542971ec03c",
       "impact": "",
       "location": {
         "column": 9,
@@ -994,7 +994,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "16577083-e536-47ec-abbf-76b3fcb8e9c5",
+      "id": "8be8f9c4-332c-4c7d-8fba-7aeb57dff7ed",
       "impact": "",
       "location": {
         "column": 47,
@@ -1020,7 +1020,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "db157d87-dc51-4c8f-b542-c6a407042fe9",
+      "id": "359d7827-9b03-4fff-8c9a-8689fbb715f7",
       "impact": "",
       "location": {
         "column": 7,
@@ -1046,7 +1046,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "65beb6c8-9a8b-4560-867d-96c5f346a3a2",
+      "id": "a4542d48-a858-4ef9-b1f4-7c43d8d3b45f",
       "impact": "",
       "location": {
         "column": 8,
@@ -1072,7 +1072,7 @@
       "cwe": null,
       "description": "Local session clearing may not revoke on-chain authority.",
       "evidence": "Local session clearing may not revoke on-chain authority.",
-      "id": "2ff3c9ae-6f9a-44f8-8795-076d5b4ce706",
+      "id": "f79f2a9a-6960-4550-a905-795c7e76c1d0",
       "impact": "",
       "location": {
         "column": 7,
@@ -1098,7 +1098,7 @@
       "cwe": null,
       "description": "Local session clearing may not revoke on-chain authority.",
       "evidence": "Local session clearing may not revoke on-chain authority.",
-      "id": "50dcccc3-0a99-4238-b5d7-e8c28617dda3",
+      "id": "ea5428ab-3d88-47a5-a16f-ef3dba1c81ee",
       "impact": "",
       "location": {
         "column": 7,
@@ -1124,7 +1124,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "86ba3a70-bf26-48b8-b012-ac2611661fbb",
+      "id": "99de6e69-06da-4f18-b6d1-3d7c1831f71c",
       "impact": "",
       "location": {
         "column": 15,
@@ -1150,7 +1150,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "c0e66536-4bd5-4b09-8a6a-8c90b22f8e68",
+      "id": "08308efb-eea2-434a-b6ae-ced5b2f610f1",
       "impact": "",
       "location": {
         "column": 15,
@@ -1176,7 +1176,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "4b413a14-7686-461d-b681-87c533cc3e95",
+      "id": "58d77f09-67f7-4067-96c8-17c1aa340139",
       "impact": "",
       "location": {
         "column": 25,
@@ -1202,7 +1202,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "5f58d710-d76c-4124-90eb-022f6089e72e",
+      "id": "db30590c-d27d-4539-a4f8-1975d2986b67",
       "impact": "",
       "location": {
         "column": 23,
@@ -1228,7 +1228,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "e490494e-020c-48f8-9d90-3e0137307712",
+      "id": "5dce2ad1-5439-43aa-8653-dc688831c8be",
       "impact": "",
       "location": {
         "column": 14,
@@ -1254,7 +1254,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "9d8016c8-e920-4c6c-83f4-75fa75b5ef97",
+      "id": "d6762b8c-1994-486e-b3a2-eee2638ce4ec",
       "impact": "",
       "location": {
         "column": 14,
@@ -1280,7 +1280,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "2fa7efaf-cb03-4d21-8a7b-9c2ae969f2ae",
+      "id": "9e14bee5-f79b-4f4f-9bbd-b8186c108c02",
       "impact": "",
       "location": {
         "column": 14,
@@ -1306,7 +1306,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "6408dd26-5b31-41d9-82c6-9a810be291e0",
+      "id": "943d1b51-8f6e-4f76-b94f-70a2d902b3bd",
       "impact": "",
       "location": {
         "column": 8,
@@ -1332,7 +1332,7 @@
       "cwe": null,
       "description": "An LLM call is near prompt/message construction that references untrusted application or repository content, with no observed sanitizer or explicit data delimiter.",
       "evidence": "    system_fingerprint?: string | null;\n    service_tier?: \"auto\" | \"default\" | \"flex\" | \"scale\" | \"priority\" | null;\n};\n/**\n * Workers AI support for OpenAI's Responses API",
-      "id": "6594360b-af4e-456a-89ec-63b044e64d4d",
+      "id": "fd537141-eaee-4c91-827a-d65ba3be6ba8",
       "impact": "",
       "location": {
         "column": 0,
@@ -1358,7 +1358,7 @@
       "cwe": null,
       "description": "An LLM call is near prompt/message construction that references untrusted application or repository content, with no observed sanitizer or explicit data delimiter.",
       "evidence": "    service_tier?: \"auto\" | \"default\" | \"flex\" | \"scale\" | \"priority\" | null;\n};\n/**\n * Workers AI support for OpenAI's Responses API\n * Reference: https://github.com/openai/openai-node/blob/master/src/resources/responses/responses.ts",
-      "id": "9f26aef3-eada-45fc-a2b6-8e399c1f51e8",
+      "id": "5a6761e8-0ac5-4f09-a36d-741248dac241",
       "impact": "",
       "location": {
         "column": 0,
@@ -1384,7 +1384,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "0eba2fc2-6370-483d-9a02-e12278a0a6e5",
+      "id": "80b2c3cf-f613-44cd-aa8b-ab95bc3b0385",
       "impact": "",
       "location": {
         "column": 18,
@@ -1410,7 +1410,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "e0edf725-1540-40da-a75d-794065b48288",
+      "id": "9fa10ccf-6050-4720-9589-a8b8f9b5225e",
       "impact": "",
       "location": {
         "column": 5,
@@ -1436,7 +1436,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "5168680b-9585-43a7-8f8e-fc4ed1ed8d00",
+      "id": "e0a4a008-40b8-4ca3-a65b-946207593249",
       "impact": "",
       "location": {
         "column": 45,
@@ -1462,7 +1462,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "eac4392c-2ba5-4467-b787-7ffee21ba6b2",
+      "id": "499691c1-a89a-49a9-9beb-b1e21f635cfd",
       "impact": "",
       "location": {
         "column": 29,
@@ -1488,7 +1488,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "776cef76-1602-46bf-957f-a09ca3e9bf7e",
+      "id": "407e04f5-6849-4c2b-9d36-59adea7f54aa",
       "impact": "",
       "location": {
         "column": 22,
@@ -1514,7 +1514,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "501b2971-b358-4705-8d66-fe6e46285e3f",
+      "id": "a2193052-3e5e-481a-8858-4ac152f181be",
       "impact": "",
       "location": {
         "column": 9,
@@ -1540,7 +1540,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "6938f71c-77bc-4667-bd78-9d62c4ff63cc",
+      "id": "8da06681-c7de-4545-a77b-7d974fccd380",
       "impact": "",
       "location": {
         "column": 9,
@@ -1566,7 +1566,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "13d629cd-79ff-4a8e-b693-3749a196a9c9",
+      "id": "a8120d7c-8ced-42a2-87c2-06d905bc0b46",
       "impact": "",
       "location": {
         "column": 7,
@@ -1592,7 +1592,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "14138fc4-49a2-406c-9723-ff646e789703",
+      "id": "5ebfad39-4ff0-474e-893a-89530a6d147b",
       "impact": "",
       "location": {
         "column": 9,
@@ -1618,7 +1618,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "33d01a6c-4801-4480-a4b7-27306c580ba2",
+      "id": "b6444e5a-21f5-4f6d-8068-b58d8cbc7615",
       "impact": "",
       "location": {
         "column": 9,
@@ -1644,7 +1644,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "2fa1ac41-1246-4584-97c5-638f54ef3e37",
+      "id": "36dffe65-62bb-4ee4-87d8-c790b7508b06",
       "impact": "",
       "location": {
         "column": 9,
@@ -1670,7 +1670,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "e1721ec0-566d-4166-b86e-327487aeb9cc",
+      "id": "2ef82301-09d1-4116-b058-46a284aa733a",
       "impact": "",
       "location": {
         "column": 9,
@@ -1696,7 +1696,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "e1a457bd-e60f-46eb-851d-e1da0333e067",
+      "id": "1a9067cb-a47d-4025-98d4-8bdee59e64b1",
       "impact": "",
       "location": {
         "column": 9,
@@ -1722,7 +1722,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "6010ffee-28e3-48bb-bea3-881a09aca5e3",
+      "id": "93214f38-b1aa-4aa0-b74d-924b4a581ec0",
       "impact": "",
       "location": {
         "column": 9,
@@ -1748,7 +1748,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "68e69f28-7bc5-4af9-bcf3-d1b6cdf0ea0c",
+      "id": "b381b216-41fe-4faa-9727-2a5fadfaf00e",
       "impact": "",
       "location": {
         "column": 7,
@@ -1774,7 +1774,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "45d68977-4784-4fce-afd8-b7aba037a6c5",
+      "id": "53f57032-8507-4321-8096-78c7d8eb28d5",
       "impact": "",
       "location": {
         "column": 5,
@@ -1800,7 +1800,7 @@
       "cwe": null,
       "description": "Local session clearing may not revoke on-chain authority.",
       "evidence": "Local session clearing may not revoke on-chain authority.",
-      "id": "10d51e1e-8b25-41b7-b016-02f8b7a6dc20",
+      "id": "34655266-8fec-4b66-974b-f3de55b50477",
       "impact": "",
       "location": {
         "column": 12,
@@ -1826,7 +1826,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "e22a5c2f-9de4-4fe7-98c1-a96df80b362a",
+      "id": "0dc6be01-6767-446e-b2f9-f9923fee309f",
       "impact": "",
       "location": {
         "column": 5,
@@ -1852,7 +1852,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "aad73d21-86bc-4b2b-94c6-cadacef894c7",
+      "id": "0a57c3fa-91cc-43ed-aedc-5d067d95e2ef",
       "impact": "",
       "location": {
         "column": 15,
@@ -1878,7 +1878,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "0cdc9aec-85bb-469b-9019-0bd3af023395",
+      "id": "a8a29974-339f-4a6d-aad2-2c2b8002aaf5",
       "impact": "",
       "location": {
         "column": 7,
@@ -1904,7 +1904,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "e34d1003-9511-48b2-af91-4ddb31c83386",
+      "id": "5a42899d-9552-4202-a024-f1b66a50146f",
       "impact": "",
       "location": {
         "column": 9,
@@ -1930,7 +1930,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "c4dcf502-31b6-43a6-baa7-2d06acfcabdd",
+      "id": "5a2f1582-4b2d-4602-8ea5-60fad015969d",
       "impact": "",
       "location": {
         "column": 9,
@@ -1956,7 +1956,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "35da7591-4dd6-4f4e-b95f-4e05596215a9",
+      "id": "cfcaaeec-5760-4ccf-bdf7-2655e8257f3c",
       "impact": "",
       "location": {
         "column": 9,
@@ -1982,7 +1982,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "fe21a02d-79da-416e-a03d-510ac5dae2b4",
+      "id": "0db5cc65-3d06-4cad-bf9d-c1c24656add2",
       "impact": "",
       "location": {
         "column": 64,
@@ -2008,7 +2008,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "35c1d606-f2a7-480e-93b1-4e216cfdba8f",
+      "id": "5b0ea111-5150-48e1-b300-fc063044be84",
       "impact": "",
       "location": {
         "column": 21,
@@ -2034,7 +2034,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "90d126af-eb20-49d4-996e-c5c0e7ac10dc",
+      "id": "00cb58ea-afcf-4001-bbc2-b055391780f1",
       "impact": "",
       "location": {
         "column": 9,
@@ -2060,7 +2060,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "8fec96ce-15d8-4fa7-bb98-c84f43989506",
+      "id": "c33735e0-b5f8-44d3-83e5-10800f76011c",
       "impact": "",
       "location": {
         "column": 18,
@@ -2086,7 +2086,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "1ebaebaa-c790-431e-be17-6f107e7f2997",
+      "id": "5d23066a-d952-4383-ae89-18c3a260f6e3",
       "impact": "",
       "location": {
         "column": 9,
@@ -2112,7 +2112,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "a146ccaa-d8d6-4a7c-9451-3340a70d1074",
+      "id": "c396c391-5ca3-4697-b162-9579ac2adff0",
       "impact": "",
       "location": {
         "column": 13,
@@ -2138,7 +2138,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "42e2e604-846f-4cb8-8bc2-b884ceacf12e",
+      "id": "0b82b18f-abdc-410f-adaf-e09b40befd7f",
       "impact": "",
       "location": {
         "column": 7,
@@ -2164,7 +2164,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "357c9fa0-26c6-4591-bd63-0034ac16bb9f",
+      "id": "ed987e02-67b2-4027-804c-3ceb711a9b5f",
       "impact": "",
       "location": {
         "column": 30,
@@ -2190,7 +2190,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "3f64bd4e-2fa8-45e4-a6cf-2c91884e1bc1",
+      "id": "64a2bcb8-f318-4478-b935-fc2f4c1caea8",
       "impact": "",
       "location": {
         "column": 12,
@@ -2216,7 +2216,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "b7b2bdc4-5dce-4b61-8963-0f198c8c27f7",
+      "id": "400e1559-a732-46e8-83ca-c23bcec1be20",
       "impact": "",
       "location": {
         "column": 20,
@@ -2242,7 +2242,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "e4f20339-73f1-46a3-b4eb-560759b6cf46",
+      "id": "c3ed3aae-972d-40a0-8293-c8f3c214592b",
       "impact": "",
       "location": {
         "column": 12,
@@ -2268,7 +2268,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "125eaff4-534a-44bc-9af6-17a663ad3b26",
+      "id": "145e4c41-9c00-42fa-aace-4e87c1368cca",
       "impact": "",
       "location": {
         "column": 32,
@@ -2294,7 +2294,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "61544d64-e273-436b-8699-dbde608eb761",
+      "id": "1cfe66e4-8e40-4e4f-8de3-fb2cae1a647a",
       "impact": "",
       "location": {
         "column": 42,
@@ -2320,7 +2320,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "151a6e1e-7e78-40d2-b1da-45e100483101",
+      "id": "eb435dc4-adab-48d3-a6b1-3488b4c29079",
       "impact": "",
       "location": {
         "column": 42,
@@ -2346,7 +2346,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "045ae948-6bfa-4960-91d7-d8e944d82345",
+      "id": "7b7bbf11-d715-4306-9498-088cd2d82aa9",
       "impact": "",
       "location": {
         "column": 42,
@@ -2372,7 +2372,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "a263c84a-f39e-4acc-8164-306233768514",
+      "id": "782d8779-02f2-49a6-8b8a-f815004171af",
       "impact": "",
       "location": {
         "column": 42,
@@ -2398,7 +2398,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "8c4444da-5eda-4c4f-911d-3fc45638ffa3",
+      "id": "ee8735ca-a3e3-4cb0-b6ab-67bee8c59e91",
       "impact": "",
       "location": {
         "column": 42,
@@ -2424,7 +2424,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "1d1b59cb-5103-44fe-bc87-04138d6b0559",
+      "id": "d130e7d5-215e-4b08-b44f-dee88f6462c6",
       "impact": "",
       "location": {
         "column": 42,
@@ -2450,7 +2450,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "f195915d-c07d-40a4-82d6-1e63176a1e4f",
+      "id": "72876fdd-97ca-4baa-941c-305089d3bf4b",
       "impact": "",
       "location": {
         "column": 42,
@@ -2476,7 +2476,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "af502a54-adda-4de8-bd85-4827ca00e90b",
+      "id": "b227f8bc-0e6e-4b37-8c92-62d6e1dfb31d",
       "impact": "",
       "location": {
         "column": 18,
@@ -2502,7 +2502,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "5adfc1de-f021-4c04-9112-1293b8c14d45",
+      "id": "716007df-2ec6-4f1a-895c-65e493d11795",
       "impact": "",
       "location": {
         "column": 9,
@@ -2528,7 +2528,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "e5692bef-cd8e-428d-913c-ff5255b3e059",
+      "id": "fd209da7-c847-4522-8fd0-b3e046cb2b98",
       "impact": "",
       "location": {
         "column": 9,
@@ -2554,7 +2554,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "9559c382-41cd-4ddc-90b7-400e6ff32673",
+      "id": "7f374c0c-569d-482c-8ae3-72d45a49042b",
       "impact": "",
       "location": {
         "column": 9,
@@ -2580,7 +2580,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "0f1b8d7d-73f8-46ea-ba19-2818f6dd893e",
+      "id": "bc08dd85-4c43-4334-8e90-ac71477cdcb8",
       "impact": "",
       "location": {
         "column": 9,
@@ -2606,7 +2606,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "070f072b-01dd-4413-8d7c-5fb1f8d61a79",
+      "id": "42a8a647-3f8f-4b37-bd73-28227efc62f5",
       "impact": "",
       "location": {
         "column": 11,
@@ -2632,7 +2632,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "680ae882-12b0-4b98-9470-4709885d3f6f",
+      "id": "31064155-e1ee-43c9-b937-5d0c52233cc8",
       "impact": "",
       "location": {
         "column": 11,
@@ -2658,7 +2658,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "4913b3d0-f6fa-4eaf-b3b2-307c5508d6e2",
+      "id": "12d08392-d6c8-4757-a4d3-972f365c7af2",
       "impact": "",
       "location": {
         "column": 11,
@@ -2684,7 +2684,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "a4463054-3fc5-441a-906e-edc9569ec69a",
+      "id": "850dae74-d33a-4513-8b9a-ff9bacc8151c",
       "impact": "",
       "location": {
         "column": 25,
@@ -2710,7 +2710,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "943c6880-ce48-4f07-9122-9b8b7457a7ed",
+      "id": "8bf49651-4741-4480-b69b-fa76be47172d",
       "impact": "",
       "location": {
         "column": 23,
@@ -2736,7 +2736,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "80d2740c-694f-45c1-b980-33ca3fc9b0ea",
+      "id": "703b98f7-a494-4781-9fc5-5990433f0799",
       "impact": "",
       "location": {
         "column": 14,
@@ -2762,7 +2762,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "bc27c344-bcb4-4376-bdd5-c9b7edb67b7f",
+      "id": "a67cb5c4-681f-45b9-b761-0704bca034a1",
       "impact": "",
       "location": {
         "column": 29,
@@ -2788,7 +2788,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "681acbdb-246a-4a6b-97b4-e0680063eb81",
+      "id": "9268f45c-18dc-4435-acbd-8b96f76ec89b",
       "impact": "",
       "location": {
         "column": 31,
@@ -2814,7 +2814,7 @@
       "cwe": null,
       "description": "Child process execution uses shell mode or a constructed command string.",
       "evidence": "Child process execution uses shell mode or a constructed command string.",
-      "id": "4a6cf843-5f9e-441f-abf2-16bf45cc3d88",
+      "id": "882493de-da63-4ea1-a9b0-d3266916fd26",
       "impact": "",
       "location": {
         "column": 33,
@@ -2840,7 +2840,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "4facd3af-3c2f-4f80-9724-8235d07d61ee",
+      "id": "57d9de1f-c36a-44c9-9765-1d7ebad34d1e",
       "impact": "",
       "location": {
         "column": 23,
@@ -2866,7 +2866,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "const response = await fetch(subscription.endpoint, payload)",
-      "id": "1a9f44d3-4681-4326-b28f-813483e850b8",
+      "id": "a840dd3e-6fee-44e0-b58d-f5954caac7d3",
       "impact": "",
       "location": {
         "column": 0,
@@ -2892,7 +2892,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "const response = await fetch(V1_SUBGRAPH_URL, {",
-      "id": "fb6bed88-ae03-4cb5-8b92-3c384d6f2794",
+      "id": "a5bdebfb-420a-4777-a6eb-010497ab808c",
       "impact": "",
       "location": {
         "column": 0,
@@ -2918,7 +2918,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;",
-      "id": "6dbd865c-353e-468b-887a-c284f7a2b957",
+      "id": "faf7f0e5-09ba-42d2-953b-0f88ada7489a",
       "impact": "",
       "location": {
         "column": 0,
@@ -2944,7 +2944,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "declare function fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;",
-      "id": "3bdae268-ec32-42ce-92b2-be82170ecc17",
+      "id": "fad12859-7e7d-4ed9-87b5-81603ab5ecf1",
       "impact": "",
       "location": {
         "column": 0,
@@ -2970,7 +2970,7 @@
       "cwe": null,
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "evidence": "fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;",
-      "id": "bd5dd5bc-78d7-42a9-bdc2-6bca6d7d630c",
+      "id": "c15e4451-79ae-497c-99d3-bfe58cef4aa3",
       "impact": "",
       "location": {
         "column": 0,
@@ -2996,7 +2996,7 @@
       "cwe": null,
       "description": "An LLM call is near prompt/message construction that references untrusted application or repository content, with no observed sanitizer or explicit data delimiter.",
       "evidence": "    system_fingerprint?: string | null;\n    service_tier?: \"auto\" | \"default\" | \"flex\" | \"scale\" | \"priority\" | null;\n};\n/**\n * Workers AI support for OpenAI's Responses API",
-      "id": "08f3114f-f075-4e8c-80f8-7ceffaecad23",
+      "id": "c6a5eddc-927d-4a4d-bbe1-add6c20e942e",
       "impact": "",
       "location": {
         "column": 0,
@@ -3022,7 +3022,7 @@
       "cwe": null,
       "description": "An LLM call is near prompt/message construction that references untrusted application or repository content, with no observed sanitizer or explicit data delimiter.",
       "evidence": "    service_tier?: \"auto\" | \"default\" | \"flex\" | \"scale\" | \"priority\" | null;\n};\n/**\n * Workers AI support for OpenAI's Responses API\n * Reference: https://github.com/openai/openai-node/blob/master/src/resources/responses/responses.ts",
-      "id": "bc4da93e-987c-4840-a0d0-4a363ea36ad1",
+      "id": "1465973e-bee6-4a58-93f7-0dd35e466b86",
       "impact": "",
       "location": {
         "column": 0,
@@ -3048,7 +3048,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "078932cc-0b5c-4bd5-9db9-6db825a2cc64",
+      "id": "c23b207d-4258-42e0-90a9-649fd0b6d899",
       "impact": "",
       "location": {
         "column": 7,
@@ -3074,7 +3074,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "60dc08e7-9147-475d-a762-911e6d3fab07",
+      "id": "d0bb21f0-db5a-49a9-8809-6791efe3bd66",
       "impact": "",
       "location": {
         "column": 26,
@@ -3100,7 +3100,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "ac142419-af90-42c6-aef7-a73ec4900153",
+      "id": "9f3a0ee2-bfca-4055-8a9d-daeced1e7a1e",
       "impact": "",
       "location": {
         "column": 5,
@@ -3126,7 +3126,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "7d470472-2bc6-489d-a5fc-cd67063743b2",
+      "id": "843c6fb6-294c-446a-8937-e98751e3fc5c",
       "impact": "",
       "location": {
         "column": 33,
@@ -3152,7 +3152,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "d1b5dc5e-51eb-421c-9ca0-97c414dcffe3",
+      "id": "bd787d97-0f5c-4f05-a665-22efecefdd1c",
       "impact": "",
       "location": {
         "column": 12,
@@ -3178,7 +3178,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "aca666db-6604-43c9-9798-c0370c57f13a",
+      "id": "8aab063e-32bf-4ae9-baf7-6faf7ef4f732",
       "impact": "",
       "location": {
         "column": 33,
@@ -3204,7 +3204,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "d56363f5-2f0d-47db-b0bd-465a86342cf7",
+      "id": "aabbdee0-e1fb-430b-aeb4-fd86f09b1316",
       "impact": "",
       "location": {
         "column": 12,
@@ -3230,7 +3230,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "7405dfce-19cc-4f5b-9b97-f7694347e3a3",
+      "id": "8b01139c-f464-4be8-bbd1-df31de9f5b0f",
       "impact": "",
       "location": {
         "column": 15,
@@ -3256,7 +3256,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "3bae120e-ac69-43ff-ad7e-92ffde11297a",
+      "id": "4d463e28-bb3c-4885-8a2d-f64d6214e114",
       "impact": "",
       "location": {
         "column": 5,
@@ -3282,7 +3282,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "16502637-f384-425a-8c31-b99c8318fb24",
+      "id": "33b4cca9-646f-48e9-8f9a-2fefa8976610",
       "impact": "",
       "location": {
         "column": 5,
@@ -3308,7 +3308,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "0034d1b7-0f2b-460d-a822-577d016fe4d9",
+      "id": "23578016-10a1-4c31-9c31-1da3f5964455",
       "impact": "",
       "location": {
         "column": 5,
@@ -3334,7 +3334,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "fa2319f0-c656-465d-b796-cb95b8d2276b",
+      "id": "324c19d1-8c9e-4bbb-837a-b574063355ef",
       "impact": "",
       "location": {
         "column": 5,
@@ -3360,7 +3360,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "deb19f2e-b33a-4505-b2a0-f65bf98b6658",
+      "id": "5cfa0380-1bb4-41b3-8a60-78700945eaf8",
       "impact": "",
       "location": {
         "column": 5,
@@ -3386,7 +3386,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "d56f5eb1-75d8-4f8e-9446-5c766323a71e",
+      "id": "936f3bda-1eaf-478a-889b-21244ea0e03b",
       "impact": "",
       "location": {
         "column": 5,
@@ -3412,7 +3412,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "3881d6db-68cb-416f-9776-33086f876cfc",
+      "id": "80cfed4f-b244-4685-86d2-d64d8847fdc0",
       "impact": "",
       "location": {
         "column": 12,
@@ -3438,7 +3438,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "d479b652-7fbf-4159-bcba-b3d3e7efa98f",
+      "id": "816df32d-b09c-4832-906e-3b225f867341",
       "impact": "",
       "location": {
         "column": 21,
@@ -3464,7 +3464,7 @@
       "cwe": null,
       "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
       "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
-      "id": "fa7d3c4a-6372-4c90-8df1-7478431ea59f",
+      "id": "0db1b262-5663-455b-81d9-aa356c8cbc9c",
       "impact": "",
       "location": {
         "column": 26,
@@ -3490,7 +3490,7 @@
       "cwe": null,
       "description": "Signature-verification path requires fail-closed constant-time verification.",
       "evidence": "Signature-verification path requires fail-closed constant-time verification.",
-      "id": "c84e24e0-c4a3-41da-9b2d-4b7ee9b175f8",
+      "id": "70e735a3-ce16-4833-b090-c571c3b85451",
       "impact": "",
       "location": {
         "column": 245,
@@ -3516,7 +3516,7 @@
       "cwe": null,
       "description": "A parsed machine transition targets a state not defined in the same states block.",
       "evidence": "preparing -> error.preparation",
-      "id": "fdf124fa-176a-4576-8b7e-1cfd96db027b",
+      "id": "50ef811c-055c-489a-a14c-db19877b4a52",
       "impact": "",
       "location": {
         "column": 0,
@@ -3542,7 +3542,7 @@
       "cwe": null,
       "description": "A parsed machine transition targets a state not defined in the same states block.",
       "evidence": "submitting -> error.submission",
-      "id": "71a6d661-696b-4c80-b73f-fbcda22afd81",
+      "id": "06793377-dee5-4784-bd39-b93de8d79f89",
       "impact": "",
       "location": {
         "column": 0,
@@ -3568,7 +3568,7 @@
       "cwe": null,
       "description": "A parsed machine transition targets a state not defined in the same states block.",
       "evidence": "pending -> error.timeout",
-      "id": "22a8ea50-4e03-4693-9734-c5e8217f62db",
+      "id": "88832571-1294-46cd-a1de-9c7be1e85bac",
       "impact": "",
       "location": {
         "column": 0,
@@ -3594,7 +3594,7 @@
       "cwe": null,
       "description": "A parsed machine transition targets a state not defined in the same states block.",
       "evidence": "confirming -> error.reverted",
-      "id": "b371a49f-28aa-4c56-b19f-a5893853333d",
+      "id": "c4abdb59-5163-4405-a912-3732deef0dbd",
       "impact": "",
       "location": {
         "column": 0,
@@ -3620,7 +3620,7 @@
       "cwe": null,
       "description": "A parsed machine transition targets a state not defined in the same states block.",
       "evidence": "retrying -> error.cancelled",
-      "id": "78a123cc-82d4-4afb-8764-5118692b608c",
+      "id": "6a9276bd-2ef4-403c-a0d0-cefe2f685c91",
       "impact": "",
       "location": {
         "column": 0,
@@ -3646,7 +3646,7 @@
       "cwe": null,
       "description": "No parsed transition path reaches this state from the machine's initial state.",
       "evidence": "initial=idle; unreachable=error",
-      "id": "f8706e7e-b877-4b2b-9d67-8c41cf76470e",
+      "id": "f2680957-ae60-4013-93ee-16a1b9e8ec31",
       "impact": "",
       "location": {
         "column": 0,
@@ -3672,7 +3672,7 @@
       "cwe": null,
       "description": "request.from reaches a signing/account path; verify equality with the connected signer.",
       "evidence": "request.from reaches a signing/account path; verify equality with the connected signer.",
-      "id": "4d865da4-6e15-45c9-9fce-637190c653d8",
+      "id": "ec6d51f6-4853-4c24-a250-bc453613d125",
       "impact": "",
       "location": {
         "column": 20,
@@ -3698,7 +3698,7 @@
       "cwe": null,
       "description": "request.from reaches a signing/account path; verify equality with the connected signer.",
       "evidence": "request.from reaches a signing/account path; verify equality with the connected signer.",
-      "id": "4116e443-67aa-4d43-a330-af73f38eab06",
+      "id": "6c65a626-83fe-4de9-81fe-f694bcfdf566",
       "impact": "",
       "location": {
         "column": 27,
@@ -3724,7 +3724,7 @@
       "cwe": null,
       "description": "request.from reaches a signing/account path; verify equality with the connected signer.",
       "evidence": "request.from reaches a signing/account path; verify equality with the connected signer.",
-      "id": "4060d273-dab3-440f-afcb-843d504189a5",
+      "id": "438a27db-462f-4bf2-ad8b-571a6c01c68a",
       "impact": "",
       "location": {
         "column": 8,
@@ -3750,7 +3750,7 @@
       "cwe": null,
       "description": "request.from reaches a signing/account path; verify equality with the connected signer.",
       "evidence": "request.from reaches a signing/account path; verify equality with the connected signer.",
-      "id": "728d10d4-aae9-4955-a63b-315a5b0ad037",
+      "id": "6b89e7b4-5702-40f7-b9e9-baa776303bb1",
       "impact": "",
       "location": {
         "column": 11,
@@ -3776,7 +3776,7 @@
       "cwe": null,
       "description": "request.from reaches a signing/account path; verify equality with the connected signer.",
       "evidence": "request.from reaches a signing/account path; verify equality with the connected signer.",
-      "id": "6191fba7-d60c-4180-bda9-f62da650d2d3",
+      "id": "149269f5-ce11-49d6-b4bc-f1b94d9f48f0",
       "impact": "",
       "location": {
         "column": 5,
@@ -3802,7 +3802,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "c2ce79b5-536a-4e5b-9cc0-391fcc51d700",
+      "id": "afeecb98-a03a-4a85-8f75-13099d09a958",
       "impact": "",
       "location": {
         "column": 3,
@@ -3828,7 +3828,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "97aadd63-ecc9-41d8-90ce-da5c349dd9e7",
+      "id": "10fd4118-ce53-4287-a1d3-cf53ebf6adc1",
       "impact": "",
       "location": {
         "column": 13,
@@ -3854,7 +3854,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "da05760d-5e6c-47c5-8bcc-f2db53001a78",
+      "id": "f192d132-466f-412d-95c1-e5ef6c96f57b",
       "impact": "",
       "location": {
         "column": 17,
@@ -3880,7 +3880,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "d78c03a4-dc43-46ec-94a8-7226df4d983d",
+      "id": "2114bf6c-c080-4639-9cff-ac6f442142d6",
       "impact": "",
       "location": {
         "column": 13,
@@ -3906,7 +3906,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "4fbc578e-6dbb-41e7-8bcd-3cbb731ccfe8",
+      "id": "6c6d43f1-82d6-4a1c-bc14-c88a342761d3",
       "impact": "",
       "location": {
         "column": 13,
@@ -3932,7 +3932,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "64c48a10-3f35-440e-b30c-28d9a01fdea3",
+      "id": "ea52dbc7-308e-45df-b2dc-03f03991f338",
       "impact": "",
       "location": {
         "column": 9,
@@ -3958,7 +3958,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "e04e330c-4541-4461-899c-d99eb7bd8e3d",
+      "id": "879c9d2b-60a1-4725-af17-2ee619edd855",
       "impact": "",
       "location": {
         "column": 9,
@@ -3984,7 +3984,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "6dc3c0e5-c5d7-47e8-b82e-e75e36f9afe8",
+      "id": "85df0568-20ff-4da8-87ea-f424e8077b9f",
       "impact": "",
       "location": {
         "column": 9,
@@ -4010,7 +4010,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "2d89fa81-ee82-4d9e-a05f-58811ac873af",
+      "id": "06b8e29a-18cf-445c-b50d-0169e1be5a74",
       "impact": "",
       "location": {
         "column": 9,
@@ -4036,7 +4036,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "5ade1e74-87cd-4924-af4a-90c8b174e8ab",
+      "id": "e7525651-1d5f-43dc-ae0e-0671df561e78",
       "impact": "",
       "location": {
         "column": 9,
@@ -4062,7 +4062,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "bdf8b0bf-e2de-4be6-829b-982976977a09",
+      "id": "1bbe2328-32c2-43c8-8f0d-9da8ddef449c",
       "impact": "",
       "location": {
         "column": 10,
@@ -4088,7 +4088,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "c486e6c0-d8ea-454b-8c9a-0466e4a27d39",
+      "id": "f80f8d27-d476-4a2b-afea-afea27de816d",
       "impact": "",
       "location": {
         "column": 6,
@@ -4114,7 +4114,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "aa0dc466-f79d-4006-8d74-3312e38abe3b",
+      "id": "da6bdf7a-58d2-41ad-a116-5c5d009ffdae",
       "impact": "",
       "location": {
         "column": 6,
@@ -4140,7 +4140,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "e9c0b999-9e49-4472-8dbe-aca110cbb016",
+      "id": "a1b402d2-82ab-4300-a8ce-8e46c75fc7c2",
       "impact": "",
       "location": {
         "column": 48,
@@ -4166,7 +4166,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "22a74947-4ee4-47cd-88f3-71a3730046b3",
+      "id": "c540df7a-d9a6-4844-a269-bd0a995aecb6",
       "impact": "",
       "location": {
         "column": 7,
@@ -4192,7 +4192,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "0f2b8cfe-e66c-483b-b812-16656f2a96e8",
+      "id": "57f1f5a1-3e3f-4630-8e62-c1ffbb3b3a65",
       "impact": "",
       "location": {
         "column": 7,
@@ -4218,7 +4218,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "d543caff-eef2-4216-9fc8-50d200b276a5",
+      "id": "bc0bba2f-8677-479d-b7e6-c1c5ce9dee5e",
       "impact": "",
       "location": {
         "column": 27,
@@ -4244,7 +4244,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "aa0993b5-af33-4609-9164-9676b3f31615",
+      "id": "63d04f57-1b90-48d7-b442-b35bc86c3fec",
       "impact": "",
       "location": {
         "column": 8,
@@ -4270,7 +4270,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "c7932766-85fd-41aa-875f-c18374387493",
+      "id": "b09fe94b-5ff5-4f3e-83e7-d9a015a47e34",
       "impact": "",
       "location": {
         "column": 7,
@@ -4296,7 +4296,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "d4e00a72-7f5e-4988-b2cd-94cf7603978d",
+      "id": "e9981f1e-283b-4204-b1a6-a702ee8b1f41",
       "impact": "",
       "location": {
         "column": 12,
@@ -4322,7 +4322,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "c399b32c-a33a-48e6-9330-2a17a4b6a095",
+      "id": "a6d4cb5a-e72b-46e2-88f5-dc5560a0d7af",
       "impact": "",
       "location": {
         "column": 12,
@@ -4348,7 +4348,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "357108b2-a2ad-4189-a559-936c14754c90",
+      "id": "1051702b-9d16-4eda-8566-410ca106a751",
       "impact": "",
       "location": {
         "column": 8,
@@ -4374,7 +4374,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "62eb0cc3-c388-4d75-b154-27c6fac5b703",
+      "id": "688147a0-6ea0-43b3-97ac-81e2c3b35cac",
       "impact": "",
       "location": {
         "column": 7,
@@ -4400,7 +4400,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "7dca051d-1d29-4860-99f5-738b41af6fce",
+      "id": "5107f367-d8bb-4345-9e0c-2530713d83c5",
       "impact": "",
       "location": {
         "column": 5,
@@ -4426,7 +4426,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "e24bc062-c1b3-4fe9-ab86-05fb09c5ff2e",
+      "id": "4b0647ba-0964-45d8-8e8d-affcdd236f09",
       "impact": "",
       "location": {
         "column": 13,
@@ -4452,7 +4452,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "547086d9-9ea1-4072-b8ee-44f73a70911b",
+      "id": "0263460b-5a2f-4761-8f0a-99647022584b",
       "impact": "",
       "location": {
         "column": 27,
@@ -4478,7 +4478,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "669d4172-74f4-4c73-aca8-3c533ca9262e",
+      "id": "fcb83850-6e2e-4d9a-8a91-eee830922a0b",
       "impact": "",
       "location": {
         "column": 28,
@@ -4504,7 +4504,7 @@
       "cwe": null,
       "description": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
       "evidence": "EIP-712 domain construction requires review for chainId and verifyingContract binding.",
-      "id": "0755350f-3bc0-4e45-8f02-477d1fd5c77c",
+      "id": "082cbc30-c922-4da5-9d6e-e18aefe61bfc",
       "impact": "",
       "location": {
         "column": 35,
@@ -4530,7 +4530,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "b1d467b0-6341-4383-b7aa-86bdba0864f3",
+      "id": "68cecb15-88af-4558-949a-b1e3965d2d25",
       "impact": "",
       "location": {
         "column": 13,
@@ -4556,7 +4556,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "a43c0cce-8f28-4d92-a4de-bf2df190867b",
+      "id": "1c9fc1ff-e6b3-4510-b00c-6e807d9fe5ed",
       "impact": "",
       "location": {
         "column": 13,
@@ -4582,7 +4582,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "5ee5f213-6e25-4730-ad68-c8bb8665b684",
+      "id": "e92fd7ba-ab01-4eff-b183-9aeff4b859cf",
       "impact": "",
       "location": {
         "column": 13,
@@ -4608,7 +4608,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "aa674a03-7c34-4af8-bf5e-a3787c729449",
+      "id": "9b0c8a92-e9b5-4f91-af9e-8cd7940b2200",
       "impact": "",
       "location": {
         "column": 16,
@@ -4634,7 +4634,7 @@
       "cwe": null,
       "description": "request.from reaches a signing/account path; verify equality with the connected signer.",
       "evidence": "request.from reaches a signing/account path; verify equality with the connected signer.",
-      "id": "1857c7b9-c835-4262-b931-820cb408c1bd",
+      "id": "6b48c93d-ad86-4918-91b9-33160fa2c8f0",
       "impact": "",
       "location": {
         "column": 15,
@@ -4660,7 +4660,7 @@
       "cwe": null,
       "description": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
       "evidence": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
-      "id": "b54de8b5-6a0c-45c2-871b-5d7f1cb78404",
+      "id": "b9181b12-725f-4b66-a06f-5e2119f5d75a",
       "impact": "",
       "location": {
         "column": 4,
@@ -4686,7 +4686,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "4e1c65aa-cc71-4fde-aa63-0ca96117cb37",
+      "id": "e5605cbe-ffbf-41ea-b7cf-d915a8d5d69c",
       "impact": "",
       "location": {
         "column": 3,
@@ -4712,7 +4712,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "99888928-4047-4efc-b19a-7c236d7f61e1",
+      "id": "387179fe-b6ca-4e97-a47d-b12da69c328e",
       "impact": "",
       "location": {
         "column": 3,
@@ -4738,7 +4738,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "c4bb920f-173a-458e-b92b-9924bda4dbdd",
+      "id": "c31659e2-ad55-426b-8dfa-ada7821dfeda",
       "impact": "",
       "location": {
         "column": 9,
@@ -4764,7 +4764,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "e8b23d91-7afa-4a39-82b6-1aedd2be46c3",
+      "id": "9312f9be-c73a-48d2-b049-66c64a9728e8",
       "impact": "",
       "location": {
         "column": 9,
@@ -4790,7 +4790,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "5a13044e-4e05-4469-bd36-11cde9e48de6",
+      "id": "4dcfe5b6-2e6a-4020-b707-98ab6ab83798",
       "impact": "",
       "location": {
         "column": 37,
@@ -4816,7 +4816,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "0e71bc2b-0c35-403b-98d9-bf2d4acb1111",
+      "id": "26a4ef76-7429-4eea-bedd-c9f0b2497e33",
       "impact": "",
       "location": {
         "column": 7,
@@ -4842,7 +4842,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "3e68c840-fba3-4c8f-a6d6-a1fb9689cd2f",
+      "id": "e84aa0de-24cd-485a-8fdc-bcf767c9712d",
       "impact": "",
       "location": {
         "column": 5,
@@ -4868,7 +4868,7 @@
       "cwe": null,
       "description": "Parsed persisted JSON should be schema-validated before trusted use.",
       "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
-      "id": "2180238c-d44d-4956-a2ab-2f50bbd91ddc",
+      "id": "71a0a181-5f11-41d7-9bfb-d032b43cac2a",
       "impact": "",
       "location": {
         "column": 22,
@@ -4894,7 +4894,7 @@
       "cwe": null,
       "description": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
       "evidence": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
-      "id": "ffdf07ba-264e-4ca4-b9ea-fe4849c60986",
+      "id": "a8230d98-4e8f-4c4e-a50c-9a73eb58b433",
       "impact": "",
       "location": {
         "column": 18,
@@ -4920,7 +4920,7 @@
       "cwe": null,
       "description": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
       "evidence": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
-      "id": "cd4658d7-c9cc-4e2d-a8bb-c17710d6d80b",
+      "id": "726677a7-a97f-47ce-a31d-d67e6e8b399d",
       "impact": "",
       "location": {
         "column": 26,
@@ -4946,7 +4946,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "57cd8bc5-5596-4c6f-9ef0-06383df9af68",
+      "id": "6afff122-99ae-4719-8fab-16d9c742f5f5",
       "impact": "",
       "location": {
         "column": 7,
@@ -4972,7 +4972,7 @@
       "cwe": null,
       "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
       "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
-      "id": "ceb22339-9459-4e50-b0b4-0007df044961",
+      "id": "02bca724-4be8-4e6c-a253-f55012283b32",
       "impact": "",
       "location": {
         "column": 7,
@@ -4998,7 +4998,7 @@
       "cwe": null,
       "description": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
       "evidence": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
-      "id": "8893bb61-d521-4941-af6c-e6ab70884104",
+      "id": "d1bbcaea-8510-4e82-97f2-90b858d89932",
       "impact": "",
       "location": {
         "column": 17,

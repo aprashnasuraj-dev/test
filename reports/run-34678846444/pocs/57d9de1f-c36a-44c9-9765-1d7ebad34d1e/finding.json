@@ -1,0 +1,26 @@
+{
+  "asset": "explorer",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
+  "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
+  "id": "57d9de1f-c36a-44c9-9765-1d7ebad34d1e",
+  "impact": "",
+  "location": {
+    "column": 23,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/worker/safe-fetch.ts",
+    "function": null,
+    "line": 214
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation."
+}

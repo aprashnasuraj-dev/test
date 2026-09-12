@@ -1,0 +1,11 @@
+finding_id=782d8779-02f2-49a6-8b8a-f815004171af
+severity=Medium
+asset=explorer
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=apps/portal//home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/lib/reverseRegistrarChainId.test.ts:63
+source_line=expect(getCoinTypeForReverseRegistrarChainId(59144, 'sepolia')).toBe(
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

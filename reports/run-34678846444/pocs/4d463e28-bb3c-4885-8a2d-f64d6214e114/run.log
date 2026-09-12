@@ -1,0 +1,11 @@
+finding_id=4d463e28-bb3c-4885-8a2d-f64d6214e114
+severity=Medium
+asset=workers
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=workers//home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/posthog/name-search-stats.ts:95
+source_line=fetch(endpointUrl, {
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

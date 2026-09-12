@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Parsed persisted JSON should be schema-validated before trusted use.",
+  "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
+  "id": "843c6fb6-294c-446a-8937-e98751e3fc5c",
+  "impact": "",
+  "location": {
+    "column": 33,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/expiry-discovery/cursors.test.ts",
+    "function": null,
+    "line": 11
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Parsed persisted JSON should be schema-validated before trusted use."
+}

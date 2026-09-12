@@ -1,0 +1,11 @@
+finding_id=e97951db-a4e6-4be8-a427-be6c838a4591
+severity=High
+asset=explorer
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=R2-04
+escape_reason=severity_escalation
+source=apps/portal/src/worker/avatar.test.ts:163
+source_line=// viem's getMetadataAvatarUri did `fetch(uri).then(r => r.json())` with no
+scanner_evidence=// viem's getMetadataAvatarUri did `fetch(uri).then(r => r.json())` with no
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

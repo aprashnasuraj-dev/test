@@ -1,0 +1,11 @@
+finding_id=57d9de1f-c36a-44c9-9765-1d7ebad34d1e
+severity=Medium
+asset=explorer
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=apps/portal//home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/worker/safe-fetch.ts:214
+source_line=const res = await fetch(current, { redirect: 'manual', signal })
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

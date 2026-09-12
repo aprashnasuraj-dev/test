@@ -1,0 +1,11 @@
+finding_id=06b8e29a-18cf-445c-b50d-0169e1be5a74
+severity=Medium
+asset=transaction-manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager//home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.actors.ts:936
+source_line=chainId: input.publicClient.chain?.id ?? sepolia.id,
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

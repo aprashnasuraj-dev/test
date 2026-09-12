@@ -7,7 +7,7 @@
       "description": "A modeled untrusted source reaches a sensitive sink without an observed sanitizer.",
       "escape_reason": "severity_escalation",
       "evidence": "return sw.clients.openWindow(url);",
-      "id": "85ab0ad0-97c8-4920-99c4-b10e1b5fdae5",
+      "id": "b2ac8638-3ad8-4dbd-b049-1a4d35f0cd61",
       "impact": "",
       "known_severity": "Low",
       "location": {
@@ -36,7 +36,7 @@
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "escape_reason": "severity_escalation",
       "evidence": "const response = await fetch(`${WALLET_FUND_API_URL}/wallet/fund`, {",
-      "id": "4e02f35c-d716-49ed-b945-ae058ebc4abf",
+      "id": "d1f523b3-6b35-4d7d-910b-7dcbe7b7d4d8",
       "impact": "",
       "known_severity": "Low",
       "location": {
@@ -65,7 +65,7 @@
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "escape_reason": "severity_escalation",
       "evidence": "// viem's getMetadataAvatarUri did `fetch(uri).then(r => r.json())` with no",
-      "id": "9b183447-f657-4ba3-bfc5-c03d4606230c",
+      "id": "e97951db-a4e6-4be8-a427-be6c838a4591",
       "impact": "",
       "known_severity": "Low",
       "location": {
@@ -94,7 +94,7 @@
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "escape_reason": "severity_escalation",
       "evidence": "* - `getMetadataAvatarUri()` does `fetch(uri).then(r => r.json())` on an",
-      "id": "d0fac6cf-e620-46b3-949a-f0aaa2f75297",
+      "id": "a127b2d6-1c7b-45cf-97d4-7cdd512c2a78",
       "impact": "",
       "known_severity": "Low",
       "location": {
@@ -123,7 +123,7 @@
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "escape_reason": "severity_escalation",
       "evidence": "fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;",
-      "id": "b403220e-8e03-45cf-af7f-73deb1e606dd",
+      "id": "454f28f7-675f-4727-8cea-45c7012d8a74",
       "impact": "",
       "known_severity": "Low",
       "location": {
@@ -152,7 +152,7 @@
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "escape_reason": "severity_escalation",
       "evidence": "declare function fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;",
-      "id": "e244fb81-513c-4af8-9350-3f79650e37bf",
+      "id": "4944e2bb-53ba-4c56-adcd-e2f700c37873",
       "impact": "",
       "known_severity": "Low",
       "location": {
@@ -181,7 +181,7 @@
       "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
       "escape_reason": "severity_escalation",
       "evidence": "fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;",
-      "id": "68815d6c-95bb-4090-bfb0-e7364446b0be",
+      "id": "702fed06-23b2-480c-a1bd-7b2fe21a1874",
       "impact": "",
       "known_severity": "Low",
       "location": {

@@ -1,0 +1,26 @@
+{
+  "asset": "manager",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Local session clearing may not revoke on-chain authority.",
+  "evidence": "Local session clearing may not revoke on-chain authority.",
+  "id": "f79f2a9a-6960-4550-a905-795c7e76c1d0",
+  "impact": "",
+  "location": {
+    "column": 7,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/lib/wallet/WalletLifecycle.tsx",
+    "function": null,
+    "line": 20
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-local-revoke-without-chain-revoke",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-local-revoke-without-chain-revoke",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Local session clearing may not revoke on-chain authority."
+}

@@ -1,0 +1,11 @@
+finding_id=6b48c93d-ad86-4918-91b9-33160fa2c8f0
+severity=Medium
+asset=transaction-manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-request-from-not-validated
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager//home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/transaction.machine.ts:270
+source_line=account: eoaRequest.from,
+scanner_evidence=request.from reaches a signing/account path; verify equality with the connected signer.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

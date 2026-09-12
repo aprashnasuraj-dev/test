@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
+  "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
+  "id": "9f3a0ee2-bfca-4055-8a9d-daeced1e7a1e",
+  "impact": "",
+  "location": {
+    "column": 5,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/email/utils.ts",
+    "function": null,
+    "line": 30
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation."
+}

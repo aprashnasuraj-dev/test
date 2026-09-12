@@ -1,0 +1,26 @@
+{
+  "asset": "manager",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "URL passed to open/postMessage requires scheme and origin validation.",
+  "evidence": "URL passed to open/postMessage requires scheme and origin validation.",
+  "id": "7b0a11ec-ec97-4a09-b9d0-792b9325084f",
+  "impact": "",
+  "location": {
+    "column": 19,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/notifications/utils/telegram/auth.ts",
+    "function": null,
+    "line": 48
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unvalidated-open-url",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unvalidated-open-url",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "URL passed to open/postMessage requires scheme and origin validation."
+}

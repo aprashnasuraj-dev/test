@@ -1,0 +1,11 @@
+finding_id=882493de-da63-4ea1-a9b0-d3266916fd26
+severity=Medium
+asset=explorer
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-shell-true-or-interpolated-command
+matched_known_id=None
+escape_reason=None
+source=apps/portal//home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/worker/og-render.ts:15
+source_line=const match = matchHtmlRegExp.exec(str)
+scanner_evidence=Child process execution uses shell mode or a constructed command string.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

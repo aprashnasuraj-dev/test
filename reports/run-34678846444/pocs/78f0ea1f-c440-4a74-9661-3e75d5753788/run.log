@@ -1,0 +1,11 @@
+finding_id=78f0ea1f-c440-4a74-9661-3e75d5753788
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=apps/manager//home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/service/profileNfts.ts:198
+source_line=const response = await fetch(
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

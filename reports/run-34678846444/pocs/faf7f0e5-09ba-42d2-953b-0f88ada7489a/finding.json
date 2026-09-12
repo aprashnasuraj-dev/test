@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
+  "evidence": "fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;",
+  "id": "faf7f0e5-09ba-42d2-953b-0f88ada7489a",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "api-worker/worker-configuration.gen.d.ts",
+    "function": null,
+    "line": 334
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "server_side_fetch_of_untrusted_avatar_url",
+  "rule_id": "custom-ssrf:dynamic-url-sink",
+  "severity": "High",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Dynamic URL reaches outbound request without observed destination validation"
+}

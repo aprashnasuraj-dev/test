@@ -1,0 +1,11 @@
+finding_id=33b4cca9-646f-48e9-8f9a-2fefa8976610
+severity=Medium
+asset=workers
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=workers//home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/sendgrid/contacts.ts:61
+source_line=fetch(url, {
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

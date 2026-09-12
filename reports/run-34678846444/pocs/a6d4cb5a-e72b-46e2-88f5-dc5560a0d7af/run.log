@@ -1,0 +1,11 @@
+finding_id=a6d4cb5a-e72b-46e2-88f5-dc5560a0d7af
+severity=Medium
+asset=transaction-manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-eip712-domain-missing-binding
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager//home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:316
+source_line=expect(typedData.domain.name).toBe('USDC')
+scanner_evidence=EIP-712 domain construction requires review for chainId and verifyingContract binding.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced
