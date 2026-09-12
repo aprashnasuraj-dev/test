@@ -6,9 +6,9 @@ import os
 import re
 import shutil
 import subprocess
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Mapping, Sequence
 
 _WINDOWS_ABSOLUTE = re.compile(r"^(?P<drive>[A-Za-z]):[\\/](?P<tail>.*)$")
 _WINDOWS_FILE_URI = re.compile(r"^file:///(?P<drive>[A-Za-z]):/(?P<tail>.*)$")
