@@ -3,6 +3,10 @@ name: ENS Audit Bootstrap
 on:
   push:
     branches: [main]
+    paths:
+      - '.github/workflows/ens-audit-bootstrap.yml'
+      - 'scripts/**'
+      - 'tooling/**'
   workflow_dispatch:
 
 permissions:
@@ -20,6 +24,8 @@ jobs:
       UPSTREAM_REPO: https://github.com/immunefi-team/audit-comp-ens.git
       UPSTREAM_REF: 1c9b47f18fcddd2e864dfe385c4171061c9811ae
       PNPM_VERSION: 10.27.0
+      CORE_NODE_VERSION: '20'
+      FULL_NODE_VERSION: '22.18.0'
       VITE_RHINESTONE_API_KEY: audit-ci-placeholder
       SEPOLIA_FORK_URL: https://ethereum-sepolia-rpc.publicnode.com
 
@@ -33,7 +39,7 @@ jobs:
           version: 10.27.0
           run_install: false
 
-      - name: Setup Node 20
+      - name: Setup Node 20 core-audit lane
         uses: actions/setup-node@v6
         with:
           node-version: '20'
@@ -55,7 +61,7 @@ jobs:
           git -C ens-workspace checkout --detach "$UPSTREAM_REF"
           test "$(git -C ens-workspace rev-parse HEAD)" = "$UPSTREAM_REF"
 
-      - name: Verify toolchain versions
+      - name: Verify core-lane toolchain versions
         run: |
           node --version
           pnpm --version
@@ -64,9 +70,10 @@ jobs:
           forge --version
           anvil --version
           semgrep --version
+          test "$(node --version | cut -d. -f1)" = "v20"
           test "$(pnpm --version)" = "$PNPM_VERSION"
 
-      - name: Install upstream workspace
+      - name: Install upstream workspace under Node 20
         working-directory: ens-workspace
         run: pnpm install --frozen-lockfile
 
@@ -76,17 +83,28 @@ jobs:
           cp apps/manager/.env.example apps/manager/.env.local 2>/dev/null || touch apps/manager/.env.local
           cp apps/portal/.env.example apps/portal/.env.local 2>/dev/null || touch apps/portal/.env.local
 
-      - name: Typecheck core audit packages
+      - name: Typecheck core audit packages under Node 20
         working-directory: ens-workspace
         run: |
           pnpm --filter @ens-apps/smart-account typecheck
           pnpm --filter @ens-apps/transaction-manager typecheck
 
-      - name: Test core audit packages
+      - name: Test core audit packages under Node 20
         working-directory: ens-workspace
         run: |
           pnpm --filter @ens-apps/smart-account test
           pnpm --filter @ens-apps/transaction-manager test
+
+      - name: Setup Node 22.18 for full ENS application stack
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22.18.0'
+
+      - name: Verify full-stack Node lane
+        run: |
+          node --version
+          pnpm --version
+          node -e "const [maj,min]=process.versions.node.split('.').map(Number); if (maj < 22 || (maj === 22 && min < 18)) process.exit(1)"
 
       - name: Build Manager, Portal, and API worker
         working-directory: ens-workspace
@@ -94,6 +112,10 @@ jobs:
           pnpm build:manager
           pnpm build:portal
           pnpm --filter api-worker build
+
+      - name: Install Playwright Chromium for E2E work
+        working-directory: ens-workspace
+        run: pnpm --filter @ens-apps/e2e exec playwright install --with-deps chromium
 
       - name: Install and test custom audit tooling
         run: |
@@ -142,7 +164,8 @@ jobs:
           {
             echo "upstream_repo=$UPSTREAM_REPO"
             echo "upstream_ref=$UPSTREAM_REF"
-            echo "node=$(node --version 2>/dev/null || true)"
+            echo "core_node=$CORE_NODE_VERSION"
+            echo "full_node=$(node --version 2>/dev/null || true)"
             echo "pnpm=$(pnpm --version 2>/dev/null || true)"
             echo "rust=$(rustc --version 2>/dev/null || true)"
             echo "forge=$(forge --version 2>/dev/null | head -n1 || true)"
