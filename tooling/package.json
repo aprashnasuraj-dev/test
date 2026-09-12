@@ -6,6 +6,7 @@
     "check": "pnpm -r --if-present typecheck && pnpm -r --if-present test",
     "mutate:userop": "pnpm --filter @audit/userop-mutator start",
     "stress:ens": "pnpm --filter @audit/ens-normalizer start",
-    "hydrate": "pnpm --filter @audit/state-hydrator start"
+    "hydrate": "pnpm --filter @audit/state-hydrator start",
+    "emulate:worker": "pnpm --filter @workspace/worker-emulator start"
   }
 }
