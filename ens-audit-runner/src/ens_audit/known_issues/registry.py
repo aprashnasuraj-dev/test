@@ -64,12 +64,12 @@ def load_known_issues(path: Path | None = None) -> tuple[KnownIssue, ...]:
     source = path or _registry_path()
     raw = yaml.safe_load(source.read_text(encoding="utf-8"))
     if not isinstance(raw, list):
-        raise ValueError("known issue registry must contain a YAML list")
+        raise TypeError("known issue registry must contain a YAML list")
     issues: list[KnownIssue] = []
     seen_ids: set[str] = set()
     for item in raw:
         if not isinstance(item, dict):
-            raise ValueError("known issue entries must be mappings")
+            raise TypeError("known issue entries must be mappings")
         issue = _parse_issue(item)
         if issue.id in seen_ids:
             raise ValueError(f"duplicate known issue id: {issue.id}")
@@ -87,10 +87,15 @@ def _parse_issue(item: dict[str, Any]) -> KnownIssue:
         raise ValueError(f"known issue missing required fields: {', '.join(missing)}")
     assets = item["asset"]
     patterns = item["match_patterns"]
+    suppress_if = item.get("suppress_if", [])
     if not isinstance(assets, list) or not all(isinstance(value, str) for value in assets):
-        raise ValueError("known issue asset must be a list of strings")
+        raise TypeError("known issue asset must be a list of strings")
     if not isinstance(patterns, list):
-        raise ValueError("known issue match_patterns must be a list")
+        raise TypeError("known issue match_patterns must be a list")
+    if not isinstance(suppress_if, list) or not all(
+        isinstance(value, str) for value in suppress_if
+    ):
+        raise TypeError("known issue suppress_if must be a list of strings")
     return KnownIssue(
         id=str(item["id"]),
         severity=str(item["severity"]),
@@ -98,7 +103,7 @@ def _parse_issue(item: dict[str, Any]) -> KnownIssue:
         title=str(item["title"]),
         root_cause=str(item["root_cause"]),
         match_patterns=tuple(_parse_pattern(pattern) for pattern in patterns),
-        suppress_if=tuple(str(value) for value in item.get("suppress_if", [])),
+        suppress_if=tuple(suppress_if),
         notes=str(item.get("notes", "")),
     )
 
@@ -107,15 +112,18 @@ def _parse_pattern(item: Any) -> MatchPattern:
     """Validate one matcher mapping and reject unknown keys."""
 
     if not isinstance(item, dict):
-        raise ValueError("known issue match pattern must be a mapping")
+        raise TypeError("known issue match pattern must be a mapping")
     allowed = {"file_glob", "content_regex", "git_history", "rule_id", "cwe", "function"}
     unknown = set(item) - allowed
     if unknown:
         raise ValueError(f"unknown match pattern fields: {', '.join(sorted(unknown))}")
+    git_history = item.get("git_history", False)
+    if not isinstance(git_history, bool):
+        raise TypeError("git_history match pattern must be a boolean")
     return MatchPattern(
         file_glob=_optional_string(item.get("file_glob")),
         content_regex=_optional_string(item.get("content_regex")),
-        git_history=bool(item.get("git_history", False)),
+        git_history=git_history,
         rule_id=_optional_string(item.get("rule_id")),
         cwe=_optional_string(item.get("cwe")),
         function=_optional_string(item.get("function")),
@@ -128,5 +136,5 @@ def _optional_string(value: Any) -> str | None:
     if value is None:
         return None
     if not isinstance(value, str):
-        raise ValueError("match pattern values must be strings")
+        raise TypeError("match pattern values must be strings")
     return value
