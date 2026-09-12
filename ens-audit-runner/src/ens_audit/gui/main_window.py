@@ -34,6 +34,7 @@ from ens_audit.gui.settings_view import SettingsView
 from ens_audit.gui.widgets.progress_dialog import ProgressDialog
 from ens_audit.models import AuditReport
 from ens_audit.pipeline.orchestrator import PipelineCancelled, PipelineOrchestrator
+from ens_audit.tooling import DEFAULT_TOOL_RUNNER
 
 
 class StageSelectionDialog(QDialog):
@@ -44,16 +45,16 @@ class StageSelectionDialog(QDialog):
     """
 
     def __init__(self, parent: QWidget | None = None) -> None:
-        """Build one checkbox per configured analysis stage.
-
-        Security invariant: each checkbox label maps directly to a known stage identifier.
-        """
+        """Build one checkbox per configured analysis stage."""
 
         super().__init__(parent)
         self.setWindowTitle("Select Audit Stages")
         self._checks: dict[str, QCheckBox] = {}
         layout = QVBoxLayout(self)
-        layout.addWidget(QLabel("Choose analysis stages. Known-issue filtering and reporting run automatically."))
+        prompt = QLabel(
+            "Choose analysis stages. Known-issue filtering and reporting run automatically."
+        )
+        layout.addWidget(prompt)
         for stage in PipelineOrchestrator.ANALYSIS_STAGES:
             checkbox = QCheckBox(stage.replace("_", " ").title(), self)
             checkbox.setChecked(True)
@@ -68,21 +69,13 @@ class StageSelectionDialog(QDialog):
         layout.addWidget(buttons)
 
     def selected_stages(self) -> list[str]:
-        """Return checked stage identifiers in canonical order.
-
-        Security invariant: every returned value originates from the orchestrator's fixed stage
-        registry.
-        """
+        """Return checked stage identifiers in canonical order."""
 
         return [stage for stage, checkbox in self._checks.items() if checkbox.isChecked()]
 
 
 class AuditWorker(QObject):
-    """Run async audit orchestration inside a dedicated QThread.
-
-    Security invariant: worker execution calls only validated orchestrator entry points and
-    communicates with the GUI through Qt signals.
-    """
+    """Run async audit orchestration inside a dedicated QThread."""
 
     progress = Signal(str, str, int, int)
     log = Signal(str)
@@ -97,11 +90,7 @@ class AuditWorker(QObject):
         mode: str,
         selected_stages: list[str] | None = None,
     ) -> None:
-        """Configure one worker run mode and optional validated stage list.
-
-        Security invariant: ``mode`` is checked against a closed set before any audit method is
-        dispatched.
-        """
+        """Configure one worker run mode and optional validated stage list."""
 
         super().__init__()
         if mode not in {"full", "selected", "retry"}:
@@ -112,11 +101,7 @@ class AuditWorker(QObject):
 
     @Slot()
     def run(self) -> None:
-        """Execute the selected orchestrator entry point and emit terminal state.
-
-        Security invariant: exceptions are converted to bounded plain-text error signals and
-        never evaluated by the UI.
-        """
+        """Execute the selected orchestrator entry point and emit terminal state."""
 
         self.orchestrator.progress = self.progress.emit
         self.orchestrator.logger = self.log.emit
@@ -138,18 +123,10 @@ class AuditWorker(QObject):
 
 
 class MainWindow(QMainWindow):
-    """Primary ENS Audit Runner desktop window.
-
-    Security invariant: long-running analysis executes off the GUI thread; source and scanner
-    data are rendered as plain text through dedicated views.
-    """
+    """Primary ENS Audit Runner desktop window."""
 
     def __init__(self) -> None:
-        """Construct tabs, worker state, menus, and cross-view signal wiring.
-
-        Security invariant: the orchestrator is created once with fixed repository scope and is
-        reused only for its own current run when retrying.
-        """
+        """Construct tabs, worker state, menus, and cross-view signal wiring."""
 
         super().__init__()
         self.setWindowTitle("ENS Audit Runner")
@@ -191,23 +168,15 @@ class MainWindow(QMainWindow):
         self._build_menu()
 
     def _build_menu(self) -> None:
-        """Create Settings and About actions.
-
-        Security invariant: menu actions only navigate or display static application metadata.
-        """
+        """Create Settings and About actions."""
 
         settings_action = self.menuBar().addAction("Settings")
-        settings_action.triggered.connect(
-            lambda: self.tabs.setCurrentWidget(self.settings_view)
-        )
+        settings_action.triggered.connect(lambda: self.tabs.setCurrentWidget(self.settings_view))
         about_action = self.menuBar().addAction("About")
         about_action.triggered.connect(self._show_about)
 
     def _build_logs_tab(self) -> QWidget:
-        """Build timestamped log search/filter/export controls.
-
-        Security invariant: log text is read-only and exports exactly the displayed plain text.
-        """
+        """Build timestamped log search/filter/export controls."""
 
         container = QWidget(self)
         self.log_view = QPlainTextEdit(container)
@@ -230,19 +199,13 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def run_full_audit(self) -> None:
-        """Start a complete seven-stage audit in a worker thread.
-
-        Security invariant: concurrent audit workers are rejected.
-        """
+        """Start a complete seven-stage audit in a worker thread."""
 
         self._start_worker("full")
 
     @Slot()
     def run_selected_stages(self) -> None:
-        """Prompt for a closed subset of stages and start them in a worker thread.
-
-        Security invariant: an empty selection is rejected before orchestration.
-        """
+        """Prompt for a closed subset of stages and start them in a worker thread."""
 
         if self._thread is not None:
             self._busy_message()
@@ -258,10 +221,7 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def retry_failed(self) -> None:
-        """Retry incomplete stages from the orchestrator's current run.
-
-        Security invariant: retry is unavailable until this orchestrator owns a run id.
-        """
+        """Retry incomplete stages from the orchestrator's current run."""
 
         if self.orchestrator.current_run_id is None:
             QMessageBox.information(self, "Nothing to Retry", "Run an audit first.")
@@ -283,14 +243,30 @@ class MainWindow(QMainWindow):
         self._append_log("resume requested")
 
     def _start_worker(self, mode: str, stages: list[str] | None = None) -> None:
-        """Create and start one QThread audit worker.
-
-        Security invariant: at most one worker thread can own the orchestrator at a time.
-        """
+        """Create and start one QThread audit worker with session-only tool settings."""
 
         if self._thread is not None:
             self._busy_message()
             return
+
+        settings = self.settings_view.session_settings()
+        DEFAULT_TOOL_RUNNER.set_session_environment(
+            {
+                "SEMGREP_APP_TOKEN": settings.semgrep_app_token,
+                "SNYK_TOKEN": settings.snyk_token,
+            }
+        )
+        DEFAULT_TOOL_RUNNER.set_disabled_tools(
+            () if settings.codeql_terms_accepted else ("codeql",)
+        )
+        if not settings.codeql_terms_accepted:
+            codeql_installed = bool(
+                DEFAULT_TOOL_RUNNER.native_path("codeql")
+                or DEFAULT_TOOL_RUNNER.wsl_path("codeql")
+            )
+            if codeql_installed:
+                self._append_log("CodeQL skipped for this run: usage terms not confirmed")
+
         self._last_pair = None
         self._stage_status.clear()
         self._completed_assets = {stage: set() for stage in PipelineOrchestrator.STAGES}
@@ -317,11 +293,7 @@ class MainWindow(QMainWindow):
 
     @Slot(str, str, int, int)
     def _on_progress(self, asset: str, stage: str, current: int, total: int) -> None:
-        """Update pipeline/dashboard progress from worker metadata.
-
-        Security invariant: only configured asset/stage rows affect pipeline state; global report
-        progress is handled separately.
-        """
+        """Update pipeline/dashboard progress from worker metadata."""
 
         self._finalize_previous_pair()
         if self._progress_dialog is not None:
@@ -333,12 +305,11 @@ class MainWindow(QMainWindow):
 
     @Slot(str)
     def _append_log(self, message: str) -> None:
-        """Append one bounded plain-text worker log line to both log surfaces.
+        """Append one bounded plain-text worker log line to both log surfaces."""
 
-        Security invariant: control characters are stripped before rendering.
-        """
-
-        cleaned = "".join(character for character in message if character >= " " or character == "\t")[:4000]
+        cleaned = "".join(
+            character for character in message if character >= " " or character == "\t"
+        )[:4000]
         self.pipeline_view.append_log(cleaned)
         self.log_view.appendPlainText(cleaned)
         complete = re.match(r"complete ([^:]+):([^;]+);", cleaned)
@@ -353,10 +324,7 @@ class MainWindow(QMainWindow):
 
     @Slot(object)
     def _on_report(self, report_object: object) -> None:
-        """Propagate a completed AuditReport to dashboard, findings, and report views.
-
-        Security invariant: objects not matching ``AuditReport`` are rejected.
-        """
+        """Propagate a completed AuditReport to dashboard, findings, and report views."""
 
         if not isinstance(report_object, AuditReport):
             self._on_failed("Worker returned an invalid report object")
@@ -364,9 +332,7 @@ class MainWindow(QMainWindow):
         self._finalize_previous_pair()
         report = report_object
         repo_root = (REPOS_DIR / "audit-comp-ens").resolve()
-        repo_roots = {
-            spec.name: (repo_root / spec.relative_path).resolve() for spec in ASSETS
-        }
+        repo_roots = {spec.name: (repo_root / spec.relative_path).resolve() for spec in ASSETS}
         findings = list(report.findings)
         self.dashboard.set_asset_count(len(ASSETS))
         self.dashboard.set_findings(findings)
@@ -391,14 +357,13 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def _worker_finished(self) -> None:
-        """Release worker references after QThread shutdown.
-
-        Security invariant: stale worker objects cannot be reused concurrently.
-        """
+        """Release worker references and scrub session-only scanner credentials."""
 
         if self._progress_dialog is not None:
             self._progress_dialog.close()
             self._progress_dialog.deleteLater()
+        DEFAULT_TOOL_RUNNER.set_session_environment({})
+        DEFAULT_TOOL_RUNNER.set_disabled_tools(())
         self._progress_dialog = None
         self._worker = None
         self._thread = None
@@ -437,7 +402,8 @@ class MainWindow(QMainWindow):
         QMessageBox.about(
             self,
             "About ENS Audit Runner",
-            "ENS Audit Runner performs source-only security analysis against the configured pinned ENS audit scope.",
+            "ENS Audit Runner performs source-only security analysis against the configured "
+            "pinned ENS audit scope.",
         )
 
     def _find_next_log(self) -> None:
@@ -450,7 +416,12 @@ class MainWindow(QMainWindow):
     def _export_log(self) -> None:
         """Export displayed logs to a user-selected UTF-8 text file."""
 
-        destination, _ = QFileDialog.getSaveFileName(self, "Export Log", "ens-audit.log", "Log (*.log);;Text (*.txt)")
+        destination, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export Log",
+            "ens-audit.log",
+            "Log (*.log);;Text (*.txt)",
+        )
         if destination:
             Path(destination).write_text(self.log_view.toPlainText(), encoding="utf-8")
 
