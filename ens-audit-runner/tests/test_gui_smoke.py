@@ -7,10 +7,10 @@ from pathlib import Path
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from PySide6.QtWidgets import QApplication  # noqa: E402
+from PySide6.QtWidgets import QApplication
 
-from ens_audit.gui.main_window import MainWindow  # noqa: E402
-from ens_audit.pipeline import orchestrator as orchestrator_module  # noqa: E402
+from ens_audit.gui.main_window import MainWindow
+from ens_audit.pipeline import orchestrator as orchestrator_module
 
 
 def test_main_window_constructs_offscreen(
