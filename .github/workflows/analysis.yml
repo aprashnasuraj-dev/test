@@ -14,11 +14,11 @@ on:
         required: true
         default: 'https://github.com/immunefi-team/audit-comp-ens.git'
       assets:
-        description: 'Assets accepted by ens_audit --assets'
+        description: 'Configured audit assets'
         required: true
         default: 'manager,portal,workers,transaction-manager,smart-account'
       stages:
-        description: 'Stages accepted by ens_audit --stages'
+        description: 'Requested stages; unavailable optional stages are reported and skipped'
         required: true
         default: 'sast,symbolic,fuzz,deps,secrets,ui,rpc,diff,known-filter,report'
 
@@ -69,12 +69,84 @@ jobs:
         working-directory: ens-audit-runner
         run: |
           set -euo pipefail
-          python -m ens_audit \
-            --repo "$TARGET_REPO" \
-            --assets "$TARGET_ASSETS" \
-            --stages "$TARGET_STAGES" \
-            --out "$GITHUB_WORKSPACE/out" \
-            --verbose 2>&1 | tee "$GITHUB_WORKSPACE/out/runs/analysis.log"
+          python - <<'PY' 2>&1 | tee "$GITHUB_WORKSPACE/out/runs/analysis.log"
+          import asyncio
+          import json
+          import os
+          import shutil
+          from pathlib import Path
+
+          from ens_audit.config import ASSETS, UPSTREAM_REPOSITORY
+          from ens_audit.pipeline.orchestrator import PipelineOrchestrator
+
+          workspace = Path(os.environ["GITHUB_WORKSPACE"])
+          out = workspace / "out"
+          out.mkdir(parents=True, exist_ok=True)
+
+          requested_repo = os.environ["TARGET_REPO"].strip()
+          if requested_repo != UPSTREAM_REPOSITORY:
+              raise SystemExit(
+                  f"workflow repo mismatch: requested={requested_repo!r} configured={UPSTREAM_REPOSITORY!r}"
+              )
+
+          aliases = {"portal": "explorer"}
+          requested_assets = {
+              aliases.get(value.strip(), value.strip())
+              for value in os.environ["TARGET_ASSETS"].split(",")
+              if value.strip()
+          }
+          configured_assets = {spec.name for spec in ASSETS}
+          if requested_assets != configured_assets:
+              raise SystemExit(
+                  "current runner executes its fixed configured asset set; "
+                  f"requested={sorted(requested_assets)} configured={sorted(configured_assets)}"
+              )
+
+          requested_stages = [
+              value.strip().lower().replace("-", "_")
+              for value in os.environ["TARGET_STAGES"].split(",")
+              if value.strip()
+          ]
+          available = set(PipelineOrchestrator.ANALYSIS_STAGES) | {"known_filter", "report"}
+          unavailable = [stage for stage in requested_stages if stage not in available]
+          for stage in unavailable:
+              print(f"::warning::stage '{stage}' is not implemented by the current runner; skipping")
+
+          selected = [
+              stage for stage in PipelineOrchestrator.ANALYSIS_STAGES if stage in requested_stages
+          ]
+          if not selected:
+              raise SystemExit("no implemented analysis stages were selected")
+
+          print(f"configured repository: {UPSTREAM_REPOSITORY}")
+          print(f"configured assets: {', '.join(sorted(configured_assets))}")
+          print(f"analysis stages: {', '.join(selected)}")
+
+          orchestrator = PipelineOrchestrator(logger=print)
+          report = asyncio.run(orchestrator.run_selected(selected))
+
+          source_json = report.output_dir / "audit-report.json"
+          source_md = report.output_dir / "audit-report.md"
+          if not source_json.is_file():
+              raise SystemExit(f"analysis completed without report JSON: {source_json}")
+
+          payload = json.loads(source_json.read_text(encoding="utf-8"))
+          (out / "findings.json").write_text(
+              json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8"
+          )
+          if source_md.is_file():
+              shutil.copy2(source_md, out / "audit-report.md")
+
+          generated_submissions = report.output_dir / "findings"
+          if generated_submissions.is_dir():
+              submissions = out / "submissions"
+              submissions.mkdir(parents=True, exist_ok=True)
+              for path in generated_submissions.glob("*.md"):
+                  shutil.copy2(path, submissions / path.name)
+
+          print(f"normalized report output: {out}")
+          print(f"finding count: {len(payload.get('findings', []))}")
+          PY
 
       - name: Verify submission artifacts
         if: always()
