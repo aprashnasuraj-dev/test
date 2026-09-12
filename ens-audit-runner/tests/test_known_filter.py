@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from ens_audit.known_issues import KnownIssue, MatchPattern, load_known_issues
+from ens_audit.known_issues import load_known_issues
+from ens_audit.known_issues.registry import KnownIssue, MatchPattern
 from ens_audit.models import Finding, FindingStatus, Location, Severity
 from ens_audit.pipeline.stage_known_filter import KnownIssueFilterStage
 
