@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import shutil
 from dataclasses import dataclass
 
 from PySide6.QtCore import Signal
@@ -25,6 +24,7 @@ from ens_audit.config import (
     UPSTREAM_BRANCH,
     UPSTREAM_REPOSITORY,
 )
+from ens_audit.tooling import DEFAULT_TOOL_RUNNER
 
 
 @dataclass(frozen=True, slots=True)
@@ -41,20 +41,16 @@ class SessionSettings:
 
 
 class SettingsView(QWidget):
-    """Display immutable scope settings and discover local audit tool executables.
+    """Display immutable scope settings and discover executable analyzer routes.
 
-    Security invariant: tool discovery uses ``shutil.which`` only; entering settings never
-    executes a discovered binary or persists credential text.
+    Security invariant: entering settings never executes an analyzer or persists credential
+    text. WSL discovery invokes only ``which <tool>`` through the shared argv-only resolver.
     """
 
     settings_changed = Signal()
 
     def __init__(self, parent: QWidget | None = None) -> None:
-        """Build scope, credential, and tool-discovery controls.
-
-        Security invariant: upstream repository identity fields are read-only to prevent a GUI
-        edit from silently expanding audit scope.
-        """
+        """Build scope, credential, and tool-discovery controls."""
 
         super().__init__(parent)
 
@@ -90,7 +86,7 @@ class SettingsView(QWidget):
         credential_form.addRow("Snyk token", self.snyk_token)
 
         self.tool_table = QTableWidget(0, 4, self)
-        self.tool_table.setHorizontalHeaderLabels(("Tool", "Native", "WSL available", "Docker available"))
+        self.tool_table.setHorizontalHeaderLabels(("Tool", "Native path", "WSL path", "Active route"))
         self.tool_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         self.tool_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
 
@@ -105,20 +101,23 @@ class SettingsView(QWidget):
         self.detect_tools()
 
     def detect_tools(self) -> None:
-        """Refresh native executable paths plus WSL/Docker host availability.
+        """Refresh actual native/WSL resolution for every configured tool."""
 
-        Security invariant: detection performs filesystem PATH lookup only and does not invoke
-        any tool or execute version commands.
-        """
-
-        has_wsl = shutil.which("wsl.exe") is not None or shutil.which("wsl") is not None
-        has_docker = shutil.which("docker.exe") is not None or shutil.which("docker") is not None
+        DEFAULT_TOOL_RUNNER.clear_cache()
         self.tool_table.setRowCount(0)
         for tool in REQUIRED_TOOLS:
+            native = DEFAULT_TOOL_RUNNER.native_path(tool)
+            if native:
+                wsl_path = "Not checked (native preferred)"
+                route = "Native"
+            else:
+                discovered_wsl = DEFAULT_TOOL_RUNNER.wsl_path(tool)
+                wsl_path = discovered_wsl or "Not found"
+                route = "WSL" if discovered_wsl else "Missing"
+
             row = self.tool_table.rowCount()
             self.tool_table.insertRow(row)
-            native = shutil.which(tool) or "Not found"
-            values = (tool, native, "Yes" if has_wsl else "No", "Yes" if has_docker else "No")
+            values = (tool, native or "Not found", wsl_path, route)
             for column, value in enumerate(values):
                 self.tool_table.setItem(row, column, QTableWidgetItem(value))
 
