@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import asyncio
 import json
-import shutil
 import subprocess
 from pathlib import Path
 from typing import Any
 
 from ens_audit.config import RESULTS_DIR
 from ens_audit.models import Asset, Finding, Location, Severity
+from ens_audit.tooling import DEFAULT_TOOL_RUNNER
 
 
 class SymbolicStage:
@@ -19,6 +19,9 @@ class SymbolicStage:
     Security invariant: symbolic tools run only against the checked-out asset path with
     fixed bounds and without shell interpretation.
     """
+
+    def __init__(self) -> None:
+        self.tool_runner = DEFAULT_TOOL_RUNNER
 
     async def run(self, asset: Asset) -> list[Finding]:
         """Run symbolic analyzers when Solidity is present and normalize supported output."""
@@ -34,7 +37,7 @@ class SymbolicStage:
         output_dir.mkdir(parents=True, exist_ok=True)
         findings: list[Finding] = []
 
-        if shutil.which("myth"):
+        if self.tool_runner.available("myth"):
             mythril_path = output_dir / "mythril.json"
             completed = self._tool(
                 [
@@ -59,7 +62,7 @@ class SymbolicStage:
             mythril_path.write_text(completed.stdout, encoding="utf-8")
             findings.extend(self._parse_mythril(mythril_path, asset))
 
-        if shutil.which("halmos"):
+        if self.tool_runner.available("halmos"):
             halmos_path = output_dir / "halmos.json"
             self._tool(
                 [
@@ -79,24 +82,21 @@ class SymbolicStage:
 
         return findings
 
-    @staticmethod
     def _tool(
+        self,
         argv: list[str],
         *,
         cwd: Path,
         timeout_s: int,
         accepted_codes: set[int],
     ) -> subprocess.CompletedProcess[str]:
-        """Run a symbolic tool as an argv-only child process."""
+        """Run a symbolic tool natively or through WSL as an argv-only child process."""
 
-        completed = subprocess.run(
-            argv,
+        completed = self.tool_runner.run(
+            argv[0],
+            argv[1:],
             cwd=cwd,
-            shell=False,
-            check=False,
-            capture_output=True,
-            text=True,
-            timeout=timeout_s,
+            timeout_s=timeout_s,
         )
         if completed.returncode not in accepted_codes:
             detail = completed.stderr.strip() or completed.stdout.strip() or "tool failed"
