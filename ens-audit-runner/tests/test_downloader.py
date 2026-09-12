@@ -8,6 +8,7 @@ from unittest.mock import Mock
 
 import pytest
 
+from ens_audit.config import AssetSpec
 from ens_audit.downloader import repo_downloader
 from ens_audit.models import Asset
 
@@ -79,8 +80,8 @@ def test_build_assets_maps_only_configured_subtrees(
     root = tmp_path / "repo"
     root.mkdir()
     specs = (
-        repo_downloader.AssetSpec("one", Path("apps/one")),
-        repo_downloader.AssetSpec("two", Path("packages/two")),
+        AssetSpec("one", Path("apps/one")),
+        AssetSpec("two", Path("packages/two")),
     )
     for spec in specs:
         (root / spec.relative_path).mkdir(parents=True)
@@ -102,7 +103,7 @@ def test_build_assets_rejects_missing_path(
     monkeypatch.setattr(
         repo_downloader,
         "ASSETS",
-        (repo_downloader.AssetSpec("missing", Path("missing")),),
+        (AssetSpec("missing", Path("missing")),),
     )
 
     with pytest.raises(repo_downloader.RepositoryDownloadError, match="missing"):
