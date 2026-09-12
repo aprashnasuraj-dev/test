@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -37,12 +38,16 @@ class SecretStage:
         sanitized: list[dict[str, Any]] = []
 
         if self.tool_runner.available("trufflehog"):
-            completed = self._tool(
-                ["trufflehog", "git", asset.path.as_uri(), "--json"],
-                cwd=asset.path,
-                timeout_s=900,
+            argv, cwd, include_file = self._trufflehog_command(asset, output_dir)
+            try:
+                completed = self._tool(argv, cwd=cwd, timeout_s=900)
+            finally:
+                if include_file is not None:
+                    include_file.unlink(missing_ok=True)
+            scanner_findings, scanner_metadata = self._parse_trufflehog_text(
+                completed.stdout,
+                asset,
             )
-            scanner_findings, scanner_metadata = self._parse_trufflehog_text(completed.stdout, asset)
             findings.extend(scanner_findings)
             sanitized.extend(scanner_metadata)
 
@@ -64,6 +69,54 @@ class SecretStage:
             encoding="utf-8",
         )
         return findings
+
+    @staticmethod
+    def _trufflehog_command(
+        asset: Asset,
+        output_dir: Path,
+    ) -> tuple[list[str], Path, Path | None]:
+        """Build a history-aware, scope-restricted TruffleHog command.
+
+        The audit assets are subdirectories of one monorepo, not independent Git
+        repositories. TruffleHog's git source must therefore receive the true repository
+        root. An ephemeral include-path file restricts history scanning to the current
+        asset. A non-Git checkout falls back to filesystem scanning rather than producing a
+        false scanner failure.
+        """
+
+        root_lookup = subprocess.run(
+            ["git", "-C", str(asset.path), "rev-parse", "--show-toplevel"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        if root_lookup.returncode != 0:
+            return ["trufflehog", "filesystem", str(asset.path), "--json"], asset.path, None
+
+        repo_root = Path(root_lookup.stdout.strip()).resolve()
+        try:
+            scope = asset.path.resolve().relative_to(repo_root).as_posix()
+        except ValueError as exc:
+            raise RuntimeError(
+                f"asset path is outside its Git repository root: {asset.path}"
+            ) from exc
+
+        include_file = output_dir / ".trufflehog-include-paths"
+        scope_pattern = rf"^{re.escape(scope)}(?:/.*)?$"
+        include_file.write_text(scope_pattern + "\n", encoding="utf-8")
+        return (
+            [
+                "trufflehog",
+                "git",
+                repo_root.as_uri(),
+                "--json",
+                "--include-paths",
+                str(include_file),
+            ],
+            repo_root,
+            include_file,
+        )
 
     def _tool(
         self,
@@ -103,8 +156,16 @@ class SecretStage:
             source = record.get("SourceMetadata") or {}
             data = source.get("Data") if isinstance(source, dict) else {}
             git_data = data.get("Git") if isinstance(data, dict) else {}
-            file_name = str(git_data.get("file", "")) if isinstance(git_data, dict) else ""
-            line_number = int(git_data.get("line", 0) or 0) if isinstance(git_data, dict) else 0
+            filesystem_data = data.get("Filesystem") if isinstance(data, dict) else {}
+            source_data: dict[str, Any]
+            if isinstance(git_data, dict) and git_data:
+                source_data = git_data
+            elif isinstance(filesystem_data, dict):
+                source_data = filesystem_data
+            else:
+                source_data = {}
+            file_name = str(source_data.get("file", ""))
+            line_number = int(source_data.get("line", 0) or 0)
             metadata.append(
                 {
                     "scanner": "trufflehog",
