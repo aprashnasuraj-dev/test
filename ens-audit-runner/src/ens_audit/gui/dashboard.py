@@ -3,16 +3,17 @@
 from __future__ import annotations
 
 from collections import Counter
+from typing import ClassVar
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QColor, QPainter
+from PySide6.QtGui import QColor, QPaintEvent, QPainter
 from PySide6.QtWidgets import (
     QGridLayout,
     QGroupBox,
     QHBoxLayout,
     QLabel,
-    QPushButton,
     QProgressBar,
+    QPushButton,
     QVBoxLayout,
     QWidget,
 )
@@ -28,7 +29,7 @@ class SeverityPie(QWidget):
     rendered or interpreted by the painter.
     """
 
-    _COLORS = {
+    _COLORS: ClassVar[dict[Severity, QColor]] = {
         Severity.CRITICAL: QColor("#7f1d1d"),
         Severity.HIGH: QColor("#dc2626"),
         Severity.MEDIUM: QColor("#d97706"),
@@ -37,30 +38,20 @@ class SeverityPie(QWidget):
     }
 
     def __init__(self, parent: QWidget | None = None) -> None:
-        """Create an empty severity pie widget.
-
-        Security invariant: internal state begins with the closed severity vocabulary only.
-        """
+        """Create an empty severity pie widget."""
 
         super().__init__(parent)
         self._counts = {severity: 0 for severity in Severity}
         self.setMinimumSize(180, 180)
 
     def set_counts(self, counts: dict[Severity, int]) -> None:
-        """Replace pie data with non-negative counts for known severities.
-
-        Security invariant: unknown keys are ignored and values are clamped to non-negative
-        integers before painting.
-        """
+        """Replace pie data with non-negative counts for known severities."""
 
         self._counts = {severity: max(0, int(counts.get(severity, 0))) for severity in Severity}
         self.update()
 
-    def paintEvent(self, event: object) -> None:  # noqa: N802
-        """Paint the current severity distribution.
-
-        Security invariant: drawing uses only validated numeric state and fixed colors.
-        """
+    def paintEvent(self, event: QPaintEvent) -> None:
+        """Paint the current severity distribution."""
 
         del event
         painter = QPainter(self)
@@ -84,26 +75,21 @@ class SeverityPie(QWidget):
 
 
 class Dashboard(QWidget):
-    """Display audit completion and severity overview with run/export actions.
-
-    Security invariant: dashboard state is derived from normalized model objects and bounded
-    stage counters rather than raw scanner markup.
-    """
+    """Display audit completion and severity overview with run/export actions."""
 
     run_full_requested = Signal()
     run_selected_requested = Signal()
     export_requested = Signal()
 
     def __init__(self, parent: QWidget | None = None) -> None:
-        """Build dashboard controls and stage progress indicators.
-
-        Security invariant: action buttons emit intent only; they execute no subprocesses.
-        """
+        """Build dashboard controls and stage progress indicators."""
 
         super().__init__(parent)
         self.asset_label = QLabel(f"Assets: 0/{len(ASSETS)} Downloaded", self)
         self.stage_label = QLabel(f"Stages: 0/{len(PIPELINE_STAGES)} Complete", self)
-        self.severity_labels = {severity: QLabel(f"{severity.value}: 0", self) for severity in Severity}
+        self.severity_labels = {
+            severity: QLabel(f"{severity.value}: 0", self) for severity in Severity
+        }
         self.stage_bars = {stage: QProgressBar(self) for stage in PIPELINE_STAGES}
         self.pie = SeverityPie(self)
 
@@ -146,19 +132,13 @@ class Dashboard(QWidget):
         layout.addStretch(1)
 
     def set_asset_count(self, downloaded: int) -> None:
-        """Update downloaded-asset count with configured bounds.
-
-        Security invariant: displayed values are clamped to the configured asset cardinality.
-        """
+        """Update downloaded-asset count with configured bounds."""
 
         count = min(max(0, int(downloaded)), len(ASSETS))
         self.asset_label.setText(f"Assets: {count}/{len(ASSETS)} Downloaded")
 
     def set_stage_progress(self, stage: str, completed_assets: int) -> None:
-        """Update one known stage progress bar.
-
-        Security invariant: unknown stage names are ignored and counts are clamped.
-        """
+        """Update one known stage progress bar."""
 
         bar = self.stage_bars.get(stage)
         if bar is None:
@@ -168,10 +148,7 @@ class Dashboard(QWidget):
         self.stage_label.setText(f"Stages: {complete}/{len(PIPELINE_STAGES)} Complete")
 
     def set_findings(self, findings: list[Finding]) -> None:
-        """Update severity totals from open normalized findings.
-
-        Security invariant: suppressed/false-positive records do not inflate open triage counts.
-        """
+        """Update severity totals from open normalized findings."""
 
         counts = Counter(
             finding.severity for finding in findings if finding.status is FindingStatus.OPEN
