@@ -61,7 +61,7 @@ class XStateAnalyzer:
                         stage="sast",
                         rule_id="ens-xstate-missing-complete",
                         root_cause="xstate_subscription_missing_completion",
-                        location=Location(file=str(path.relative_to(asset.path)), line=line),
+                        location=Location(file=path.relative_to(asset.path).as_posix(), line=line),
                         description="Stopping the subscribed actor can leave an awaiting caller unsettled when no completion handler exists.",
                         evidence=match.group(0)[:4000],
                         confidence=0.9,
@@ -74,7 +74,7 @@ class XStateAnalyzer:
 
         graph, initial, line_by_state, unknown_targets = self._extract_graph(text)
         findings: list[Finding] = []
-        relative = str(path.relative_to(asset.path))
+        relative = path.relative_to(asset.path).as_posix()
         for source, target, line in unknown_targets:
             findings.append(
                 Finding(
