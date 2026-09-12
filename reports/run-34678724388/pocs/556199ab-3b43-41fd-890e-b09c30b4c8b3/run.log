@@ -1,0 +1,15 @@
+finding_id=556199ab-3b43-41fd-890e-b09c30b4c8b3
+severity=Medium
+asset=workers
+rule_id=custom-llm:prompt-injection-surface
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:4846
+source_line=* Workers AI support for OpenAI's Responses API
+scanner_evidence=system_fingerprint?: string | null;
+    service_tier?: "auto" | "default" | "flex" | "scale" | "priority" | null;
+};
+/**
+ * Workers AI support for OpenAI's Responses API
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

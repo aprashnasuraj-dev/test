@@ -1,0 +1,26 @@
+{
+  "asset": "transaction-manager",
+  "confidence": 0.6,
+  "cwe": null,
+  "description": "A parsed machine transition targets a state not defined in the same states block.",
+  "evidence": "submitting -> error.submission",
+  "id": "620107b2-faf2-448a-b7bc-5b48e6d9775c",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "src/machines/transaction.machine.ts",
+    "function": "submitting",
+    "line": 482
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "xstate_dead_transition",
+  "rule_id": "custom-xstate:undefined-target",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "State transition targets undefined state: error.submission"
+}

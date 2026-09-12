@@ -1,0 +1,109 @@
+{
+  "missing_required": [
+    "codeql",
+    "semgrep",
+    "slither",
+    "myth",
+    "halmos",
+    "forge",
+    "echidna",
+    "trufflehog",
+    "detect-secrets"
+  ],
+  "require_snyk": false,
+  "snyk_auth_configured": false,
+  "strict": false,
+  "tools": [
+    {
+      "available": false,
+      "name": "codeql",
+      "path": "",
+      "required": true,
+      "stage": "sast"
+    },
+    {
+      "available": false,
+      "name": "semgrep",
+      "path": "",
+      "required": true,
+      "stage": "sast"
+    },
+    {
+      "available": false,
+      "name": "slither",
+      "path": "",
+      "required": true,
+      "stage": "sast"
+    },
+    {
+      "available": true,
+      "name": "bandit",
+      "path": "/opt/hostedtoolcache/Python/3.12.14/x64/bin/bandit",
+      "required": true,
+      "stage": "sast"
+    },
+    {
+      "available": false,
+      "name": "myth",
+      "path": "",
+      "required": true,
+      "stage": "symbolic"
+    },
+    {
+      "available": false,
+      "name": "halmos",
+      "path": "",
+      "required": true,
+      "stage": "symbolic"
+    },
+    {
+      "available": false,
+      "name": "forge",
+      "path": "",
+      "required": true,
+      "stage": "fuzz"
+    },
+    {
+      "available": false,
+      "name": "echidna",
+      "path": "",
+      "required": true,
+      "stage": "fuzz"
+    },
+    {
+      "available": true,
+      "name": "npm",
+      "path": "/usr/local/bin/npm",
+      "required": true,
+      "stage": "deps"
+    },
+    {
+      "available": true,
+      "name": "pip-audit",
+      "path": "/opt/hostedtoolcache/Python/3.12.14/x64/bin/pip-audit",
+      "required": true,
+      "stage": "deps"
+    },
+    {
+      "available": false,
+      "name": "snyk",
+      "path": "",
+      "required": false,
+      "stage": "deps"
+    },
+    {
+      "available": false,
+      "name": "trufflehog",
+      "path": "",
+      "required": true,
+      "stage": "secrets"
+    },
+    {
+      "available": false,
+      "name": "detect-secrets",
+      "path": "",
+      "required": true,
+      "stage": "secrets"
+    }
+  ]
+}

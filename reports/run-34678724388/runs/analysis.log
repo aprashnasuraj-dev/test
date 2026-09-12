@@ -1,0 +1,36 @@
+::warning::stage 'ui' has no analyzer implementation in the current runner; skipping
+::warning::stage 'rpc' has no analyzer implementation in the current runner; skipping
+::warning::stage 'diff' has no analyzer implementation in the current runner; skipping
+configured repository: https://github.com/immunefi-team/audit-comp-ens.git
+configured assets: explorer, manager, smart-account, transaction-manager, workers
+requested stages: sast, symbolic, fuzz, deps, secrets, ui, rpc, diff, known_filter, report
+analysis stages: sast, symbolic, fuzz, deps, secrets
+strict analyzer failures: False
+complete manager:sast; findings=11
+complete manager:symbolic; findings=0
+complete manager:fuzz; findings=0
+complete manager:deps; findings=0
+complete manager:secrets; findings=0
+complete explorer:sast; findings=8
+complete explorer:symbolic; findings=0
+complete explorer:fuzz; findings=0
+complete explorer:deps; findings=0
+complete explorer:secrets; findings=0
+complete workers:sast; findings=7
+complete workers:symbolic; findings=0
+complete workers:fuzz; findings=0
+complete workers:deps; findings=0
+complete workers:secrets; findings=0
+complete transaction-manager:sast; findings=6
+complete transaction-manager:symbolic; findings=0
+complete transaction-manager:fuzz; findings=0
+complete transaction-manager:deps; findings=0
+complete transaction-manager:secrets; findings=0
+complete smart-account:sast; findings=0
+complete smart-account:symbolic; findings=0
+complete smart-account:fuzz; findings=0
+complete smart-account:deps; findings=0
+complete smart-account:secrets; findings=0
+normalized report output: /home/runner/work/test/test/out
+finding count: 32
+finding buckets: new=25 escaped=7 suppressed=0 informational=0 rejected=0

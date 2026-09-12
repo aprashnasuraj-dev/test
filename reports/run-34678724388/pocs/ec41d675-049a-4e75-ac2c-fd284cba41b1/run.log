@@ -1,0 +1,11 @@
+finding_id=ec41d675-049a-4e75-ac2c-fd284cba41b1
+severity=High
+asset=workers
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:1869
+source_line=fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+scanner_evidence=fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

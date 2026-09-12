@@ -1,0 +1,26 @@
+{
+  "asset": "transaction-manager",
+  "confidence": 0.6,
+  "cwe": null,
+  "description": "A parsed machine transition targets a state not defined in the same states block.",
+  "evidence": "retrying -> error.cancelled",
+  "id": "c23f3a3b-0bda-4b7d-89e6-bd6e4a0cb0de",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "src/machines/transaction.machine.ts",
+    "function": "retrying",
+    "line": 602
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "xstate_dead_transition",
+  "rule_id": "custom-xstate:undefined-target",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "State transition targets undefined state: error.cancelled"
+}
