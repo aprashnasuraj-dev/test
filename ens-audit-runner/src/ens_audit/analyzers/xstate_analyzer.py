@@ -112,11 +112,11 @@ class XStateAnalyzer:
     @staticmethod
     def _extract_graph(
         text: str,
-    ) -> tuple[nx.DiGraph, str | None, dict[str, int], list[tuple[str, str, int]]]:
+    ) -> tuple[nx.DiGraph[str], str | None, dict[str, int], list[tuple[str, str, int]]]:
         """Extract top-level state names and quoted targets from a ``states`` object."""
 
         lines = text.splitlines()
-        graph = nx.DiGraph()
+        graph: nx.DiGraph[str] = nx.DiGraph()
         initial_match = _INITIAL.search(text)
         initial = initial_match.group("state") if initial_match else None
         in_states = False
