@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import asyncio
+import threading
 from collections.abc import Callable
 from pathlib import Path
 from uuid import UUID
@@ -22,6 +24,75 @@ ProgressCallback = Callable[[str, str, int, int], None]
 LogCallback = Callable[[str], None]
 
 
+class PipelineCancelled(RuntimeError):
+    """Raised when a cooperative pipeline cancellation is observed."""
+
+
+class PipelineControl:
+    """Thread-safe pause/resume/cancel state shared with a GUI worker.
+
+    Security invariant: control methods affect only stage-boundary scheduling and never kill
+    arbitrary processes or threads asynchronously.
+    """
+
+    def __init__(self) -> None:
+        """Initialize the pipeline in running, non-cancelled state.
+
+        Security invariant: execution starts unpaused and requires an explicit cancel request
+        before cancellation can occur.
+        """
+
+        self._resume_gate = threading.Event()
+        self._resume_gate.set()
+        self._cancelled = threading.Event()
+
+    def pause(self) -> None:
+        """Pause before the next stage boundary.
+
+        Security invariant: an in-flight external scanner is not force-terminated.
+        """
+
+        self._resume_gate.clear()
+
+    def resume(self) -> None:
+        """Allow execution to proceed past the next stage boundary.
+
+        Security invariant: resume changes only the cooperative gate state.
+        """
+
+        self._resume_gate.set()
+
+    def cancel(self) -> None:
+        """Request cancellation at the next cooperative boundary.
+
+        Security invariant: cancellation unblocks a paused waiter but does not terminate
+        unrelated processes or threads.
+        """
+
+        self._cancelled.set()
+        self._resume_gate.set()
+
+    def reset(self) -> None:
+        """Reset control state for a new or retried run.
+
+        Security invariant: stale cancellation state cannot leak into a subsequent run.
+        """
+
+        self._cancelled.clear()
+        self._resume_gate.set()
+
+    async def checkpoint(self) -> None:
+        """Wait while paused and raise if cancellation was requested.
+
+        Security invariant: blocking occurs in a worker thread so the asyncio loop remains
+        responsive.
+        """
+
+        await asyncio.to_thread(self._resume_gate.wait)
+        if self._cancelled.is_set():
+            raise PipelineCancelled("audit cancelled")
+
+
 class PipelineOrchestrator:
     """Execute and checkpoint the complete audit workflow.
 
@@ -38,11 +109,20 @@ class PipelineOrchestrator:
         strict: bool = False,
         progress: ProgressCallback | None = None,
         logger: LogCallback | None = None,
+        control: PipelineControl | None = None,
     ) -> None:
+        """Initialize pipeline stages and cooperative execution state.
+
+        Security invariant: analyzer instances are fixed at construction and operate only on
+        downloader-validated assets.
+        """
+
         self.store = store or AnalysisStore(DATABASE_PATH)
         self.strict = strict
         self.progress = progress
         self.logger = logger
+        self.control = control or PipelineControl()
+        self.current_run_id: UUID | None = None
         rules = Path(__file__).resolve().parents[1] / "rules" / "ens-custom.yaml"
         self.stage_sast = SASTStage(rules)
         self.stage_symbolic = SymbolicStage()
@@ -53,17 +133,39 @@ class PipelineOrchestrator:
         self.stage_report = ReportStage()
 
     async def run_full_audit(self) -> AuditReport:
-        """Download the pinned source and execute all seven stages end to end."""
+        """Download the pinned source and execute all seven stages end to end.
 
+        Security invariant: every new run begins with a reset cooperative-control state and a
+        freshly recorded immutable commit identifier.
+        """
+
+        self.control.reset()
         assets = await download_all_repos()
         run_id = self.store.begin_run(ACTIVE_UPSTREAM_COMMIT)
+        self.current_run_id = run_id
         return await self._run_assets(run_id, assets)
 
     async def resume(self, run_id: UUID) -> AuditReport:
-        """Resume a prior run, skipping only successful per-asset checkpoints."""
+        """Resume a prior run, skipping only successful per-asset checkpoints.
 
+        Security invariant: resume uses the caller-supplied UUID only as a parameterized SQLite
+        key and still reacquires downloader-validated assets.
+        """
+
+        self.control.reset()
+        self.current_run_id = run_id
         assets = await download_all_repos()
         return await self._run_assets(run_id, assets)
+
+    async def retry_failed(self) -> AuditReport:
+        """Retry incomplete stages for the current run identifier.
+
+        Security invariant: a retry can only target the orchestrator's own current run.
+        """
+
+        if self.current_run_id is None:
+            raise RuntimeError("no audit run is available to retry")
+        return await self.resume(self.current_run_id)
 
     async def _run_assets(self, run_id: UUID, assets: list[Asset]) -> AuditReport:
         """Execute analyzer stages, filter known issues, and generate reports."""
@@ -76,6 +178,7 @@ class PipelineOrchestrator:
             findings: list[Finding] = []
             completed = self.store.completed_stages(run_id, asset.name)
             for stage_name, stage in self._analysis_stages():
+                await self.control.checkpoint()
                 current += 1
                 self._emit_progress(asset.name, stage_name, current, total_steps)
                 if stage_name in completed:
@@ -96,6 +199,9 @@ class PipelineOrchestrator:
             if persisted:
                 findings = self._dedupe_by_id([*persisted, *findings])
 
+            await self.control.checkpoint()
+            current += 1
+            self._emit_progress(asset.name, "known_filter", current, total_steps)
             filtered = await self.stage_known_filter.run(findings)
             self.store.save_stage(
                 run_id,
@@ -106,6 +212,7 @@ class PipelineOrchestrator:
             )
             results[asset.name] = filtered
 
+        await self.control.checkpoint()
         current += 1
         self._emit_progress("all", "report", current, total_steps)
         report = await self.stage_report.generate(results)
@@ -113,7 +220,11 @@ class PipelineOrchestrator:
         return report
 
     def _analysis_stages(self) -> tuple[tuple[str, object], ...]:
-        """Return analyzer stages in mandatory dependency order."""
+        """Return analyzer stages in mandatory dependency order.
+
+        Security invariant: dependency order is fixed in code and cannot be supplied by scan
+        output.
+        """
 
         return (
             ("sast", self.stage_sast),
@@ -140,6 +251,8 @@ class PipelineOrchestrator:
             findings: list[Finding] = await run_method(asset)
             self._log(f"complete {asset.name}:{name}; findings={len(findings)}")
             return findings, True
+        except PipelineCancelled:
+            raise
         except Exception as exc:
             self._log(f"failed {asset.name}:{name}; {type(exc).__name__}: {exc}")
             if self.strict:
@@ -148,19 +261,28 @@ class PipelineOrchestrator:
 
     @staticmethod
     def _dedupe_by_id(findings: list[Finding]) -> list[Finding]:
-        """Keep the latest representation for each immutable finding id."""
+        """Keep the latest representation for each immutable finding id.
+
+        Security invariant: deduplication keys use generated UUIDs rather than untrusted text.
+        """
 
         by_id = {finding.id: finding for finding in findings}
         return list(by_id.values())
 
     def _emit_progress(self, asset: str, stage: str, current: int, total: int) -> None:
-        """Emit progress data to the GUI callback when configured."""
+        """Emit progress data to the GUI callback when configured.
+
+        Security invariant: callbacks receive scalar progress metadata only.
+        """
 
         if self.progress is not None:
             self.progress(asset, stage, current, total)
 
     def _log(self, message: str) -> None:
-        """Emit a pipeline log line without evaluating its contents."""
+        """Emit a pipeline log line without evaluating its contents.
+
+        Security invariant: log callbacks receive inert strings only.
+        """
 
         if self.logger is not None:
             self.logger(message)
