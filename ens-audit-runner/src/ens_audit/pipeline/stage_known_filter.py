@@ -54,7 +54,7 @@ class KnownIssueFilterStage:
         path = finding.location.file.replace("\\", "/").lower().strip()
         function = (finding.location.function or "").strip().lower()
         cwe = (finding.cwe or "").strip().upper()
-        payload = f"{path}\x00{function}\x00{cwe}".encode("utf-8")
+        payload = f"{path}\x00{function}\x00{cwe}".encode()
         return hashlib.sha256(payload).hexdigest()
 
     def _matches_any_pattern(self, finding: Finding, issue: KnownIssue) -> bool:
@@ -62,8 +62,8 @@ class KnownIssueFilterStage:
 
         if not issue.match_patterns:
             return False
-        haystack = "\n".join(
-            (finding.title, finding.description, finding.evidence, finding.rule_id)
+        haystack = (
+            f"{finding.title}\n{finding.description}\n{finding.evidence}\n{finding.rule_id}"
         )
         for pattern in issue.match_patterns:
             if pattern.file_glob and fnmatch.fnmatch(
