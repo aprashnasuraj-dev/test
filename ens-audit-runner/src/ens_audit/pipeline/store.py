@@ -9,6 +9,9 @@ from uuid import UUID, uuid4
 
 from ens_audit.models import Finding, FindingStatus, Location, Severity
 
+_DEFAULT_ANALYSIS_STAGES = ("sast", "symbolic", "fuzz", "deps", "secrets")
+_DEFAULT_ANALYSIS_STAGES_JSON = json.dumps(_DEFAULT_ANALYSIS_STAGES, separators=(",", ":"))
+
 
 class AnalysisStore:
     """Persist audit state in SQLite.
@@ -31,7 +34,7 @@ class AnalysisStore:
         return connection
 
     def _initialize(self) -> None:
-        """Create required tables if they do not exist."""
+        """Create required tables and migrate legacy run metadata in place."""
 
         with self._connect() as connection:
             connection.executescript(
@@ -39,6 +42,7 @@ class AnalysisStore:
                 CREATE TABLE IF NOT EXISTS runs (
                     id TEXT PRIMARY KEY,
                     commit_sha TEXT NOT NULL,
+                    analysis_stages TEXT NOT NULL,
                     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
                 );
                 CREATE TABLE IF NOT EXISTS stage_checkpoints (
@@ -59,17 +63,59 @@ class AnalysisStore:
                 );
                 """
             )
+            columns = {
+                str(row["name"])
+                for row in connection.execute("PRAGMA table_info(runs)").fetchall()
+            }
+            if "analysis_stages" not in columns:
+                default_json = _DEFAULT_ANALYSIS_STAGES_JSON.replace("'", "''")
+                connection.execute(
+                    "ALTER TABLE runs ADD COLUMN analysis_stages TEXT NOT NULL "
+                    f"DEFAULT '{default_json}'"
+                )
 
-    def begin_run(self, commit_sha: str) -> UUID:
-        """Create and return a new immutable audit run identifier."""
+    def begin_run(
+        self,
+        commit_sha: str,
+        analysis_stages: tuple[str, ...] = _DEFAULT_ANALYSIS_STAGES,
+    ) -> UUID:
+        """Create a new immutable audit run with its intended analysis-stage selection."""
 
         run_id = uuid4()
+        stage_json = json.dumps(analysis_stages, separators=(",", ":"))
         with self._connect() as connection:
             connection.execute(
-                "INSERT INTO runs(id, commit_sha) VALUES(?, ?)",
-                (str(run_id), commit_sha),
+                "INSERT INTO runs(id, commit_sha, analysis_stages) VALUES(?, ?, ?)",
+                (str(run_id), commit_sha, stage_json),
             )
         return run_id
+
+    def run_commit(self, run_id: UUID) -> str:
+        """Return the immutable source commit associated with a run."""
+
+        with self._connect() as connection:
+            row = connection.execute(
+                "SELECT commit_sha FROM runs WHERE id=?",
+                (str(run_id),),
+            ).fetchone()
+        if row is None:
+            raise KeyError(f"unknown audit run: {run_id}")
+        return str(row["commit_sha"])
+
+    def run_analysis_stages(self, run_id: UUID) -> tuple[str, ...]:
+        """Return the canonical analysis-stage selection stored for a run."""
+
+        with self._connect() as connection:
+            row = connection.execute(
+                "SELECT analysis_stages FROM runs WHERE id=?",
+                (str(run_id),),
+            ).fetchone()
+        if row is None:
+            raise KeyError(f"unknown audit run: {run_id}")
+        raw = json.loads(str(row["analysis_stages"]))
+        if not isinstance(raw, list) or not raw or not all(isinstance(item, str) for item in raw):
+            raise ValueError(f"invalid stage selection stored for audit run: {run_id}")
+        return tuple(raw)
 
     def save_stage(
         self,
