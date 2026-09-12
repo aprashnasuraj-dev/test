@@ -8,7 +8,10 @@ from pathlib import Path
 from ens_audit.models import Asset, Finding, Location, Severity
 
 _SINK = re.compile(r"\b(?:fetch|axios(?:\.get)?|https?\.get)\s*\(\s*([^,\)]+)")
-_DYNAMIC_URL = re.compile(r"\b(?:url|uri|avatar|endpoint|target|href|src)\b", re.IGNORECASE)
+_DYNAMIC_URL = re.compile(
+    r"\b[\w$]*(?:url|uri|avatar|endpoint|target|href|src)[\w$]*\b",
+    re.IGNORECASE,
+)
 _VALIDATION = re.compile(
     r"(?:new\s+URL|url\.protocol|hostname|host\b|isPrivate|isLoopback|ipaddr|ipaddress|allowlist|whitelist)",
     re.IGNORECASE,
@@ -44,7 +47,11 @@ class SSRFAnalyzer:
 
     @staticmethod
     def _analyze_file(asset: Asset, path: Path) -> list[Finding]:
-        """Analyze one source file using a bounded local validation window."""
+        """Analyze one source file using a bounded local validation window.
+
+        Security invariant: dynamic URL-like identifiers are recognized as complete source-code
+        identifiers, including camelCase forms, without evaluating or requesting their values.
+        """
 
         lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
         findings: list[Finding] = []
@@ -73,7 +80,10 @@ class SSRFAnalyzer:
                         file=str(path.relative_to(asset.path)),
                         line=index + 1,
                     ),
-                    description="A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
+                    description=(
+                        "A variable URL-like value reaches an outbound request and no nearby "
+                        "scheme, host, IP, or allowlist validation was observed."
+                    ),
                     evidence=line.strip()[:2000],
                     confidence=0.7,
                 )
