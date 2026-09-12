@@ -1,0 +1,27 @@
+rules:
+  - id: ens-manual-lowercase-before-name-operation
+    message: "Manual lowercasing of an ENS-like name may diverge from ENSIP-15 normalization. Verify ens_normalize/normalize is applied before hashing or lookup."
+    severity: WARNING
+    languages: [typescript, javascript]
+    patterns:
+      - pattern: $NAME.toLowerCase()
+      - metavariable-regex:
+          metavariable: $NAME
+          regex: ".*(name|label|ens).*"
+
+  - id: userop-empty-signature-literal
+    message: "UserOperation-like object contains an empty signature literal. Confirm this is test-only and cannot reach validation/execution."
+    severity: WARNING
+    languages: [typescript, javascript]
+    pattern: |
+      {
+        ...,
+        signature: "0x",
+        ...
+      }
+
+  - id: hardcoded-anvil-private-key
+    message: "Hardcoded Anvil test private key found. Keep it strictly inside local/test code and never reuse it on a funded network."
+    severity: WARNING
+    languages: [typescript, javascript]
+    pattern-regex: "ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
