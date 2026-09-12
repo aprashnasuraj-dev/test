@@ -243,3 +243,318 @@
     - rule_id: "ens-stale-error-after-success"
     - content_regex: "(?i)stale error.*success|confirmed transaction.*error"
   notes: "The earlier failure message is retained after a later successful attempt."
+
+- id: "QA-01"
+  severity: "Functional"
+  asset: ["manager", "explorer"]
+  title: "Name transfers with certain role combinations break follow-up actions"
+  root_cause: "post_transfer_role_combination_breakage"
+  match_patterns:
+    - content_regex: "(?i)transfer.*role.*profile|transfer.*role.*primary|after transfer.*profile|after transfer.*primary"
+  notes: "Known functional breakage only; a role combination that grants unauthorized authority is a new security finding."
+
+- id: "QA-02"
+  severity: "Functional"
+  asset: ["manager", "explorer"]
+  title: "WalletConnect on mobile is broken or degraded"
+  root_cause: "mobile_walletconnect_session_sync_failure"
+  match_patterns:
+    - content_regex: "(?i)walletconnect.*mobile.*reload|rainbow.*walletconnect.*fail|metamask.*reload.*connect"
+  notes: "Known mobile connection/session-refresh defect."
+
+- id: "QA-03"
+  severity: "Functional"
+  asset: ["explorer"]
+  title: "Minor price mismatch in registration and extension modals"
+  root_cause: "displayed_registration_price_rounding_mismatch"
+  match_patterns:
+    - content_regex: "(?i)discount.*per.?year.*total|registration.*price.*mismatch|extension.*price.*mismatch"
+  notes: "Display-only mismatch is known; a mismatch with the amount actually charged on-chain is new."
+
+- id: "QA-04"
+  severity: "Functional"
+  asset: ["explorer"]
+  title: "Burning fuses on wrapped V1 names throws a transaction error"
+  root_cause: "wrapped_v1_fuse_burn_failure"
+  match_patterns:
+    - content_regex: "(?i)wrapped v1.*burn.*fuse|burn.*fuse.*transaction error"
+  notes: "Known wrapped V1 fuse-burning failure; overlaps WEB-1259."
+
+- id: "QA-05"
+  severity: "Functional"
+  asset: ["manager"]
+  title: "Renewal is blocked immediately after registration"
+  root_cause: "post_registration_renewal_temporarily_blocked"
+  match_patterns:
+    - content_regex: "(?i)renew.*immediately.*register|name cannot be renewed here.*register"
+  notes: "The block is known to clear after some time."
+
+- id: "QA-06"
+  severity: "Functional"
+  asset: ["manager", "explorer"]
+  title: "A deleted, non-resolving subname is still shown as the primary name"
+  root_cause: "stale_primary_name_after_subname_deletion"
+  match_patterns:
+    - content_regex: "(?i)deleted.*subname.*primary|non-resolving.*primary.*profile"
+  notes: "Known stale display/profile error after a primary subname stops resolving."
+
+- id: "QA-07"
+  severity: "Functional"
+  asset: ["explorer"]
+  title: "Rejecting a transaction shows a bulky error and re-prompts the wallet"
+  root_cause: "cancelled_transaction_reprompt_loop"
+  match_patterns:
+    - content_regex: "(?i)reject.*transaction.*prompt again|cancel.*transaction.*re.?prompt|bulky.*raw error.*wallet"
+  notes: "Known cancellation UX defect; overlaps WEB-580."
+
+- id: "QA-08"
+  severity: "Functional"
+  asset: ["manager", "explorer"]
+  title: "Long error messages overflow their containers"
+  root_cause: "unbounded_error_text_layout"
+  match_patterns:
+    - content_regex: "(?i)long error.*overflow|raw error.*container|error message.*spill"
+  notes: "Raw error presentation is known; exposure of secrets or tokens in an error is a new security finding."
+
+- id: "QA-09"
+  severity: "Functional"
+  asset: ["manager"]
+  title: "Avatar missing from homepage search results"
+  root_cause: "homepage_search_avatar_not_rendered"
+  match_patterns:
+    - content_regex: "(?i)homepage.*search.*avatar.*missing|search result.*avatar.*not.*show"
+  notes: "Known rendering defect; overlaps WEB-1231."
+
+- id: "QA-10"
+  severity: "Functional"
+  asset: ["explorer"]
+  title: "Bulk renewal shows no avatars, and blank boxes for names without one"
+  root_cause: "bulk_renewal_avatar_rendering_failure"
+  match_patterns:
+    - content_regex: "(?i)bulk renewal.*avatar|renewal.*blank box.*avatar"
+  notes: "Known bulk-renewal rendering defect."
+
+- id: "WEB-806"
+  severity: "Functional (Urgent)"
+  asset: ["manager"]
+  title: "Subname records not appearing after being migrated"
+  root_cause: "migrated_subname_records_not_rendered"
+  match_patterns:
+    - content_regex: "(?i)migrat.*subname.*records.*not.*visible|subname.*records.*after migration"
+  notes: "Internal status: In Progress."
+
+- id: "WEB-1303"
+  severity: "Functional (High)"
+  asset: ["manager"]
+  title: "Profile edit of unmigratable names throws 500"
+  root_cause: "unmigratable_profile_edit_server_error"
+  match_patterns:
+    - content_regex: "(?i)unmigratable.*profile.*500|profile edit.*cannot be migrated.*500"
+  notes: "Internal status: In Progress."
+
+- id: "WEB-1255"
+  severity: "Functional (High)"
+  asset: ["manager"]
+  title: "Grace-period helpers keyed on a boolean that defaults to v2"
+  root_cause: "grace_period_protocol_boolean_default"
+  match_patterns:
+    - content_regex: "(?i)isv2.*grace|v1.*90.*v2.*28|grace.*default.*v2"
+  notes: "Known V1/V2 expiry-display logic defect; internal status: In Progress."
+
+- id: "WEB-622"
+  severity: "Functional (High)"
+  asset: ["manager"]
+  title: "Certificate security warning on testnet"
+  root_cause: "testnet_untrusted_certificate"
+  match_patterns:
+    - content_regex: "(?i)testnet.*certificate.*warning|untrusted issuer.*testnet"
+  notes: "Known testnet deployment issue; lack of TLS best practices is also out of scope."
+
+- id: "WEB-567"
+  severity: "Functional (High)"
+  asset: ["manager"]
+  title: "Avatar and header upload inconsistencies"
+  root_cause: "profile_image_cache_or_persistence_inconsistency"
+  match_patterns:
+    - content_regex: "(?i)avatar.*header.*old image|image.*editing.*not after saving|image update.*reload"
+  notes: "Known image persistence/cache behavior; internal status: In Progress."
+
+- id: "WEB-626"
+  severity: "Functional (High)"
+  asset: ["manager"]
+  title: "Renewal modal is misleading for grace-period names"
+  root_cause: "grace_period_renewal_modal_wrong_ownership_copy"
+  match_patterns:
+    - content_regex: "(?i)grace.*renew.*modal.*someone else|grace-period.*owned by.*someone"
+  notes: "Known misleading modal copy; internal status: Ready."
+
+- id: "WEB-391"
+  severity: "Functional (High)"
+  asset: ["manager"]
+  title: "V1 subnames not clickable in search"
+  root_cause: "v1_subname_search_link_disabled"
+  match_patterns:
+    - content_regex: "(?i)v1 subname.*grey|v1 subname.*unclickable|v1 subname.*direct url"
+  notes: "Known search-navigation defect; internal status: Ready."
+
+- id: "WEB-1188"
+  severity: "Functional (High)"
+  asset: ["manager"]
+  title: "No warning about missing gas funds during checkout"
+  root_cause: "checkout_missing_gas_balance_warning"
+  match_patterns:
+    - content_regex: "(?i)checkout.*no warning.*gas|seth.*gas.*wallet.*reject"
+  notes: "Known Manager checkout warning defect; internal status: Ready."
+
+- id: "WEB-1259"
+  severity: "Functional (High)"
+  asset: ["manager"]
+  title: "Burning fuses fails for wrapped V1 names"
+  root_cause: "wrapped_v1_fuse_burn_failure"
+  match_patterns:
+    - content_regex: "(?i)wrapped v1.*burn.*fuse|burn.*fuse.*wrapped v1"
+  notes: "Overlaps QA-04; internal status: fix in QA."
+
+- id: "WEB-1249"
+  severity: "Functional (High)"
+  asset: ["manager"]
+  title: "Creating a subname can detach an existing child registry"
+  root_cause: "subname_creation_replaces_existing_child_registry"
+  match_patterns:
+    - content_regex: "(?i)create.*subname.*replace.*registry|detach.*child registry|orphan.*nested subname"
+  notes: "Known functional defect; a materially different unauthorized authority path remains new."
+
+- id: "WEB-1148"
+  severity: "Functional (Medium)"
+  asset: ["manager"]
+  title: "Infinite commit loop on simultaneous registration of the same name"
+  root_cause: "simultaneous_registration_commit_retry_loop"
+  match_patterns:
+    - content_regex: "(?i)simultaneous.*register.*commit loop|same name.*endless commit"
+  notes: "Known liveness defect when two users register the same name concurrently."
+
+- id: "WEB-1231"
+  severity: "Functional (Medium)"
+  asset: ["manager"]
+  title: "Avatar not shown in homepage search results"
+  root_cause: "homepage_search_avatar_not_rendered"
+  match_patterns:
+    - content_regex: "(?i)homepage.*search.*avatar|search result.*avatar.*missing"
+  notes: "Overlaps QA-09; internal status: Triage."
+
+- id: "WEB-1301"
+  severity: "Functional (Medium)"
+  asset: ["manager"]
+  title: "Address view shows misleading owner and expiry metadata"
+  root_cause: "address_view_uses_primary_name_metadata"
+  match_patterns:
+    - content_regex: "(?i)address view.*owner.*expiry|address.*registered.*expires.*primary name"
+  notes: "Known metadata-context defect; internal status: Triage."
+
+- id: "WEB-1263"
+  severity: "Functional"
+  asset: ["manager"]
+  title: "Raw error message rendering"
+  root_cause: "unbounded_error_text_layout"
+  match_patterns:
+    - content_regex: "(?i)raw error.*render|error message.*raw"
+  notes: "Overlaps QA-08. Sensitive-data exposure through an error is not suppressed by this entry."
+
+- id: "WEB-1304"
+  severity: "Functional"
+  asset: ["manager"]
+  title: "Renewing a wrapped V1 name leaves its NameWrapper expiry stale"
+  root_cause: "wrapped_v1_renewal_does_not_sync_namewrapper_expiry"
+  match_patterns:
+    - content_regex: "(?i)wrapped v1.*renew.*expiry|namewrapper.*expiry.*stale|base registrar.*wrapper.*expire"
+  notes: "Known issue under investigation."
+
+- id: "WEB-1136"
+  severity: "Functional (Low)"
+  asset: ["manager"]
+  title: "Visual defect on a new banner"
+  root_cause: "banner_visual_defect"
+  match_patterns:
+    - content_regex: "(?i)new banner.*visual|banner.*cosmetic"
+  notes: "Cosmetic only; internal status: In Progress."
+
+- id: "WEB-441"
+  severity: "Functional (Low)"
+  asset: ["manager"]
+  title: "Support-docs link placed awkwardly in the dashboard FAQ"
+  root_cause: "dashboard_faq_support_link_layout"
+  match_patterns:
+    - content_regex: "(?i)support.*docs.*dashboard.*faq|faq.*link.*awkward"
+  notes: "Cosmetic only; internal status: In Progress."
+
+- id: "WEB-390"
+  severity: "Functional (Urgent)"
+  asset: ["manager"]
+  title: "Subnames missing from the migration list"
+  root_cause: "migration_list_omits_subnames"
+  match_patterns:
+    - content_regex: "(?i)subname.*missing.*migration list|migration list.*parent.*subname"
+  notes: "Known issue; internal status: Ready, blocked."
+
+- id: "WEB-1257"
+  severity: "Functional (High)"
+  asset: ["explorer"]
+  title: "Cannot set primary name after parent transfer"
+  root_cause: "post_transfer_role_combination_breakage"
+  match_patterns:
+    - content_regex: "(?i)parent transfer.*cannot set.*primary|registry.*not detached.*primary"
+  notes: "Overlaps QA-01; internal status: In Review."
+
+- id: "WEB-1187"
+  severity: "Functional (High)"
+  asset: ["explorer"]
+  title: "No warning about missing gas funds during checkout"
+  root_cause: "checkout_missing_gas_balance_warning"
+  match_patterns:
+    - content_regex: "(?i)checkout.*no warning.*gas|seth.*gas.*wallet.*reject"
+  notes: "Explorer equivalent of WEB-1188; internal status: Ready."
+
+- id: "WEB-699"
+  severity: "Functional (Medium)"
+  asset: ["explorer", "manager"]
+  title: "WalletConnect session not reflected until reload"
+  root_cause: "mobile_walletconnect_session_sync_failure"
+  match_patterns:
+    - content_regex: "(?i)walletconnect.*not.*update.*reload|mobile wallet.*refresh.*session"
+  notes: "Overlaps QA-02; affects both apps; internal status: In Progress."
+
+- id: "WEB-1305"
+  severity: "Functional"
+  asset: ["explorer"]
+  title: "Transferring roles to a V1 name hangs"
+  root_cause: "v2_role_transfer_to_v1_not_blocked"
+  match_patterns:
+    - content_regex: "(?i)transfer.*roles.*v1.*hang|v2.*role.*v1.*pending"
+  notes: "Related to QA-01; the known behavior is an indefinitely pending transfer that should be blocked in UI."
+
+- id: "WEB-1233"
+  severity: "Functional (Low)"
+  asset: ["explorer"]
+  title: "Browser tab title not updating on navigation"
+  root_cause: "document_title_not_updated_on_route_change"
+  match_patterns:
+    - content_regex: "(?i)tab title.*not.*update|previous name.*tab.*reload"
+  notes: "Known navigation display defect; internal status: Triage."
+
+- id: "WEB-716"
+  severity: "Functional (Medium)"
+  asset: ["explorer"]
+  title: "No way to replace an existing subregistry"
+  root_cause: "existing_subregistry_replace_action_hidden"
+  match_patterns:
+    - content_regex: "(?i)replace.*existing subregistry|deploy-subregistry.*slot.*empty|set-subregistry.*replace"
+  notes: "Known UI capability gap despite on-chain role support; internal status: fix in QA."
+
+- id: "WEB-580"
+  severity: "Functional (High)"
+  asset: ["explorer"]
+  title: "Cancelling a transaction re-prompts the wallet"
+  root_cause: "cancelled_transaction_reprompt_loop"
+  match_patterns:
+    - content_regex: "(?i)cancel.*transaction.*re.?prompt|reject.*wallet.*prompt again"
+  notes: "Overlaps QA-07; internal status: Ready."
