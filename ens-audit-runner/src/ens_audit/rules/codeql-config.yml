@@ -1,0 +1,15 @@
+name: "ENS Audit Runner"
+
+queries:
+  - uses: security-extended
+
+paths-ignore:
+  - "**/node_modules/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/coverage/**"
+  - "**/test/**"
+  - "**/tests/**"
+  - "**/*.test.*"
+  - "**/*.spec.*"
+  - "**/__snapshots__/**"
