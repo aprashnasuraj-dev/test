@@ -82,7 +82,7 @@ def test_tool_accepts_allowed_code_and_rejects_other_code(tmp_path: Path) -> Non
         def run(self, *_args: object, **_kwargs: object) -> subprocess.CompletedProcess[str]:
             return subprocess.CompletedProcess(["forge"], self.code, "stdout", "stderr")
 
-    stage.tool_runner = Runner()  # type: ignore[assignment]
+    stage.tool_runner = Runner(0)  # type: ignore[assignment]
     completed = stage._tool(
         ["forge", "test"],
         cwd=tmp_path,
