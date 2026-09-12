@@ -3,7 +3,7 @@
 
 from pathlib import Path
 
-project_root = Path(__file__).resolve().parent
+project_root = Path(SPECPATH).resolve()
 source_root = project_root / "src"
 package_root = source_root / "ens_audit"
 
