@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import os
 
-import pytest
-
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 from PySide6.QtWidgets import QApplication
@@ -40,9 +38,7 @@ def test_progress_dialog_updates_and_clamps_pipeline_counters() -> None:
         dialog.close()
 
 
-def test_progress_dialog_cancel_emits_once_per_request_and_updates_status(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
+def test_progress_dialog_cancel_emits_intent_and_updates_status() -> None:
     """Cancellation remains cooperative: the dialog emits intent and changes only its label."""
 
     dialog = _dialog()
