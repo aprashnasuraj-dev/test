@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QLabel, QWidget
 
@@ -15,7 +17,7 @@ class SeverityBadge(QLabel):
     text is disabled, so finding-controlled strings cannot inject markup into the widget.
     """
 
-    _STYLES = {
+    _STYLES: ClassVar[dict[Severity, str]] = {
         Severity.CRITICAL: "background:#7f1d1d;color:#ffffff;",
         Severity.HIGH: "background:#b91c1c;color:#ffffff;",
         Severity.MEDIUM: "background:#b45309;color:#ffffff;",
@@ -24,10 +26,7 @@ class SeverityBadge(QLabel):
     }
 
     def __init__(self, severity: Severity, parent: QWidget | None = None) -> None:
-        """Initialize a badge from a validated severity.
-
-        Security invariant: ``severity`` must be an enum member; arbitrary text is rejected.
-        """
+        """Initialize a badge from a validated severity."""
 
         if not isinstance(severity, Severity):
             raise TypeError("severity must be a Severity")
