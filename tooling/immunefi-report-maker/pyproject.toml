@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "immunefi-report-maker"
+version = "0.1.0"
+description = "Validated Markdown report generator for authorized Immunefi-style audit findings"
+requires-python = ">=3.11"
+dependencies = [
+  "openai>=1.68.0",
+  "pydantic>=2.7.0,<3.0.0",
+]
+
+[project.scripts]
+immunefi-report-maker = "immunefi_report_maker:main"
+
+[tool.setuptools]
+py-modules = ["immunefi_report_maker"]
