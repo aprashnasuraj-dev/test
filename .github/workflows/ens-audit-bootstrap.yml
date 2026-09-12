@@ -1,0 +1,162 @@
+name: ENS Audit Bootstrap
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ens-audit-bootstrap-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      UPSTREAM_REPO: https://github.com/immunefi-team/audit-comp-ens.git
+      UPSTREAM_REF: 1c9b47f18fcddd2e864dfe385c4171061c9811ae
+      PNPM_VERSION: 10.27.0
+      VITE_RHINESTONE_API_KEY: audit-ci-placeholder
+      SEPOLIA_FORK_URL: https://ethereum-sepolia-rpc.publicnode.com
+
+    steps:
+      - name: Checkout audit workspace
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.27.0
+          run_install: false
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup Foundry 1.7.1
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.7.1
+
+      - name: Install Semgrep 1.177.0
+        run: pipx install 'semgrep==1.177.0'
+
+      - name: Clone pinned upstream audit target
+        run: |
+          git clone --branch audit-comp-ready --single-branch "$UPSTREAM_REPO" ens-workspace
+          git -C ens-workspace checkout --detach "$UPSTREAM_REF"
+          test "$(git -C ens-workspace rev-parse HEAD)" = "$UPSTREAM_REF"
+
+      - name: Verify toolchain versions
+        run: |
+          node --version
+          pnpm --version
+          rustc --version
+          cargo --version
+          forge --version
+          anvil --version
+          semgrep --version
+          test "$(pnpm --version)" = "$PNPM_VERSION"
+
+      - name: Install upstream workspace
+        working-directory: ens-workspace
+        run: pnpm install --frozen-lockfile
+
+      - name: Initialize local app environments
+        working-directory: ens-workspace
+        run: |
+          cp apps/manager/.env.example apps/manager/.env.local 2>/dev/null || touch apps/manager/.env.local
+          cp apps/portal/.env.example apps/portal/.env.local 2>/dev/null || touch apps/portal/.env.local
+
+      - name: Typecheck core audit packages
+        working-directory: ens-workspace
+        run: |
+          pnpm --filter @ens-apps/smart-account typecheck
+          pnpm --filter @ens-apps/transaction-manager typecheck
+
+      - name: Test core audit packages
+        working-directory: ens-workspace
+        run: |
+          pnpm --filter @ens-apps/smart-account test
+          pnpm --filter @ens-apps/transaction-manager test
+
+      - name: Build Manager, Portal, and API worker
+        working-directory: ens-workspace
+        run: |
+          pnpm build:manager
+          pnpm build:portal
+          pnpm --filter api-worker build
+
+      - name: Install and test custom audit tooling
+        run: |
+          pnpm --dir tooling install --frozen-lockfile=false
+          pnpm --dir tooling check
+
+      - name: Validate custom Semgrep rules
+        run: semgrep scan --validate --config tooling/ast-rules/ens-security.yml
+
+      - name: Run targeted static scan
+        run: |
+          semgrep scan \
+            --config tooling/ast-rules/ens-security.yml \
+            --json \
+            --output semgrep-results.json \
+            ens-workspace/packages/smart-account \
+            ens-workspace/packages/transaction-manager \
+            ens-workspace/apps/manager || true
+
+      - name: Smoke-test pinned Sepolia Anvil fork
+        working-directory: ens-workspace
+        run: |
+          set -euo pipefail
+          compose=e2e/infra/docker-compose.yml
+          docker compose -f "$compose" config >/dev/null
+          docker compose -f "$compose" up -d anvil
+          trap 'docker compose -f "$compose" down -v' EXIT
+          ok=0
+          for _ in $(seq 1 24); do
+            if cast chain-id --rpc-url http://127.0.0.1:8545 >/tmp/chain-id 2>/dev/null; then
+              ok=1
+              break
+            fi
+            sleep 5
+          done
+          if [ "$ok" -ne 1 ]; then
+            docker compose -f "$compose" logs anvil
+            exit 1
+          fi
+          test "$(cat /tmp/chain-id)" = "11155111"
+          cast block-number --rpc-url http://127.0.0.1:8545
+
+      - name: Write environment manifest
+        if: always()
+        run: |
+          {
+            echo "upstream_repo=$UPSTREAM_REPO"
+            echo "upstream_ref=$UPSTREAM_REF"
+            echo "node=$(node --version 2>/dev/null || true)"
+            echo "pnpm=$(pnpm --version 2>/dev/null || true)"
+            echo "rust=$(rustc --version 2>/dev/null || true)"
+            echo "forge=$(forge --version 2>/dev/null | head -n1 || true)"
+            echo "anvil=$(anvil --version 2>/dev/null | head -n1 || true)"
+            echo "semgrep=$(semgrep --version 2>/dev/null | head -n1 || true)"
+          } > audit-environment.txt
+
+      - name: Upload audit setup artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ens-audit-bootstrap-${{ github.run_id }}
+          path: |
+            audit-environment.txt
+            semgrep-results.json
+          if-no-files-found: warn
+          retention-days: 14
