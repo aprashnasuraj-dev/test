@@ -156,6 +156,15 @@ Expected output:
 dist\ENSAuditRunner.exe
 ```
 
+Validate the packaged startup path without launching an audit:
+
+```powershell
+.\dist\ENSAuditRunner.exe --smoke-test
+Get-Content "$env:LOCALAPPDATA\ens-audit\logs\startup.log"
+```
+
+A successful smoke test exits with code `0` after a two-second Qt event loop and writes `SMOKE_TEST_OK` to the startup log.
+
 The EXE contains the GUI, known-issue registry, and local rule files. Large third-party scanners are intentionally external so they can be independently updated and verified.
 
 ## Important limitation
