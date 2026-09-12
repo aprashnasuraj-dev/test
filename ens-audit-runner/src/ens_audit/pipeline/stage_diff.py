@@ -25,7 +25,11 @@ class _Risk:
 _RISKS = (
     _Risk(
         "diff-dynamic-execution",
-        re.compile(r"\b(?:eval\s*\(|exec\s*\(|new\s+Function\s*\(|child_process|spawn\s*\(|execFile\s*\()", re.I),
+        re.compile(
+            r"\b(?:eval\s*\(|exec\s*\(|new\s+Function\s*\(|child_process|"
+            r"spawn\s*\(|execFile\s*\()",
+            re.IGNORECASE,
+        ),
         "Security-sensitive change introduces an execution primitive",
         Severity.HIGH,
         "changed_dynamic_execution_surface",
@@ -33,7 +37,10 @@ _RISKS = (
     ),
     _Risk(
         "diff-html-sink",
-        re.compile(r"(?:innerHTML|outerHTML|insertAdjacentHTML|dangerouslySetInnerHTML|document\.write)", re.I),
+        re.compile(
+            r"(?:innerHTML|outerHTML|insertAdjacentHTML|dangerouslySetInnerHTML|document\.write)",
+            re.IGNORECASE,
+        ),
         "Security-sensitive change touches an HTML parsing sink",
         Severity.MEDIUM,
         "changed_html_injection_surface",
@@ -41,7 +48,11 @@ _RISKS = (
     ),
     _Risk(
         "diff-solidity-call",
-        re.compile(r"\.(?:delegatecall|call|staticcall)\s*(?:\{|\()|\bselfdestruct\s*\(|\btx\.origin\b|\bassembly\s*\{", re.I),
+        re.compile(
+            r"\.(?:delegatecall|call|staticcall)\s*(?:\{|\()|"
+            r"\bselfdestruct\s*\(|\btx\.origin\b|\bassembly\s*\{",
+            re.IGNORECASE,
+        ),
         "Security-sensitive change touches a low-level Solidity primitive",
         Severity.HIGH,
         "changed_low_level_contract_primitive",
@@ -52,7 +63,7 @@ _RISKS = (
         re.compile(
             r"\b(?:authorize|authorization|permission|role|owner|signature|recover|nonce|"
             r"chainId|chain_id|session|impersonat|privilege|accessControl)\b",
-            re.I,
+            re.IGNORECASE,
         ),
         "Change modifies an authorization or signature boundary",
         Severity.MEDIUM,
@@ -61,7 +72,11 @@ _RISKS = (
     ),
     _Risk(
         "diff-rpc-network",
-        re.compile(r"\b(?:provider\.request|jsonrpc|rpc|fetch\s*\(|WebSocket\s*\(|url|endpoint|redirect)\b", re.I),
+        re.compile(
+            r"\b(?:provider\.request|jsonrpc|rpc|fetch\s*\(|WebSocket\s*\(|url|"
+            r"endpoint|redirect)\b",
+            re.IGNORECASE,
+        ),
         "Change modifies an RPC or outbound network boundary",
         Severity.MEDIUM,
         "changed_rpc_network_boundary",
@@ -69,7 +84,10 @@ _RISKS = (
     ),
     _Risk(
         "diff-secret-key",
-        re.compile(r"\b(?:secret|token|api[_-]?key|private[_-]?key|mnemonic|seed|credential)\b", re.I),
+        re.compile(
+            r"\b(?:secret|token|api[_-]?key|private[_-]?key|mnemonic|seed|credential)\b",
+            re.IGNORECASE,
+        ),
         "Change modifies secret or key material handling",
         Severity.MEDIUM,
         "changed_secret_handling",
@@ -109,8 +127,17 @@ def _first_parent(repo: Path, commit: str) -> str:
 def _diff(repo: Path, parent: str, commit: str, scope: str) -> str:
     process = subprocess.run(
         [
-            "git", "-C", str(repo), "diff", "--no-ext-diff", "--unified=0",
-            "--find-renames", parent, commit, "--", scope,
+            "git",
+            "-C",
+            str(repo),
+            "diff",
+            "--no-ext-diff",
+            "--unified=0",
+            "--find-renames",
+            parent,
+            commit,
+            "--",
+            scope,
         ],
         check=False,
         capture_output=True,
@@ -161,7 +188,7 @@ class DiffStage:
                     asset_relative = current_file
                     prefix = f"{scope}/" if scope != "." else ""
                     if prefix and current_file.startswith(prefix):
-                        asset_relative = current_file[len(prefix):]
+                        asset_relative = current_file[len(prefix) :]
                     findings.append(
                         Finding(
                             title=risk.title,
@@ -172,12 +199,15 @@ class DiffStage:
                             root_cause=risk.root_cause,
                             location=Location(asset_relative or current_file, current_line),
                             description=(
-                                "The pinned revision adds or changes a line matching a security-sensitive "
-                                "pattern. This is a review signal tied to the exact commit diff, not proof "
-                                "of exploitability by itself."
+                                "The pinned revision adds or changes a line matching a "
+                                "security-sensitive pattern. This is a review signal tied to "
+                                "the exact commit diff, not proof of exploitability by itself."
                             ),
-                            evidence=source.strip()[:240],
-                            impact="A regression in this changed trust boundary could introduce a new vulnerability relative to the parent revision.",
+                            evidence=f"changed line matched security category {risk.rule_id}",
+                            impact=(
+                                "A regression in this changed trust boundary could introduce "
+                                "a new vulnerability relative to the parent revision."
+                            ),
                             recommendation=risk.recommendation,
                             confidence=0.62,
                         )
@@ -207,7 +237,8 @@ class DiffStage:
                 },
                 indent=2,
                 sort_keys=True,
-            ) + "\n",
+            )
+            + "\n",
             encoding="utf-8",
         )
         return findings

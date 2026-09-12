@@ -75,9 +75,9 @@ class PipelineControl:
 class PipelineOrchestrator:
     """Execute and checkpoint the complete audit workflow.
 
-    Security invariant: only downloader-validated assets enter analyzers. A complete full
-    audit is accepted only when every analysis stage has a successful checkpoint for every
-    configured asset, so a silent stage skip cannot masquerade as coverage.
+    Security invariant: only downloader-validated assets enter analyzers. Every requested
+    analysis stage must have a successful checkpoint for every configured asset before a run
+    is accepted, so a failed or silent stage skip cannot masquerade as coverage.
     """
 
     STAGES = (
@@ -134,8 +134,7 @@ class PipelineOrchestrator:
         run_id = self.store.begin_run(ACTIVE_UPSTREAM_COMMIT, selected)
         self.current_run_id = run_id
         report = await self._run_assets(run_id, assets, selected_stages=selected)
-        if selected == self.ANALYSIS_STAGES:
-            self._assert_complete_scope(run_id, assets, selected)
+        self._assert_complete_scope(run_id, assets, selected)
         return report
 
     async def resume(self, run_id: UUID) -> AuditReport:
@@ -151,8 +150,7 @@ class PipelineOrchestrator:
         self.current_run_id = run_id
         assets = await download_all_repos()
         report = await self._run_assets(run_id, assets, selected_stages=selected)
-        if selected == self.ANALYSIS_STAGES:
-            self._assert_complete_scope(run_id, assets, selected)
+        self._assert_complete_scope(run_id, assets, selected)
         return report
 
     async def retry_failed(self) -> AuditReport:
@@ -257,7 +255,7 @@ class PipelineOrchestrator:
         assets: list[Asset],
         selected: tuple[str, ...],
     ) -> None:
-        """Fail a full audit unless every selected stage succeeded for every asset."""
+        """Fail a run unless every selected stage succeeded for every asset."""
         missing: dict[str, list[str]] = {}
         for asset in assets:
             completed = self.store.completed_stages(run_id, asset.name)
@@ -270,7 +268,7 @@ class PipelineOrchestrator:
             )
             raise RuntimeError(f"incomplete full-scope audit; unsuccessful stages: {detail}")
         self._log(
-            "full-scope coverage complete; "
+            "requested-scope coverage complete; "
             f"assets={len(assets)} stages={len(selected)} checks={len(assets) * len(selected)}"
         )
 

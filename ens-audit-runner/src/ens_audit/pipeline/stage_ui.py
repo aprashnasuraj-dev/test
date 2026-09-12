@@ -31,7 +31,7 @@ class _Rule:
 _RULES = (
     _Rule(
         "ui-dom-html-sink",
-        re.compile(r"\.(?:innerHTML|outerHTML)\s*=\s*(?![\"'`])", re.I),
+        re.compile(r"\.(?:innerHTML|outerHTML)\s*=\s*(?![\"'`])", re.IGNORECASE),
         "Dynamic HTML reaches a DOM parsing sink",
         Severity.HIGH,
         "untrusted_html_dom_sink",
@@ -42,7 +42,10 @@ _RULES = (
     ),
     _Rule(
         "ui-insert-adjacent-html",
-        re.compile(r"\.insertAdjacentHTML\s*\(\s*[^,]+,\s*(?![\"'`])", re.I),
+        re.compile(
+            r"\.insertAdjacentHTML\s*\(\s*[^,]+,\s*(?![\"'`])",
+            re.IGNORECASE,
+        ),
         "Dynamic markup reaches insertAdjacentHTML",
         Severity.HIGH,
         "untrusted_insert_adjacent_html",
@@ -53,7 +56,7 @@ _RULES = (
     ),
     _Rule(
         "ui-document-write",
-        re.compile(r"\bdocument\.(?:write|writeln)\s*\(", re.I),
+        re.compile(r"\bdocument\.(?:write|writeln)\s*\(", re.IGNORECASE),
         "document.write is used in application UI code",
         Severity.MEDIUM,
         "document_write_sink",
@@ -64,7 +67,10 @@ _RULES = (
     ),
     _Rule(
         "ui-dynamic-code",
-        re.compile(r"(?<![\w.])(?:eval\s*\(|new\s+Function\s*\()", re.I),
+        re.compile(
+            r"(?<![\w.])(?:eval\s*\(|new\s+Function\s*\()",
+            re.IGNORECASE,
+        ),
         "Dynamic JavaScript execution primitive is present",
         Severity.HIGH,
         "dynamic_code_execution_ui",
@@ -75,7 +81,10 @@ _RULES = (
     ),
     _Rule(
         "ui-react-dangerous-html",
-        re.compile(r"dangerouslySetInnerHTML\s*=\s*\{\s*\{\s*__html\s*:\s*(?![\"'`])", re.I),
+        re.compile(
+            r"dangerouslySetInnerHTML\s*=\s*\{\s*\{\s*__html\s*:\s*(?![\"'`])",
+            re.IGNORECASE,
+        ),
         "Dynamic value reaches dangerouslySetInnerHTML",
         Severity.HIGH,
         "react_dangerous_html",
@@ -86,7 +95,10 @@ _RULES = (
     ),
     _Rule(
         "ui-wildcard-postmessage",
-        re.compile(r"\.postMessage\s*\([^,\n]+,\s*[\"']\*[\"']", re.I),
+        re.compile(
+            r"\.postMessage\s*\([^,\n]+,\s*[\"']\*[\"']",
+            re.IGNORECASE,
+        ),
         "postMessage uses a wildcard target origin",
         Severity.MEDIUM,
         "wildcard_postmessage_target",
@@ -101,7 +113,7 @@ _RULES = (
             r"(?:localStorage|sessionStorage)\.(?:setItem\s*\(\s*[\"'][^\"']*"
             r"(?:token|secret|private|mnemonic|seed|auth|session)[^\"']*[\"']|"
             r"(?:token|secret|privateKey|mnemonic|seed|auth|session)\s*=)",
-            re.I,
+            re.IGNORECASE,
         ),
         "Sensitive authentication material is written to Web Storage",
         Severity.MEDIUM,
@@ -114,7 +126,8 @@ _RULES = (
 )
 
 _MESSAGE_LISTENER = re.compile(
-    r"(?:addEventListener\s*\(\s*[\"']message[\"']|onmessage\s*=)", re.I
+    r"(?:addEventListener\s*\(\s*[\"']message[\"']|onmessage\s*=)",
+    re.IGNORECASE,
 )
 
 
@@ -126,8 +139,21 @@ class UIStage:
         files = iter_source_files(asset)
         findings: list[Finding] = []
         ui_files = [
-            path for path in files
-            if path.suffix.lower() in {".cjs", ".html", ".htm", ".js", ".jsx", ".mjs", ".svelte", ".ts", ".tsx", ".vue"}
+            path
+            for path in files
+            if path.suffix.lower()
+            in {
+                ".cjs",
+                ".html",
+                ".htm",
+                ".js",
+                ".jsx",
+                ".mjs",
+                ".svelte",
+                ".ts",
+                ".tsx",
+                ".vue",
+            }
         ]
 
         for path in ui_files:
@@ -155,8 +181,12 @@ class UIStage:
                     )
 
             for listener in _MESSAGE_LISTENER.finditer(text):
-                window = text[listener.start(): listener.start() + 1800]
-                if re.search(r"(?:event|evt|e)\.origin|origin\s*[!=]==?", window, re.I):
+                window = text[listener.start() : listener.start() + 1800]
+                if re.search(
+                    r"(?:event|evt|e)\.origin|origin\s*[!=]==?",
+                    window,
+                    re.IGNORECASE,
+                ):
                     continue
                 findings.append(
                     Finding(
