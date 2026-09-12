@@ -32,10 +32,7 @@ class ReportView(QWidget):
     """
 
     def __init__(self, parent: QWidget | None = None) -> None:
-        """Build report preview, export buttons, and finding selector.
-
-        Security invariant: no report content is interpreted as HTML or executable code.
-        """
+        """Build report preview, export buttons, and finding selector."""
 
         super().__init__(parent)
         self._report: AuditReport | None = None
@@ -54,7 +51,9 @@ class ReportView(QWidget):
         export_json = QPushButton("Export JSON", self)
         export_markdown = QPushButton("Export Markdown", self)
         export_immunefi = QPushButton("Export Immunefi Findings", self)
-        export_json.clicked.connect(lambda: self._export_file("findings.json", "JSON (*.json)"))
+        export_json.clicked.connect(
+            lambda: self._export_file("audit-report.json", "JSON (*.json)")
+        )
         export_markdown.clicked.connect(
             lambda: self._export_file("audit-report.md", "Markdown (*.md)")
         )
@@ -77,11 +76,7 @@ class ReportView(QWidget):
         layout.addLayout(actions)
 
     def set_report(self, report: AuditReport) -> None:
-        """Load one generated report into the preview and finding selector.
-
-        Security invariant: only files contained by ``report.output_dir`` are read and previews
-        are capped before loading into the GUI.
-        """
+        """Load one generated report into the preview and finding selector."""
 
         self._report = report
         markdown = self._contained_file("audit-report.md")
@@ -100,11 +95,7 @@ class ReportView(QWidget):
             self.finding_selector.addItem(label)
 
     def copy_selected_finding(self) -> None:
-        """Copy one open finding in Immunefi layout to the system clipboard.
-
-        Security invariant: clipboard text is generated from normalized finding fields and is
-        not executed by this application.
-        """
+        """Copy one open finding in Immunefi layout to the system clipboard."""
 
         finding = self._finding_by_label.get(self.finding_selector.currentText())
         if finding is None:
@@ -112,11 +103,7 @@ class ReportView(QWidget):
         QGuiApplication.clipboard().setText(ReportStage._immunefi_markdown(finding))
 
     def export_immunefi_directory(self) -> None:
-        """Copy generated individual finding Markdown files to a user-selected directory.
-
-        Security invariant: source traversal is restricted to the runner-generated findings
-        directory and symlinks are not followed.
-        """
+        """Copy generated individual finding Markdown files to a user-selected directory."""
 
         source = self._contained_file("findings", require_file=False)
         if source is None or not source.is_dir() or source.is_symlink():
@@ -132,11 +119,7 @@ class ReportView(QWidget):
         QMessageBox.information(self, "Export Complete", f"Exported to {destination_root}")
 
     def _export_file(self, name: str, file_filter: str) -> None:
-        """Copy one known generated report file to a user-selected destination.
-
-        Security invariant: ``name`` is resolved beneath the recorded report output directory
-        before copying.
-        """
+        """Copy one known generated report file to a user-selected destination."""
 
         source = self._contained_file(name)
         if source is None:
@@ -147,11 +130,7 @@ class ReportView(QWidget):
         shutil.copy2(source, Path(destination))
 
     def _contained_file(self, name: str, *, require_file: bool = True) -> Path | None:
-        """Resolve a generated artifact under the current report directory.
-
-        Security invariant: path canonicalization prevents export helpers from reading outside
-        ``AuditReport.output_dir``.
-        """
+        """Resolve a generated artifact under the current report directory."""
 
         if self._report is None:
             return None
