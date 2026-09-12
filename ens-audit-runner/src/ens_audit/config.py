@@ -41,7 +41,7 @@ REQUIRED_TOOLS = (
     "myth",
     "halmos",
     "forge",
-    "echidna-test",
+    "echidna",
     "npm",
     "npx",
     "pip-audit",
