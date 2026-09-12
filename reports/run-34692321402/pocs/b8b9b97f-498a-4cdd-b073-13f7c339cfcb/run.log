@@ -1,0 +1,13 @@
+finding_id=b8b9b97f-498a-4cdd-b073-13f7c339cfcb
+severity=Medium
+asset=manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unvalidated-open-url
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/notifications/utils/telegram/auth.ts:48
+source_line=const popup = window.open(
+evidence_exact_line_match=False
+scanner_evidence=URL passed to open/postMessage requires scheme and origin validation.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

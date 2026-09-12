@@ -1,0 +1,13 @@
+finding_id=6c662264-ecda-414d-9d76-4bbc4adba306
+severity=Medium
+asset=manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/commemorative-nft/eligibility.ts:200
+source_line=payload,
+evidence_exact_line_match=True
+scanner_evidence=payload,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

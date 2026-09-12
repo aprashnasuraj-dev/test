@@ -1,0 +1,26 @@
+{
+  "asset": "smart-account",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
+  "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
+  "id": "ab67fbc7-4c97-4662-b3e4-622d68b0ff38",
+  "impact": "",
+  "location": {
+    "column": 3,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/budget.test.ts",
+    "function": null,
+    "line": 20
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Chain selection or fallback requires comparison with the connected wallet chain."
+}

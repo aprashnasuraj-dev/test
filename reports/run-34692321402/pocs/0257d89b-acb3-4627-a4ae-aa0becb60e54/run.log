@@ -1,0 +1,13 @@
+finding_id=0257d89b-acb3-4627-a4ae-aa0becb60e54
+severity=High
+asset=manager
+stage=rpc
+rule_id=rpc-dynamic-fetch-url
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/profile/service/profileImageUpload.ts:150
+source_line=const response = await fetch(endpoint, {
+evidence_exact_line_match=False
+scanner_evidence=fetch(endpoint
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=4fcd1983-eb9d-4ecd-b855-8951337945f4
+severity=Medium
+asset=smart-account
+stage=ui
+rule_id=ui-sensitive-web-storage
+matched_known_id=None
+escape_reason=None
+source=packages/smart-account/src/providers/rhinestone/session-storage.test.ts:62
+source_line=localStorage.setItem('ens-sessions-v7', JSON.stringify([makeSession()]))
+evidence_exact_line_match=False
+scanner_evidence=localStorage.setItem('ens-sessions-v7'
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

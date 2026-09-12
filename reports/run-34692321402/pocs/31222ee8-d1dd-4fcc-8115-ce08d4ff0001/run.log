@@ -1,0 +1,13 @@
+finding_id=31222ee8-d1dd-4fcc-8115-ce08d4ff0001
+severity=Medium
+asset=workers
+stage=secrets
+rule_id=detect-secrets:Base64 High Entropy String
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:21
+source_line=VAPID_PUBLIC_KEY: "BOBjtfgZPtGSJtajVkh4T1Ceswos_aRXYlD4Mq8aXEa4sc_0lkrwKzUhnUIgCt22_cAEYSr0wZlhCiWPsFXyRGs";
+evidence_exact_line_match=False
+scanner_evidence=detector=Base64 High Entropy String
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

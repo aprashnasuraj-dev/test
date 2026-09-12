@@ -1,0 +1,13 @@
+finding_id=df50a083-f4ed-441c-87a0-c4c110a7800e
+severity=Medium
+asset=workers
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:1942
+source_line=send(message: Body, options?: QueueSendOptions): Promise<QueueSendResponse>;
+evidence_exact_line_match=False
+scanner_evidence=Body,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

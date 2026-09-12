@@ -1,0 +1,26 @@
+{
+  "asset": "transaction-manager",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Chain selection or fallback requires comparison with the connected wallet chain.",
+  "evidence": "Chain selection or fallback requires comparison with the connected wallet chain.",
+  "id": "f413a7f2-027e-46a6-b7d0-dd40cfa9827a",
+  "impact": "",
+  "location": {
+    "column": 9,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.actors.ts",
+    "function": null,
+    "line": 1051
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Chain selection or fallback requires comparison with the connected wallet chain."
+}

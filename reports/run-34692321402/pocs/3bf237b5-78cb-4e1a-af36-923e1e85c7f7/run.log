@@ -1,0 +1,13 @@
+finding_id=3bf237b5-78cb-4e1a-af36-923e1e85c7f7
+severity=Medium
+asset=manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/notifications/notifications/name-transferred.tsx:6
+source_line=payload,
+evidence_exact_line_match=True
+scanner_evidence=payload,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

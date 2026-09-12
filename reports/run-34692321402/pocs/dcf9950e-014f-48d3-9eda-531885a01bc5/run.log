@@ -1,0 +1,13 @@
+finding_id=dcf9950e-014f-48d3-9eda-531885a01bc5
+severity=Medium
+asset=explorer
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/worker/safe-fetch.ts:116
+source_line=for await (const chunk of res.body) {
+evidence_exact_line_match=False
+scanner_evidence=body)
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

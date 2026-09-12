@@ -1,0 +1,13 @@
+finding_id=70b93354-cec2-41c3-aa68-ad9749dae216
+severity=Medium
+asset=transaction-manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-request-from-not-validated
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/actors/eoa-transport.actor.ts:40
+source_line=if (!walletAddress || !isAddressEqual(walletAddress, eoaRequest.from)) {
+evidence_exact_line_match=False
+scanner_evidence=request.from reaches a signing/account path; verify equality with the connected signer.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=a4493383-1ad1-4fa0-95cf-18fb50ce6b96
+severity=Medium
+asset=workers
+stage=ui
+rule_id=ui-message-origin-check
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/telegram/utils.ts:323
+source_line=export const sendVerificationMessage = async (
+evidence_exact_line_match=False
+scanner_evidence=onMessage =
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

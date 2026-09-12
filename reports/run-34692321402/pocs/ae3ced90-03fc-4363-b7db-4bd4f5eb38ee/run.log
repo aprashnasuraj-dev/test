@@ -1,0 +1,13 @@
+finding_id=ae3ced90-03fc-4363-b7db-4bd4f5eb38ee
+severity=High
+asset=manager
+stage=sast
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/profile/service/profileImageUpload.ts:150
+source_line=const response = await fetch(endpoint, {
+evidence_exact_line_match=True
+scanner_evidence=const response = await fetch(endpoint, {
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

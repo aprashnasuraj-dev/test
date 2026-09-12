@@ -1,0 +1,13 @@
+finding_id=95256a3a-9b7f-4237-9abc-a3f904726c7c
+severity=Medium
+asset=manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/register-v2/state/registrationUi.machine.ts:533
+source_line=chainId: defaultPublicClient.chain.id,
+evidence_exact_line_match=False
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

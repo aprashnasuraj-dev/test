@@ -1,0 +1,13 @@
+finding_id=c2af795e-20e8-47a8-b365-15ca1fc280a3
+severity=Medium
+asset=explorer
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/worker-configuration.d.ts:11886
+source_line=// An (optional) string with the MIME type of the payload, if set by the
+evidence_exact_line_match=False
+scanner_evidence=payload,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

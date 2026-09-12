@@ -1,0 +1,13 @@
+finding_id=f61ad244-27e3-472f-90c2-3fd178cabe3a
+severity=Medium
+asset=explorer
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/worker/avatar.test.ts:28
+source_line=return new Response(body, { headers: { 'content-type': contentType } })
+evidence_exact_line_match=False
+scanner_evidence=body,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

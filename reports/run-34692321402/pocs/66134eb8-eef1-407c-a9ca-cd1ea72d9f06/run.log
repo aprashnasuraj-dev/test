@@ -1,0 +1,13 @@
+finding_id=66134eb8-eef1-407c-a9ca-cd1ea72d9f06
+severity=Medium
+asset=manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/register-v2/state/registrationUi.machine.ts:120
+source_line=* Standalone-HCA session-enable payload, pre-resolved by the caller
+evidence_exact_line_match=False
+scanner_evidence=payload,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

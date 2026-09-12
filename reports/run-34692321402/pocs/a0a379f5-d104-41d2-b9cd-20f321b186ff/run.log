@@ -1,0 +1,13 @@
+finding_id=a0a379f5-d104-41d2-b9cd-20f321b186ff
+severity=Medium
+asset=manager
+stage=sast
+rule_id=custom-ts:untrusted-navigation-url
+matched_known_id=EXP-INPUT-009
+escape_reason=severity_escalation
+source=apps/manager/public/push-sw.js:76
+source_line=return sw.clients.openWindow(url);
+evidence_exact_line_match=True
+scanner_evidence=return sw.clients.openWindow(url);
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

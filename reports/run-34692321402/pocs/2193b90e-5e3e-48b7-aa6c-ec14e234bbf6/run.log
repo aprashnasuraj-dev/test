@@ -1,0 +1,13 @@
+finding_id=2193b90e-5e3e-48b7-aa6c-ec14e234bbf6
+severity=Medium
+asset=transaction-manager
+stage=sast
+rule_id=custom-xstate:undefined-target
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/transaction.machine.ts:519
+source_line=target: 'error.timeout',
+evidence_exact_line_match=False
+scanner_evidence=pending -> error.timeout
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

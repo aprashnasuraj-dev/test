@@ -1,0 +1,13 @@
+finding_id=abb09dc0-fa42-4c6c-a8f9-08c60b1739ec
+severity=Medium
+asset=transaction-manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/services/run-telemetry.service.test.ts:59
+source_line=expect(payload).toBeNull()
+evidence_exact_line_match=False
+scanner_evidence=payload)
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=ab55e56e-1776-4745-b9f4-739e52c50094
+severity=Medium
+asset=explorer
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/worker-configuration.d.ts:1914
+source_line=send(message: Body, options?: QueueSendOptions): Promise<QueueSendResponse>;
+evidence_exact_line_match=False
+scanner_evidence=Body,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

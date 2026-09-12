@@ -1,0 +1,26 @@
+{
+  "asset": "transaction-manager",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "detect-secrets identified credential-like material.",
+  "evidence": "detector=Secret Keyword",
+  "id": "ebc6dcaf-4fcd-4831-bb2b-cf23d5ba663a",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "TRANSACTION_MANAGER_SPEC.md",
+    "function": null,
+    "line": 618
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "detect-secrets:Secret Keyword",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Secret Keyword"
+}

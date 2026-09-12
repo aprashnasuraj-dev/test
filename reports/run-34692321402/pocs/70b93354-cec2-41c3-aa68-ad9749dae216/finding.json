@@ -1,0 +1,26 @@
+{
+  "asset": "transaction-manager",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "request.from reaches a signing/account path; verify equality with the connected signer.",
+  "evidence": "request.from reaches a signing/account path; verify equality with the connected signer.",
+  "id": "70b93354-cec2-41c3-aa68-ad9749dae216",
+  "impact": "",
+  "location": {
+    "column": 8,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/actors/eoa-transport.actor.ts",
+    "function": null,
+    "line": 40
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-request-from-not-validated",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-request-from-not-validated",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "request.from reaches a signing/account path; verify equality with the connected signer."
+}

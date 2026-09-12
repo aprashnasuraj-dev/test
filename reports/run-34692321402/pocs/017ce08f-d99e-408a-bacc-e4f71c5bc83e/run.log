@@ -1,0 +1,13 @@
+finding_id=017ce08f-d99e-408a-bacc-e4f71c5bc83e
+severity=Medium
+asset=workers
+stage=ui
+rule_id=ui-message-origin-check
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/app/routes/webhook/telegram.ts:14
+source_line=const onMessage = ResultFn(async function* ({
+evidence_exact_line_match=False
+scanner_evidence=onMessage =
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=0c011f23-ca71-4d31-b95b-6eeba1dfe2af
+severity=Medium
+asset=manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/service/decodeMigrationError.ts:248
+source_line=const text = hexBytesToAscii(payload)
+evidence_exact_line_match=False
+scanner_evidence=payload)
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

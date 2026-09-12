@@ -1,0 +1,13 @@
+finding_id=3ad6cb6b-6ce3-4883-92df-5429bffa2452
+severity=Medium
+asset=manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/utils/xstate-store.test.ts:93
+source_line=expect(JSON.parse(stored)).toEqual({ count: 1 })
+evidence_exact_line_match=False
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=85c24c5d-fef8-48f9-9838-e5f8acf049e2
+severity=Medium
+asset=manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/lib/posthog/provider.tsx:61
+source_line=(payload) => {
+evidence_exact_line_match=False
+scanner_evidence=payload)
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

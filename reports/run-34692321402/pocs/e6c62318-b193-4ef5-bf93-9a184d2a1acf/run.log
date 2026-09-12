@@ -1,0 +1,13 @@
+finding_id=e6c62318-b193-4ef5-bf93-9a184d2a1acf
+severity=Medium
+asset=transaction-manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/registration/registration.hca.actors.ts:920
+source_line=const chainId = input.publicClient.chain?.id ?? sepolia.id
+evidence_exact_line_match=False
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

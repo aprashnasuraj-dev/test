@@ -1,0 +1,13 @@
+finding_id=562cd53e-6eab-4482-aa83-3b24e45556b9
+severity=Medium
+asset=workers
+stage=secrets
+rule_id=detect-secrets:Hex High Entropy String
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:10881
+source_line=* @example "44372ba35fa1270921d318f34c12f155dc87b682cf36a790cfaa3ba8737a1b5d"
+evidence_exact_line_match=False
+scanner_evidence=detector=Hex High Entropy String
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

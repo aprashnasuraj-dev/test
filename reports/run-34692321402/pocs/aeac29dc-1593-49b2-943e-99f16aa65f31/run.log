@@ -1,0 +1,13 @@
+finding_id=aeac29dc-1593-49b2-943e-99f16aa65f31
+severity=Medium
+asset=manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/commemorative-nft/eligibility.test.ts:147
+source_line=const metadata = JSON.parse(
+evidence_exact_line_match=False
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

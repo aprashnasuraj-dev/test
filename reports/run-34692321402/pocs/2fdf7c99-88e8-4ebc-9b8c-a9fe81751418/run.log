@@ -1,0 +1,13 @@
+finding_id=2fdf7c99-88e8-4ebc-9b8c-a9fe81751418
+severity=Medium
+asset=smart-account
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unscoped-session-authority
+matched_known_id=None
+escape_reason=None
+source=packages/smart-account/src/providers/rhinestone/session-storage.ts:133
+source_line=const key = `${SKIPPED_SESSION_KEY}-${ownerAddress.toLowerCase()}`
+evidence_exact_line_match=False
+scanner_evidence=Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

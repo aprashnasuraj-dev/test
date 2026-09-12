@@ -1,0 +1,17 @@
+finding_id=e2de4db8-6ea0-4c39-9c80-093c7f32a2f1
+severity=Medium
+asset=workers
+stage=sast
+rule_id=custom-llm:prompt-injection-surface
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:4847
+source_line=* Reference: https://github.com/openai/openai-node/blob/master/src/resources/responses/responses.ts
+evidence_exact_line_match=False
+scanner_evidence=service_tier?: "auto" | "default" | "flex" | "scale" | "priority" | null;
+};
+/**
+ * Workers AI support for OpenAI's Responses API
+ * Reference: https://github.com/openai/openai-node/blob/master/src/resources/responses/responses.ts
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

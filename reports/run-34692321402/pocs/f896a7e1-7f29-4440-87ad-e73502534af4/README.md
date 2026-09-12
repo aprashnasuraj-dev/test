@@ -1,0 +1,21 @@
+# Offline PoC — f896a7e1-7f29-4440-87ad-e73502534af4
+
+- Severity: **Medium**
+- Asset: `manager`
+- Stage: `rpc`
+- Rule: `rpc-unbounded-jsonrpc-body`
+- Source hint: `manager/src/features/migration/service/decodeMigrationError.ts:260`
+- Matched public issue: `none`
+- Escape reason: `none`
+
+This PoC is intentionally offline and non-destructive. It verifies the
+normalized finding metadata and, when a concrete current source location exists,
+reproduces that source trace against the pinned audit checkout.
+
+## Run
+
+```bash
+bash run.sh /path/to/audit-comp-ens
+```
+
+A successful reproduction prints `POC_OK`.

@@ -1,0 +1,13 @@
+finding_id=7a4aa4ed-7e56-4c24-977f-38cd47ebc7ef
+severity=Medium
+asset=workers
+stage=secrets
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/telegram/README.md:109
+source_line=secretToken: 'your-secret-token',
+evidence_exact_line_match=False
+scanner_evidence=detector=Secret Keyword
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

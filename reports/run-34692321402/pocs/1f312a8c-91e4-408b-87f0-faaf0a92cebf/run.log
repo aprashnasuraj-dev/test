@@ -1,0 +1,13 @@
+finding_id=1f312a8c-91e4-408b-87f0-faaf0a92cebf
+severity=Medium
+asset=smart-account
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=packages/smart-account/src/providers/rhinestone/session.test.ts:124
+source_line=chainId: sepolia.id,
+evidence_exact_line_match=False
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=815b4171-0c2d-42d1-ae7c-3f34f28b6cff
+severity=Medium
+asset=transaction-manager
+stage=sast
+rule_id=custom-xstate:undefined-target
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/transaction.machine.ts:482
+source_line=target: 'error.submission',
+evidence_exact_line_match=False
+scanner_evidence=submitting -> error.submission
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

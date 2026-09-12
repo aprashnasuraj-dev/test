@@ -1,0 +1,13 @@
+finding_id=9492e124-f88e-4545-b5e9-d792566fda08
+severity=Medium
+asset=manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/profile/components/dialogs/edit-profile/tabs/contact/records.ts:156
+source_line=const parsed = JSON.parse(serializedPrimaryContacts)
+evidence_exact_line_match=False
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

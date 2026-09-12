@@ -1,0 +1,13 @@
+finding_id=b20bd1b8-3e44-4a4a-9714-c92f0a2e058c
+severity=Medium
+asset=manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/service/_fixtures/index.ts:118
+source_line=json: () => Promise.resolve(body),
+evidence_exact_line_match=False
+scanner_evidence=body)
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

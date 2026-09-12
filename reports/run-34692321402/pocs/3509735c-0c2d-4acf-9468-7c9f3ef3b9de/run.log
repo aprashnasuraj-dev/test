@@ -1,0 +1,13 @@
+finding_id=3509735c-0c2d-4acf-9468-7c9f3ef3b9de
+severity=Medium
+asset=workers
+stage=secrets
+rule_id=trufflehog:Postgres
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/compose.yaml:24
+source_line=- PG_CONNECTION_STRING=postgres://postgres:postgres@postgres:5432/postgres
+evidence_exact_line_match=False
+scanner_evidence=detector=Postgres; verified=False
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

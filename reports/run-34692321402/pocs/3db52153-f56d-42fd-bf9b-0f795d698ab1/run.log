@@ -1,0 +1,13 @@
+finding_id=3db52153-f56d-42fd-bf9b-0f795d698ab1
+severity=Medium
+asset=transaction-manager
+stage=sast
+rule_id=custom-xstate:undefined-target
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/transaction.machine.ts:602
+source_line=target: 'error.cancelled',
+evidence_exact_line_match=False
+scanner_evidence=retrying -> error.cancelled
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

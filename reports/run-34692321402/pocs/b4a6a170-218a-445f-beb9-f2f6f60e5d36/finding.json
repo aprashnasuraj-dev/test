@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "detect-secrets identified credential-like material.",
+  "evidence": "detector=Base64 High Entropy String",
+  "id": "b4a6a170-218a-445f-beb9-f2f6f60e5d36",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "api-worker/wrangler.jsonc",
+    "function": null,
+    "line": 106
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "detect-secrets:Base64 High Entropy String",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Base64 High Entropy String"
+}

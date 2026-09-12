@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Signature-verification path requires fail-closed constant-time verification.",
+  "evidence": "Signature-verification path requires fail-closed constant-time verification.",
+  "id": "91c694dd-39f2-4ff8-b3a3-9d3e1aaa4482",
+  "impact": "",
+  "location": {
+    "column": 245,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/worker-configuration.gen.d.ts",
+    "function": null,
+    "line": 42
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-webhook-fail-open",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-webhook-fail-open",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Signature-verification path requires fail-closed constant-time verification."
+}

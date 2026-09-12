@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "Secret scanner identified credential-like material.",
+  "evidence": "detector=Postgres; verified=False",
+  "id": "3509735c-0c2d-4acf-9468-7c9f3ef3b9de",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/compose.yaml",
+    "function": null,
+    "line": 24
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "trufflehog:Postgres",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Postgres"
+}

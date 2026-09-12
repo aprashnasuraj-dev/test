@@ -1,0 +1,13 @@
+finding_id=7c3049c2-e102-4293-aa53-501352710cc1
+severity=Medium
+asset=workers
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/expiry-discovery/cursors.test.ts:90
+source_line=expect(JSON.parse(stored!)).toEqual({
+evidence_exact_line_match=False
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

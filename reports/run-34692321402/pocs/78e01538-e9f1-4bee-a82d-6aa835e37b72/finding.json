@@ -1,0 +1,26 @@
+{
+  "asset": "smart-account",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
+  "evidence": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.",
+  "id": "78e01538-e9f1-4bee-a82d-6aa835e37b72",
+  "impact": "",
+  "location": {
+    "column": 18,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/session-storage.ts",
+    "function": null,
+    "line": 122
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unscoped-session-authority",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unscoped-session-authority",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Session key authority appears owner-like; verify action, target, lifetime, and permission scoping."
+}

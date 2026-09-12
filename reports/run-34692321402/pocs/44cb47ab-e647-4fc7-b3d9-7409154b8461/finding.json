@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "Secret scanner identified credential-like material.",
+  "evidence": "detector=Postgres; verified=False",
+  "id": "44cb47ab-e647-4fc7-b3d9-7409154b8461",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "workers/api-worker/compose.yaml",
+    "function": null,
+    "line": 24
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "trufflehog:Postgres",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Postgres"
+}

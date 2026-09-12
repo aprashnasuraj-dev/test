@@ -1,0 +1,13 @@
+finding_id=b5779e64-9ea4-4fd5-846a-bbf70e2819f1
+severity=Medium
+asset=manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/service/v1SubgraphClient.ts:178
+source_line=const response = await fetch(V1_SUBGRAPH_URL, {
+evidence_exact_line_match=False
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

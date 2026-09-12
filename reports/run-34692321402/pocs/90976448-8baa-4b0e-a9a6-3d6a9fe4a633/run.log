@@ -1,0 +1,13 @@
+finding_id=90976448-8baa-4b0e-a9a6-3d6a9fe4a633
+severity=Medium
+asset=workers
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/sendgrid/contacts.ts:61
+source_line=fetch(url, {
+evidence_exact_line_match=False
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

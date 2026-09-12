@@ -1,0 +1,13 @@
+finding_id=bcbe990d-2145-4221-9f34-9ff9ab543d70
+severity=Medium
+asset=smart-account
+stage=secrets
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=packages/smart-account/src/providers/rhinestone/initialize-account.test.ts:473
+source_line=rhinestoneApiKey: 'test-api-key',
+evidence_exact_line_match=False
+scanner_evidence=detector=Secret Keyword
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

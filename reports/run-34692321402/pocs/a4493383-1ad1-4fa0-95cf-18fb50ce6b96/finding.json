@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": "CWE-346",
+  "description": "A message event handler is registered without an origin comparison in the nearby handler body.",
+  "evidence": "onMessage =",
+  "id": "a4493383-1ad1-4fa0-95cf-18fb50ce6b96",
+  "impact": "A hostile window or frame may be able to send messages that the application treats as trusted.",
+  "location": {
+    "column": 0,
+    "file": "api-worker/src/services/telegram/utils.ts",
+    "function": null,
+    "line": 323
+  },
+  "notes": "",
+  "recommendation": "Validate event.origin against an exact allowlist and validate the message schema before acting on event.data.",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "missing_postmessage_origin_validation",
+  "rule_id": "ui-message-origin-check",
+  "severity": "Medium",
+  "stage": "ui",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Cross-window message handler lacks a nearby origin check"
+}

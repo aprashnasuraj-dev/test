@@ -1,0 +1,13 @@
+finding_id=757e6426-7ed2-4be2-90cd-00c5fb2b8188
+severity=Medium
+asset=manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/lib/smart-account/SmartAccountContext.tsx:268
+source_line=const wagmiPublicClient = usePublicClient({ chainId: customSepolia.id })
+evidence_exact_line_match=False
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

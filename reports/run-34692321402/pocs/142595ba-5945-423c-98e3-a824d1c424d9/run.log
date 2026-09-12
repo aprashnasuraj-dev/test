@@ -1,0 +1,13 @@
+finding_id=142595ba-5945-423c-98e3-a824d1c424d9
+severity=Medium
+asset=transaction-manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-eip712-domain-missing-binding
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/registration/registration.hca.actors.ts:52
+source_line=import { getEip712Domain, readContract, signTypedData } from 'viem/actions'
+evidence_exact_line_match=False
+scanner_evidence=EIP-712 domain construction requires review for chainId and verifyingContract binding.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=becdd17c-6226-47cd-a78e-e6043a0a9530
+severity=Medium
+asset=workers
+stage=secrets
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/compose.yaml:10
+source_line=POSTGRES_PASSWORD: postgres
+evidence_exact_line_match=False
+scanner_evidence=detector=Secret Keyword
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

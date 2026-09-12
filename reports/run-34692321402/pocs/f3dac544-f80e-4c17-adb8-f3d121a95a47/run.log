@@ -1,0 +1,13 @@
+finding_id=f3dac544-f80e-4c17-adb8-f3d121a95a47
+severity=High
+asset=explorer
+stage=sast
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=R2-04
+escape_reason=severity_escalation
+source=apps/portal/src/worker/avatar.ts:10
+source_line=* - `getMetadataAvatarUri()` does `fetch(uri).then(r => r.json())` on an
+evidence_exact_line_match=True
+scanner_evidence=* - `getMetadataAvatarUri()` does `fetch(uri).then(r => r.json())` on an
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,26 @@
+{
+  "asset": "transaction-manager",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "detect-secrets identified credential-like material.",
+  "evidence": "detector=Hex High Entropy String",
+  "id": "4d8ff21b-efbd-4e4e-be36-2eeb5f25352c",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "src/errors/transaction.errors.test.ts",
+    "function": null,
+    "line": 42
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "detect-secrets:Hex High Entropy String",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Hex High Entropy String"
+}

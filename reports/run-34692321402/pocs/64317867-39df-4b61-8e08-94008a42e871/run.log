@@ -1,0 +1,13 @@
+finding_id=64317867-39df-4b61-8e08-94008a42e871
+severity=Medium
+asset=workers
+stage=ui
+rule_id=ui-message-origin-check
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:4669
+source_line=type FunctionMessage = {
+evidence_exact_line_match=False
+scanner_evidence=onMessage =
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

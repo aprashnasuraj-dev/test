@@ -1,0 +1,13 @@
+finding_id=10234f87-570e-4a83-80e9-ae9fdca44217
+severity=Medium
+asset=workers
+stage=secrets
+rule_id=detect-secrets:Basic Auth Credentials
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/.dev.vars.example:2
+source_line=WRANGLER_HYPERDRIVE_LOCAL_CONNECTION_STRING_DB="postgresql://postgres:postgres@localhost/postgres"
+evidence_exact_line_match=False
+scanner_evidence=detector=Basic Auth Credentials
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=3f9ee187-a08c-449b-86cf-44a4b61f37c5
+severity=Medium
+asset=transaction-manager
+stage=sast
+rule_id=custom-xstate:undefined-target
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/transaction.machine.ts:412
+source_line=target: 'error.preparation',
+evidence_exact_line_match=False
+scanner_evidence=preparing -> error.preparation
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=390b1568-f59a-493d-80c5-203824a77e3c
+severity=Medium
+asset=manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/lib/smart-account/SmartAccountContext.tsx:838
+source_line=getSessionEnablePayload,
+evidence_exact_line_match=False
+scanner_evidence=Payload,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

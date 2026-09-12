@@ -1,0 +1,13 @@
+finding_id=f1465082-88ad-47a9-bfc8-28fe8ec20514
+severity=Medium
+asset=manager
+stage=ui
+rule_id=ui-message-origin-check
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/notifications/utils/telegram/auth.ts:76
+source_line=const onMessage = (event: MessageEvent) => {
+evidence_exact_line_match=False
+scanner_evidence=onMessage =
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=aa1b8571-d2c9-4076-adc0-a399054a7251
+severity=Medium
+asset=smart-account
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unscoped-session-authority
+matched_known_id=None
+escape_reason=None
+source=packages/smart-account/src/providers/rhinestone/session.ts:85
+source_line=/** Ephemeral session key (single ECDSA session owner). */
+evidence_exact_line_match=False
+scanner_evidence=Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

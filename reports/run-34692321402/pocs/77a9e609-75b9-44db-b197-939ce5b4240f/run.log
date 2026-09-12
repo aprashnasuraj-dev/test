@@ -1,0 +1,13 @@
+finding_id=77a9e609-75b9-44db-b197-939ce5b4240f
+severity=Medium
+asset=manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/worker-configuration.gen.d.ts:1662
+source_line=/* [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/body) */
+evidence_exact_line_match=False
+scanner_evidence=body)
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

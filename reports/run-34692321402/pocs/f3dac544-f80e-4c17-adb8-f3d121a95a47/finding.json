@@ -1,0 +1,29 @@
+{
+  "asset": "explorer",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
+  "escape_reason": "severity_escalation",
+  "evidence": "* - `getMetadataAvatarUri()` does `fetch(uri).then(r => r.json())` on an",
+  "id": "f3dac544-f80e-4c17-adb8-f3d121a95a47",
+  "impact": "",
+  "known_severity": "Low",
+  "location": {
+    "column": 0,
+    "file": "src/worker/avatar.ts",
+    "function": null,
+    "line": 10
+  },
+  "matched_known_id": "R2-04",
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "server_side_fetch_of_untrusted_avatar_url",
+  "rule_id": "custom-ssrf:dynamic-url-sink",
+  "severity": "High",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Dynamic URL reaches outbound request without observed destination validation"
+}

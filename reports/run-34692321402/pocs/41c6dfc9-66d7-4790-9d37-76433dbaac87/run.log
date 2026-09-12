@@ -1,0 +1,13 @@
+finding_id=41c6dfc9-66d7-4790-9d37-76433dbaac87
+severity=High
+asset=explorer
+stage=sast
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=R2-04
+escape_reason=severity_escalation
+source=apps/portal/worker-configuration.d.ts:306
+source_line=fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;
+evidence_exact_line_match=True
+scanner_evidence=fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

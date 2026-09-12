@@ -1,0 +1,13 @@
+finding_id=99372318-bdc8-43cf-bde5-2735a15d6dd8
+severity=Medium
+asset=explorer
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/features/reverse-resolution/components/ReverseResolutionTable/ReverseResolutionTable.tsx:12
+source_line=TableBody,
+evidence_exact_line_match=False
+scanner_evidence=Body,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

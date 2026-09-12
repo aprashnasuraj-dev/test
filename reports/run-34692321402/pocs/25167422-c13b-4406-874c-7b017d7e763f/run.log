@@ -1,0 +1,13 @@
+finding_id=25167422-c13b-4406-874c-7b017d7e763f
+severity=Medium
+asset=transaction-manager
+stage=sast
+rule_id=custom-xstate:undefined-target
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/transaction.machine.ts:574
+source_line=target: 'error.reverted',
+evidence_exact_line_match=False
+scanner_evidence=confirming -> error.reverted
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=ebc6dcaf-4fcd-4831-bb2b-cf23d5ba663a
+severity=Medium
+asset=transaction-manager
+stage=secrets
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/TRANSACTION_MANAGER_SPEC.md:618
+source_line=rhinestoneApiKey: 'your-api-key'
+evidence_exact_line_match=False
+scanner_evidence=detector=Secret Keyword
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

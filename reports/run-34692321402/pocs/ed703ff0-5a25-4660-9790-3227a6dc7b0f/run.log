@@ -1,0 +1,13 @@
+finding_id=ed703ff0-5a25-4660-9790-3227a6dc7b0f
+severity=Medium
+asset=workers
+stage=secrets
+rule_id=detect-secrets:Hex High Entropy String
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/wrangler.jsonc:27
+source_line="id": "85a14d25fa4a41a3a7123bcd5093c09a"
+evidence_exact_line_match=False
+scanner_evidence=detector=Hex High Entropy String
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

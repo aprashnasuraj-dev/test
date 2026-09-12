@@ -1,0 +1,13 @@
+finding_id=1ee232eb-a3de-4506-97e0-7a9a090729a3
+severity=Medium
+asset=transaction-manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-eip712-domain-missing-binding
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:330
+source_line=getEip712Domain.mockRejectedValue(new Error('execution reverted'))
+evidence_exact_line_match=False
+scanner_evidence=EIP-712 domain construction requires review for chainId and verifyingContract binding.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

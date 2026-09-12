@@ -1,0 +1,13 @@
+finding_id=8b24dfe0-f93a-403f-a722-6e83e90fc962
+severity=High
+asset=workers
+stage=sast
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/delivery/push.ts:111
+source_line=const response = await fetch(subscription.endpoint, payload)
+evidence_exact_line_match=True
+scanner_evidence=const response = await fetch(subscription.endpoint, payload)
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

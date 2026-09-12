@@ -1,0 +1,26 @@
+{
+  "asset": "explorer",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Parsed persisted JSON should be schema-validated before trusted use.",
+  "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
+  "id": "536bd5c2-7a78-4865-9a49-136334772a83",
+  "impact": "",
+  "location": {
+    "column": 22,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/records/helpers/transformPendingChanges.ts",
+    "function": null,
+    "line": 68
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Parsed persisted JSON should be schema-validated before trusted use."
+}

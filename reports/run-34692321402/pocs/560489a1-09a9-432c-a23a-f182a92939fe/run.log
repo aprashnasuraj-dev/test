@@ -1,0 +1,13 @@
+finding_id=560489a1-09a9-432c-a23a-f182a92939fe
+severity=Medium
+asset=manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/profile/service/profileRecordTransactions.ts:251
+source_line=parsed = JSON.parse(value)
+evidence_exact_line_match=False
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

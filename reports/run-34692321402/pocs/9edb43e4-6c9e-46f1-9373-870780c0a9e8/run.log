@@ -1,0 +1,13 @@
+finding_id=9edb43e4-6c9e-46f1-9373-870780c0a9e8
+severity=Medium
+asset=transaction-manager
+stage=secrets
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/helpers/getSmartAccountAddress.test.ts:23
+source_line=rhinestoneApiKey: 'test-key',
+evidence_exact_line_match=False
+scanner_evidence=detector=Secret Keyword
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

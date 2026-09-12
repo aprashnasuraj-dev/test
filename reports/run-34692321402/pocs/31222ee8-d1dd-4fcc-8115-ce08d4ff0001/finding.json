@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "detect-secrets identified credential-like material.",
+  "evidence": "detector=Base64 High Entropy String",
+  "id": "31222ee8-d1dd-4fcc-8115-ce08d4ff0001",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "api-worker/worker-configuration.gen.d.ts",
+    "function": null,
+    "line": 21
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "detect-secrets:Base64 High Entropy String",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Base64 High Entropy String"
+}

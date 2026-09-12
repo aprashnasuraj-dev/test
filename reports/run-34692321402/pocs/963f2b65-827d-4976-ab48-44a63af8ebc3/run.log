@@ -1,0 +1,13 @@
+finding_id=963f2b65-827d-4976-ab48-44a63af8ebc3
+severity=Medium
+asset=workers
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/telegram/utils.ts:62
+source_line=fetch(url, {
+evidence_exact_line_match=False
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

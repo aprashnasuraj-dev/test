@@ -1,0 +1,13 @@
+finding_id=69027071-f5ce-4e96-b12b-00eb0728bc5a
+severity=High
+asset=explorer
+stage=rpc
+rule_id=rpc-dynamic-fetch-url
+matched_known_id=None
+escape_reason=None
+source=apps/portal/worker-configuration.d.ts:1841
+source_line=fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+evidence_exact_line_match=False
+scanner_evidence=fetch(input
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

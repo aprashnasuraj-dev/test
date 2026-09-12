@@ -1,0 +1,13 @@
+finding_id=5283880d-cf03-4157-849c-4a5849a27bff
+severity=Medium
+asset=manager
+stage=ui
+rule_id=ui-message-origin-check
+matched_known_id=None
+escape_reason=None
+source=apps/manager/worker-configuration.gen.d.ts:4670
+source_line=type FunctionMessage = {
+evidence_exact_line_match=False
+scanner_evidence=onMessage =
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

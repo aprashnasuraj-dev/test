@@ -1,0 +1,13 @@
+finding_id=004cb40d-41fc-4a1d-94b7-61f7158e6bd3
+severity=Medium
+asset=explorer
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/worker/ens.test.ts:31
+source_line=return new Response(body, { headers: { 'content-type': contentType } })
+evidence_exact_line_match=False
+scanner_evidence=body,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,13 @@
+finding_id=aecdd20e-b379-49c0-a8e8-e8d84062f95a
+severity=Medium
+asset=explorer
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/hooks/useFundWallet.ts:12
+source_line=const response = await fetch(`${WALLET_FUND_API_URL}/wallet/fund`, {
+evidence_exact_line_match=False
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

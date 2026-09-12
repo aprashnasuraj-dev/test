@@ -1,0 +1,13 @@
+finding_id=996f12e2-c958-4179-b76f-35da4d5155cb
+severity=Medium
+asset=workers
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/delivery/templates/telegram.ts:51
+source_line='name-transferred': (payload) => {
+evidence_exact_line_match=False
+scanner_evidence=payload)
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

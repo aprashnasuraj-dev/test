@@ -1,0 +1,13 @@
+finding_id=92d88f36-75a0-4672-be18-c23af06216c1
+severity=Medium
+asset=smart-account
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=packages/smart-account/src/providers/rhinestone/session-storage.ts:48
+source_line=const sessions = JSON.parse(data) as RhinestoneStoredSession[]
+evidence_exact_line_match=False
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

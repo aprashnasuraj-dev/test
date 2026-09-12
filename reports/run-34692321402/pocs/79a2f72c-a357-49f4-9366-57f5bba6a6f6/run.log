@@ -1,0 +1,13 @@
+finding_id=79a2f72c-a357-49f4-9366-57f5bba6a6f6
+severity=Medium
+asset=explorer
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/hooks/useSmartSessions.test.ts:57
+source_line=const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}')
+evidence_exact_line_match=False
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

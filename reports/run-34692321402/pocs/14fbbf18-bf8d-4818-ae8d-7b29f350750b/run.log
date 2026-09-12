@@ -1,0 +1,13 @@
+finding_id=14fbbf18-bf8d-4818-ae8d-7b29f350750b
+severity=High
+asset=manager
+stage=sast
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/service/v1SubgraphClient.ts:89
+source_line=const response = await fetch(V1_SUBGRAPH_URL, {
+evidence_exact_line_match=True
+scanner_evidence=const response = await fetch(V1_SUBGRAPH_URL, {
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

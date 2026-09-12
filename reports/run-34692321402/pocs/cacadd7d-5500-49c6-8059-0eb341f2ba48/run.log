@@ -1,0 +1,13 @@
+finding_id=cacadd7d-5500-49c6-8059-0eb341f2ba48
+severity=High
+asset=explorer
+stage=sast
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=R2-04
+escape_reason=severity_escalation
+source=apps/portal/src/worker/avatar.test.ts:163
+source_line=// viem's getMetadataAvatarUri did `fetch(uri).then(r => r.json())` with no
+evidence_exact_line_match=True
+scanner_evidence=// viem's getMetadataAvatarUri did `fetch(uri).then(r => r.json())` with no
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

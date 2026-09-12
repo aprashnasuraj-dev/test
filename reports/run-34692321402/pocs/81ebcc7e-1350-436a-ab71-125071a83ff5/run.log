@@ -1,0 +1,13 @@
+finding_id=81ebcc7e-1350-436a-ab71-125071a83ff5
+severity=High
+asset=workers
+stage=sast
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:430
+source_line=declare function fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;
+evidence_exact_line_match=True
+scanner_evidence=declare function fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

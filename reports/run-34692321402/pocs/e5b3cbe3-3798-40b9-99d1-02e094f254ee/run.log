@@ -1,0 +1,13 @@
+finding_id=e5b3cbe3-3798-40b9-99d1-02e094f254ee
+severity=Medium
+asset=manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/worker-configuration.gen.d.ts:1923
+source_line=send(message: Body, options?: QueueSendOptions): Promise<QueueSendResponse>;
+evidence_exact_line_match=False
+scanner_evidence=Body,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "detect-secrets identified credential-like material.",
+  "evidence": "detector=Secret Keyword",
+  "id": "becdd17c-6226-47cd-a78e-e6043a0a9530",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "api-worker/compose.yaml",
+    "function": null,
+    "line": 10
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "detect-secrets:Secret Keyword",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Secret Keyword"
+}

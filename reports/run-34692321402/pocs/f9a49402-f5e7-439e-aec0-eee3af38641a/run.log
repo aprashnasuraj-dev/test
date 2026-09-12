@@ -1,0 +1,13 @@
+finding_id=f9a49402-f5e7-439e-aec0-eee3af38641a
+severity=Medium
+asset=manager
+stage=rpc
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/worker-configuration.gen.d.ts:13544
+source_line=public sendEvent({ type, payload, }: {
+evidence_exact_line_match=False
+scanner_evidence=payload,
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

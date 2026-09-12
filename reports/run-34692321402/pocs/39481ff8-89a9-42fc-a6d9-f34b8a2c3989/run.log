@@ -1,0 +1,13 @@
+finding_id=39481ff8-89a9-42fc-a6d9-f34b8a2c3989
+severity=Medium
+asset=transaction-manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unscoped-session-authority
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/types/signer.types.ts:39
+source_line=* session key inside `session.owners` then signs Intents prompt-free. The
+evidence_exact_line_match=False
+scanner_evidence=Session key authority appears owner-like; verify action, target, lifetime, and permission scoping.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

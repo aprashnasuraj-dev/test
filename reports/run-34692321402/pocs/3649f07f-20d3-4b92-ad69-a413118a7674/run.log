@@ -1,0 +1,13 @@
+finding_id=3649f07f-20d3-4b92-ad69-a413118a7674
+severity=Medium
+asset=manager
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/utils/backend-client.ts:132
+source_line=: await fetch(resolvedUrl, init)
+evidence_exact_line_match=False
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

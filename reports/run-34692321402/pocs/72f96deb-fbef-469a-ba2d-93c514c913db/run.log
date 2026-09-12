@@ -1,0 +1,13 @@
+finding_id=72f96deb-fbef-469a-ba2d-93c514c913db
+severity=Medium
+asset=workers
+stage=sast
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/delivery/push.ts:111
+source_line=const response = await fetch(subscription.endpoint, payload)
+evidence_exact_line_match=False
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+source_trace_verified=true
+POC_OK offline finding metadata reproduced

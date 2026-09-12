@@ -1,0 +1,26 @@
+{
+  "asset": "explorer",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
+  "evidence": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation.",
+  "id": "c4f1a5c2-0804-4396-8c0e-37e64339fba6",
+  "impact": "",
+  "location": {
+    "column": 25,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/utils/blockExplorer/verifyProxyContract.ts",
+    "function": null,
+    "line": 45
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Network sink receives a variable URL; verify host/IP validation and redirect revalidation."
+}
