@@ -1,0 +1,11 @@
+finding_id=479b3c2d-57cf-4686-bfea-5b0ce0ac2acc
+severity=High
+asset=manager
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=None
+escape_reason=None
+source=apps/manager/worker-configuration.gen.d.ts:1850
+source_line=fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+scanner_evidence=fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

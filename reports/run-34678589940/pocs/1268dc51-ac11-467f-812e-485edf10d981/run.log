@@ -1,0 +1,11 @@
+finding_id=1268dc51-ac11-467f-812e-485edf10d981
+severity=High
+asset=explorer
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=R2-04
+escape_reason=severity_escalation
+source=apps/portal/src/worker/avatar.ts:10
+source_line=* - `getMetadataAvatarUri()` does `fetch(uri).then(r => r.json())` on an
+scanner_evidence=* - `getMetadataAvatarUri()` does `fetch(uri).then(r => r.json())` on an
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

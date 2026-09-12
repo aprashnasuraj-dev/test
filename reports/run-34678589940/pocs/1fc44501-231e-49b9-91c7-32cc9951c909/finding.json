@@ -1,0 +1,26 @@
+{
+  "asset": "manager",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "A variable URL-like value reaches an outbound request and no nearby scheme, host, IP, or allowlist validation was observed.",
+  "evidence": ": await fetch(resolvedUrl, init)",
+  "id": "1fc44501-231e-49b9-91c7-32cc9951c909",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "src/utils/backend-client.ts",
+    "function": null,
+    "line": 132
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "server_side_fetch_of_untrusted_avatar_url",
+  "rule_id": "custom-ssrf:dynamic-url-sink",
+  "severity": "High",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Dynamic URL reaches outbound request without observed destination validation"
+}

@@ -1,0 +1,26 @@
+{
+  "asset": "transaction-manager",
+  "confidence": 0.6,
+  "cwe": null,
+  "description": "A parsed machine transition targets a state not defined in the same states block.",
+  "evidence": "preparing -> error.preparation",
+  "id": "66194e49-d83c-4443-83a1-899f6442f8c7",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "src/machines/transaction.machine.ts",
+    "function": "preparing",
+    "line": 412
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "xstate_dead_transition",
+  "rule_id": "custom-xstate:undefined-target",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "State transition targets undefined state: error.preparation"
+}

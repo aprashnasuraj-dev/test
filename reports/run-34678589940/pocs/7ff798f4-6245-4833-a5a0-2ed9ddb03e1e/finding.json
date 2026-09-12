@@ -1,0 +1,26 @@
+{
+  "asset": "transaction-manager",
+  "confidence": 0.6,
+  "cwe": null,
+  "description": "A parsed machine transition targets a state not defined in the same states block.",
+  "evidence": "pending -> error.timeout",
+  "id": "7ff798f4-6245-4833-a5a0-2ed9ddb03e1e",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "src/machines/transaction.machine.ts",
+    "function": "pending",
+    "line": 519
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "xstate_dead_transition",
+  "rule_id": "custom-xstate:undefined-target",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "State transition targets undefined state: error.timeout"
+}
