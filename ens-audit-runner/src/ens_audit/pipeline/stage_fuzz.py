@@ -45,11 +45,11 @@ class FuzzStage:
                     "--match-test",
                     "invariant",
                     "--fuzz-runs",
-                    "50000",
+                    "100000",
                     "--json",
                 ],
                 cwd=asset.path,
-                timeout_s=1800,
+                timeout_s=2400,
                 accepted_codes={0, 1},
             )
             forge_output.write_text(completed.stdout, encoding="utf-8")
@@ -58,13 +58,13 @@ class FuzzStage:
         if asset.has_solidity and self.tool_runner.available("echidna"):
             config_path = output_dir / "echidna-config.yaml"
             config_path.write_text(
-                "testLimit: 50000\nseqLen: 100\nshrinkLimit: 5000\n",
+                "testLimit: 100000\nseqLen: 200\nshrinkLimit: 10000\n",
                 encoding="utf-8",
             )
             completed = self._tool(
                 ["echidna", str(asset.path), "--config", str(config_path)],
                 cwd=asset.path,
-                timeout_s=1800,
+                timeout_s=2400,
                 accepted_codes={0, 1},
             )
             (output_dir / "echidna.txt").write_text(
