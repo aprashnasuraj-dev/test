@@ -60,7 +60,7 @@ jobs:
         run: mypy --strict src/ens_audit
 
       - name: Bandit high-severity gate
-        run: bandit -r src/ens_audit -ll
+        run: bandit -r src/ -ll
 
       - name: Repository unsafe-call gates
         shell: bash
