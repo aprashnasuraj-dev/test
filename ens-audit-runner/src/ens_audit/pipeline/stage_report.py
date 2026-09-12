@@ -5,8 +5,7 @@ from __future__ import annotations
 import asyncio
 import json
 import re
-from pathlib import Path
-from typing import Iterable
+from collections.abc import Iterable
 
 from ens_audit.config import ACTIVE_UPSTREAM_COMMIT, RESULTS_DIR
 from ens_audit.models import AuditReport, Finding, FindingStatus, Severity
@@ -30,10 +29,21 @@ class ReportStage:
         output_dir = RESULTS_DIR / "report"
         submissions_dir = output_dir / "findings"
         submissions_dir.mkdir(parents=True, exist_ok=True)
-        findings = [finding for asset_findings in results.values() for finding in asset_findings]
+        for stale in submissions_dir.glob("*.md"):
+            if stale.is_file() and not stale.is_symlink():
+                stale.unlink()
 
-        (output_dir / "findings.json").write_text(
-            json.dumps([finding.to_dict() for finding in findings], indent=2, sort_keys=True),
+        findings = [finding for asset_findings in results.values() for finding in asset_findings]
+        completed = tuple(
+            sorted({finding.stage for finding in findings} | {"known_filter", "report"})
+        )
+        json_payload = {
+            "commit": ACTIVE_UPSTREAM_COMMIT,
+            "completed_stages": list(completed),
+            "findings": [finding.to_dict() for finding in findings],
+        }
+        (output_dir / "audit-report.json").write_text(
+            json.dumps(json_payload, indent=2, sort_keys=True),
             encoding="utf-8",
         )
         (output_dir / "audit-report.md").write_text(
@@ -50,9 +60,6 @@ class ReportStage:
                 encoding="utf-8",
             )
 
-        completed = tuple(
-            sorted({finding.stage for finding in findings} | {"known_filter", "report"})
-        )
         return AuditReport(
             commit=ACTIVE_UPSTREAM_COMMIT,
             findings=tuple(findings),
