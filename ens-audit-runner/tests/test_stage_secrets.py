@@ -23,15 +23,17 @@ def _asset(tmp_path: Path) -> Asset:
     return Asset("manager", root, "a" * 40)
 
 
-def _trufflehog_line(*, verified: bool = True) -> str:
+def _trufflehog_line(*, verified: bool = True, filesystem: bool = False) -> str:
     """Return scanner JSON containing a raw value that normalization must discard."""
 
+    source_kind = "Filesystem" if filesystem else "Git"
+    source_payload = {"file": "src/a.ts", "line": 12}
     return json.dumps(
         {
             "DetectorName": "TestToken",
             "Verified": verified,
             "Raw": _TRUFFLE_SECRET,
-            "SourceMetadata": {"Data": {"Git": {"file": "src/a.ts", "line": 12}}},
+            "SourceMetadata": {"Data": {source_kind: source_payload}},
         }
     )
 
@@ -65,6 +67,18 @@ def test_trufflehog_parser_discards_raw_secret(tmp_path: Path) -> None:
     assert findings[0].location.file == "src/a.ts"
     serialized = json.dumps([findings[0].to_dict(), *metadata])
     assert _TRUFFLE_SECRET not in serialized
+
+
+def test_trufflehog_filesystem_metadata_is_normalized(tmp_path: Path) -> None:
+    """Filesystem scans preserve only safe location metadata."""
+
+    [finding], metadata = SecretStage._parse_trufflehog_text(
+        _trufflehog_line(filesystem=True),
+        _asset(tmp_path),
+    )
+    assert finding.location.file == "src/a.ts"
+    assert finding.location.line == 12
+    assert metadata[0]["file"] == "src/a.ts"
 
 
 def test_trufflehog_unverified_is_medium(tmp_path: Path) -> None:
@@ -107,27 +121,38 @@ def test_tool_rejects_nonzero_exit(tmp_path: Path) -> None:
 async def test_run_scans_both_tools_and_persists_only_metadata(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """End-to-end stage orchestration sanitizes both scanner outputs before disk persistence."""
+    """End-to-end stage orchestration scopes both scanners and sanitizes persisted output."""
 
     monkeypatch.setattr(
         "ens_audit.pipeline.stage_secrets.RESULTS_DIR",
         tmp_path / "results",
     )
+    calls: list[tuple[str, tuple[str, ...]]] = []
 
     class _Runner:
         def available(self, _tool: str) -> bool:
             return True
 
         def run(
-            self, tool: str, _args: object, **_kwargs: object
+            self,
+            tool: str,
+            args: list[str],
+            **_kwargs: object,
         ) -> subprocess.CompletedProcess[str]:
-            stdout = _trufflehog_line() if tool == "trufflehog" else _detect_secrets_json()
+            calls.append((tool, tuple(args)))
+            stdout = (
+                _trufflehog_line(filesystem=True)
+                if tool == "trufflehog"
+                else _detect_secrets_json()
+            )
             return subprocess.CompletedProcess([tool], 0, stdout, "")
 
     stage = SecretStage()
     stage.tool_runner = _Runner()  # type: ignore[assignment]
     findings = await stage.run(_asset(tmp_path))
     assert len(findings) == 2
+    assert calls[0] == ("trufflehog", ("filesystem", ".", "--json"))
+    assert calls[1][0] == "detect-secrets"
     sanitized = (tmp_path / "results/manager/secrets/secret-findings-sanitized.json").read_text()
     assert _TRUFFLE_SECRET not in sanitized
     assert _DETECT_SECRET not in sanitized
