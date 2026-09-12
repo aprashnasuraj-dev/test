@@ -105,7 +105,7 @@ def test_reachable_graph_has_no_graph_findings(tmp_path: Path) -> None:
         encoding="utf-8",
     )
 
-    assert XStateAnalyzer()._graph_findings(  # noqa: SLF001
+    assert XStateAnalyzer()._graph_findings(
         Asset("transaction-manager", tmp_path, "d" * 40),
         path,
         path.read_text(encoding="utf-8"),
