@@ -55,7 +55,7 @@
   root_cause: "unvalidated_persisted_state"
   match_patterns:
     - rule_id: "ens-json-parse-without-schema"
-    - content_regex: "(?i)json\.parse.*schema|persisted.*state.*validat"
+    - content_regex: '(?i)json\.parse.*schema|persisted.*state.*validat'
   notes: "Unexpected locally-writable value types can reach code that assumes validated shapes."
 
 - id: "EXP-INPUT-008"
@@ -103,7 +103,7 @@
   root_cause: "request_from_not_bound_to_signer"
   match_patterns:
     - rule_id: "ens-request-from-not-validated"
-    - content_regex: "(?i)request\.from.*signer|from.*connected account"
+    - content_regex: '(?i)request\.from.*signer|from.*connected account'
   notes: "Most wallets reject a mismatch, so exploitability depends on the wallet."
 
 - id: "SEC-TXM-002"
