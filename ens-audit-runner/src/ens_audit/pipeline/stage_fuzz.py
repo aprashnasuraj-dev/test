@@ -51,14 +51,14 @@ class FuzzStage:
             forge_output.write_text(completed.stdout, encoding="utf-8")
             findings.extend(self._parse_forge(forge_output, asset))
 
-        if asset.has_solidity and shutil.which("echidna-test"):
+        if asset.has_solidity and shutil.which("echidna"):
             config_path = output_dir / "echidna-config.yaml"
             config_path.write_text(
                 "testLimit: 50000\nseqLen: 100\nshrinkLimit: 5000\n",
                 encoding="utf-8",
             )
             completed = self._tool(
-                ["echidna-test", str(asset.path), "--config", str(config_path)],
+                ["echidna", str(asset.path), "--config", str(config_path)],
                 cwd=asset.path,
                 timeout_s=1800,
                 accepted_codes={0, 1},
