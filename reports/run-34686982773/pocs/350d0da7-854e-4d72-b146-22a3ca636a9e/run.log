@@ -1,0 +1,11 @@
+finding_id=350d0da7-854e-4d72-b146-22a3ca636a9e
+severity=Medium
+asset=transaction-manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/providers/transactionManager.ts:333
+source_line=if (payload) {
+scanner_evidence=payload)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

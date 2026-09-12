@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "detect-secrets identified credential-like material.",
+  "evidence": "detector=Hex High Entropy String",
+  "id": "6c8abb97-3ddf-4e0c-91bf-0202726a525f",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "api-worker/worker-configuration.gen.d.ts",
+    "function": null,
+    "line": 10881
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "detect-secrets:Hex High Entropy String",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Hex High Entropy String"
+}

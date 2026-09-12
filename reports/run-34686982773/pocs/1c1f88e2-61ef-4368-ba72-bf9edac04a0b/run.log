@@ -1,0 +1,11 @@
+finding_id=1c1f88e2-61ef-4368-ba72-bf9edac04a0b
+severity=Medium
+asset=workers
+rule_id=ui-message-origin-check
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/app/routes/webhook/telegram.ts:14
+source_line=const onMessage = ResultFn(async function* ({
+scanner_evidence=onMessage =
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

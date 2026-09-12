@@ -1,0 +1,11 @@
+finding_id=23934e9f-7c60-416f-a80f-50d9a40da552
+severity=Medium
+asset=explorer
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/worker/ens.test.ts:175
+source_line=fetchSpy.mockResolvedValueOnce(new Response(body))
+scanner_evidence=body)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

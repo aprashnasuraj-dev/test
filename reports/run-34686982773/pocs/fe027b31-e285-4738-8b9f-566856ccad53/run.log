@@ -1,0 +1,11 @@
+finding_id=fe027b31-e285-4738-8b9f-566856ccad53
+severity=High
+asset=workers
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/delivery/push.ts:111
+source_line=const response = await fetch(subscription.endpoint, payload)
+scanner_evidence=const response = await fetch(subscription.endpoint, payload)
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

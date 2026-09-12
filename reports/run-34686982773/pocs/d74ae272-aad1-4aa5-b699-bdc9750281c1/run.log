@@ -1,0 +1,11 @@
+finding_id=d74ae272-aad1-4aa5-b699-bdc9750281c1
+severity=Medium
+asset=workers
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:11914
+source_line=// An (optional) string with the MIME type of the payload, if set by the
+scanner_evidence=payload,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=13499712-d4ba-4b8a-884d-206ec32a2b89
+severity=Medium
+asset=workers
+rule_id=detect-secrets:Basic Auth Credentials
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/.dev.vars.example:2
+source_line=WRANGLER_HYPERDRIVE_LOCAL_CONNECTION_STRING_DB="postgresql://postgres:postgres@localhost/postgres"
+scanner_evidence=detector=Basic Auth Credentials
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=9e3fbad7-b096-4488-8d26-9a176ecf83ce
+severity=Medium
+asset=workers
+rule_id=ui-message-origin-check
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:4669
+source_line=type FunctionMessage = {
+scanner_evidence=onMessage =
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=d387a524-c633-4508-bfda-e1431aa2f0dc
+severity=Medium
+asset=explorer
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/worker/safe-fetch.ts:193
+source_line=* unacceptable Content-Type, oversized body, timeout. Callers treat a missing
+scanner_evidence=body,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

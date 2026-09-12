@@ -1,0 +1,11 @@
+finding_id=835a8975-afc3-4dff-87ee-a601624e8522
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/service/decodeMigrationError.ts:261
+source_line=const message = hexBytesToAscii(payload)
+scanner_evidence=payload)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

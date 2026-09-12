@@ -1,0 +1,11 @@
+finding_id=25997629-3f14-402a-a7c5-8cdd07d04e48
+severity=Medium
+asset=transaction-manager
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/actors/warp-transport.actor.test.ts:55
+source_line=rhinestoneApiKey: 'test-key',
+scanner_evidence=detector=Secret Keyword
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

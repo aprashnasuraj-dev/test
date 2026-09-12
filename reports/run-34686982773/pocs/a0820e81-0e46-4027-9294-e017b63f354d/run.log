@@ -1,0 +1,11 @@
+finding_id=a0820e81-0e46-4027-9294-e017b63f354d
+severity=Medium
+asset=explorer
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/components/table/EventsDataTable/TransactionEvents.tsx:12
+source_line=TableBody,
+scanner_evidence=Body,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,26 @@
+{
+  "asset": "smart-account",
+  "confidence": 0.78,
+  "cwe": "CWE-922",
+  "description": "Authentication or key-like material appears to be persisted in localStorage/sessionStorage, which is readable by script in the origin.",
+  "evidence": "localStorage.setItem('ens-sessions-v7'",
+  "id": "9622728d-1410-4a5e-b5fb-b73858df9906",
+  "impact": "Any same-origin script compromise can expose reusable credentials or wallet material.",
+  "location": {
+    "column": 0,
+    "file": "src/providers/rhinestone/session-storage.test.ts",
+    "function": null,
+    "line": 62
+  },
+  "notes": "",
+  "recommendation": "Prefer HttpOnly/Secure/SameSite cookies for web sessions and avoid persistent browser storage for private key material.",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "sensitive_material_web_storage",
+  "rule_id": "ui-sensitive-web-storage",
+  "severity": "Medium",
+  "stage": "ui",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Sensitive authentication material is written to Web Storage"
+}

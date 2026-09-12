@@ -1,0 +1,11 @@
+finding_id=a5ee9ee4-2fb7-4a59-ab5e-b93d2ebb7e3f
+severity=Medium
+asset=transaction-manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/helpers/hca-intent-funding.test.ts:77
+source_line=chainId: sepolia.id,
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=39f8b1d3-2c70-4cbe-a3b5-91eae3ced101
+severity=High
+asset=manager
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/service/v1SubgraphClient.ts:178
+source_line=const response = await fetch(V1_SUBGRAPH_URL, {
+scanner_evidence=const response = await fetch(V1_SUBGRAPH_URL, {
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=75d86474-2057-4e3c-b232-267c52566c69
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/lib/smart-account/rhinestone.ts:100
+source_line=? (JSON.parse(customRpcUrlsRaw) as Record<number, string>)
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

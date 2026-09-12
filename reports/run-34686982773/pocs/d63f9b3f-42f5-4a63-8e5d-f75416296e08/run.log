@@ -1,0 +1,11 @@
+finding_id=d63f9b3f-42f5-4a63-8e5d-f75416296e08
+severity=Medium
+asset=explorer
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/features/registry/utils/create-subname.helpers.test.ts:36
+source_line=chainId: sepolia.id,
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,49 @@
+configured repository: https://github.com/immunefi-team/audit-comp-ens.git
+configured assets: explorer, manager, smart-account, transaction-manager, workers
+requested stages: sast, symbolic, fuzz, deps, secrets, ui, rpc, diff, known_filter, report
+analysis stages: sast, symbolic, fuzz, deps, secrets, ui, rpc, diff
+strict analyzer failures: False
+complete manager:sast; findings=52
+complete manager:symbolic; findings=0
+complete manager:fuzz; findings=0
+complete manager:deps; findings=0
+complete manager:secrets; findings=28
+complete manager:ui; findings=3
+complete manager:rpc; findings=27
+complete manager:diff; findings=0
+complete explorer:sast; findings=65
+complete explorer:symbolic; findings=0
+complete explorer:fuzz; findings=0
+complete explorer:deps; findings=0
+complete explorer:secrets; findings=25
+complete explorer:ui; findings=1
+complete explorer:rpc; findings=26
+complete explorer:diff; findings=0
+complete workers:sast; findings=25
+complete workers:symbolic; findings=0
+complete workers:fuzz; findings=0
+complete workers:deps; findings=0
+complete workers:secrets; findings=17
+complete workers:ui; findings=4
+complete workers:rpc; findings=10
+complete workers:diff; findings=0
+complete transaction-manager:sast; findings=45
+complete transaction-manager:symbolic; findings=0
+complete transaction-manager:fuzz; findings=0
+complete transaction-manager:deps; findings=0
+complete transaction-manager:secrets; findings=6
+complete transaction-manager:ui; findings=0
+complete transaction-manager:rpc; findings=7
+complete transaction-manager:diff; findings=0
+complete smart-account:sast; findings=13
+complete smart-account:symbolic; findings=0
+complete smart-account:fuzz; findings=0
+complete smart-account:deps; findings=0
+complete smart-account:secrets; findings=1
+complete smart-account:ui; findings=1
+complete smart-account:rpc; findings=0
+complete smart-account:diff; findings=0
+requested-scope coverage complete; assets=5 stages=8 checks=40
+normalized report output: /home/runner/work/test/test/out
+finding count: 356
+finding buckets: new=296 escaped=7 suppressed=53 informational=0 rejected=0

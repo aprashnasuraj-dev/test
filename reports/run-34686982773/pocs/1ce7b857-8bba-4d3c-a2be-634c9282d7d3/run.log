@@ -1,0 +1,11 @@
+finding_id=1ce7b857-8bba-4d3c-a2be-634c9282d7d3
+severity=Medium
+asset=explorer
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/features/reverse-resolution/hooks/useSetL2ReverseName.ts:82
+source_line=`No L2 reverse registrar for chain ${reverseRegistrarChainId} (sepolia)`,
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

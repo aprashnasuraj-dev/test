@@ -1,0 +1,26 @@
+{
+  "asset": "manager",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Parsed persisted JSON should be schema-validated before trusted use.",
+  "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
+  "id": "75d86474-2057-4e3c-b232-267c52566c69",
+  "impact": "",
+  "location": {
+    "column": 8,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/lib/smart-account/rhinestone.ts",
+    "function": null,
+    "line": 100
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Parsed persisted JSON should be schema-validated before trusted use."
+}

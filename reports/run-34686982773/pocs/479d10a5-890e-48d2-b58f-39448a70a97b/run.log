@@ -1,0 +1,11 @@
+finding_id=479d10a5-890e-48d2-b58f-39448a70a97b
+severity=Medium
+asset=workers
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/telegram/README.md:109
+source_line=secretToken: 'your-secret-token',
+scanner_evidence=detector=Secret Keyword
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=767aa410-7a25-4692-aefa-81dbba1e3e45
+severity=Medium
+asset=transaction-manager
+rule_id=detect-secrets:Hex High Entropy String
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/errors/transaction.errors.test.ts:42
+source_line=traceId: '591ce448ed09d2e490181848970c5c2f',
+scanner_evidence=detector=Hex High Entropy String
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

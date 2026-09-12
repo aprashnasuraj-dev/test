@@ -1,0 +1,11 @@
+finding_id=a92bdf91-626a-47e4-86cd-da877a2b3d22
+severity=Medium
+asset=workers
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/telegram/utils.ts:117
+source_line=return JSON.parse(body) as Update
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

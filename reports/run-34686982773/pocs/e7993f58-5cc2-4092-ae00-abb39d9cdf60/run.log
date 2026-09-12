@@ -1,0 +1,11 @@
+finding_id=e7993f58-5cc2-4092-ae00-abb39d9cdf60
+severity=Medium
+asset=workers
+rule_id=ui-message-origin-check
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/telegram/utils.ts:369
+source_line=export const createNotificationMessage = (
+scanner_evidence=onMessage =
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

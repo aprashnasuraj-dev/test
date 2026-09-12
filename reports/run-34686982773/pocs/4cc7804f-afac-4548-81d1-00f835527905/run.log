@@ -1,0 +1,11 @@
+finding_id=4cc7804f-afac-4548-81d1-00f835527905
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/worker-configuration.gen.d.ts:11915
+source_line=// An (optional) string with the MIME type of the payload, if set by the
+scanner_evidence=payload,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

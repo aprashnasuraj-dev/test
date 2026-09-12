@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "detect-secrets identified credential-like material.",
+  "evidence": "detector=Basic Auth Credentials",
+  "id": "13499712-d4ba-4b8a-884d-206ec32a2b89",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "api-worker/.dev.vars.example",
+    "function": null,
+    "line": 2
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "detect-secrets:Basic Auth Credentials",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Basic Auth Credentials"
+}

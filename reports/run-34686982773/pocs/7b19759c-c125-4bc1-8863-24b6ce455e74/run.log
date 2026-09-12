@@ -1,0 +1,11 @@
+finding_id=7b19759c-c125-4bc1-8863-24b6ce455e74
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/service/_fixtures/index.ts:118
+source_line=json: () => Promise.resolve(body),
+scanner_evidence=body)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

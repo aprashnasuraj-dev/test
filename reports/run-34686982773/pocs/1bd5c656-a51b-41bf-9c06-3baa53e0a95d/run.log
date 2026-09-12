@@ -1,0 +1,11 @@
+finding_id=1bd5c656-a51b-41bf-9c06-3baa53e0a95d
+severity=Medium
+asset=workers
+rule_id=detect-secrets:Base64 High Entropy String
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/wrangler.jsonc:106
+source_line="VAPID_PUBLIC_KEY": "BOBjtfgZPtGSJtajVkh4T1Ceswos_aRXYlD4Mq8aXEa4sc_0lkrwKzUhnUIgCt22_cAEYSr0wZlhCiWPsFXyRGs",
+scanner_evidence=detector=Base64 High Entropy String
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

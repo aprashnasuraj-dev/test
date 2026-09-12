@@ -1,0 +1,11 @@
+finding_id=fe860852-c05c-4756-8e78-8d4c64bcd430
+severity=Medium
+asset=transaction-manager
+rule_id=custom-xstate:undefined-target
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/transaction.machine.ts:574
+source_line=target: 'error.reverted',
+scanner_evidence=confirming -> error.reverted
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

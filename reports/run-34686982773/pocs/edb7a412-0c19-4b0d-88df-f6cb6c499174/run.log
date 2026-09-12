@@ -1,0 +1,11 @@
+finding_id=edb7a412-0c19-4b0d-88df-f6cb6c499174
+severity=Medium
+asset=workers
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/v1-names/index.ts:73
+source_line=const response = await fetch(V1_SUBGRAPH_URL, {
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

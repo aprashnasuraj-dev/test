@@ -1,0 +1,11 @@
+finding_id=c1fb641d-2b96-40b2-8ccc-808ee9b06be8
+severity=Medium
+asset=transaction-manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/services/run-telemetry.service.test.ts:272
+source_line=expect(payload).not.toBeNull()
+scanner_evidence=payload)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

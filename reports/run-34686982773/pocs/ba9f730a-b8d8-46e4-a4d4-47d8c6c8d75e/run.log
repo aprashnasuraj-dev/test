@@ -1,0 +1,11 @@
+finding_id=ba9f730a-b8d8-46e4-a4d4-47d8c6c8d75e
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/rhinestone-browser-debug/src/App.tsx:255
+source_line=hint: 'MetaMask signs the enable payload, then installs the session.',
+scanner_evidence=payload,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

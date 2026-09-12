@@ -1,0 +1,11 @@
+finding_id=56f4ec7c-122d-4f9b-b844-e2d04f913228
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-ssrf-untrusted-url
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/profile/service/profileImageUpload.ts:150
+source_line=const response = await fetch(endpoint, {
+scanner_evidence=Network sink receives a variable URL; verify host/IP validation and redirect revalidation.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

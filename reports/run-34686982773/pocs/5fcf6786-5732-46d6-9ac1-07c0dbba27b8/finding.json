@@ -1,0 +1,26 @@
+{
+  "asset": "smart-account",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "detect-secrets identified credential-like material.",
+  "evidence": "detector=Secret Keyword",
+  "id": "5fcf6786-5732-46d6-9ac1-07c0dbba27b8",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "src/providers/rhinestone/initialize-account.test.ts",
+    "function": null,
+    "line": 473
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "detect-secrets:Secret Keyword",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Secret Keyword"
+}

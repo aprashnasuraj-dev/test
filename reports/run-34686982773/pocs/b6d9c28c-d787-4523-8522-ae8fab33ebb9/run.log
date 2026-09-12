@@ -1,0 +1,11 @@
+finding_id=b6d9c28c-d787-4523-8522-ae8fab33ebb9
+severity=Medium
+asset=transaction-manager
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/registration/registration.actors.test.ts:41
+source_line=rhinestoneApiKey: 'test-key',
+scanner_evidence=detector=Secret Keyword
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

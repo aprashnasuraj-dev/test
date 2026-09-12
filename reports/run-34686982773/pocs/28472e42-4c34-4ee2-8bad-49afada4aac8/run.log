@@ -1,0 +1,11 @@
+finding_id=28472e42-4c34-4ee2-8bad-49afada4aac8
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/worker-configuration.gen.d.ts:13544
+source_line=public sendEvent({ type, payload, }: {
+scanner_evidence=payload,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

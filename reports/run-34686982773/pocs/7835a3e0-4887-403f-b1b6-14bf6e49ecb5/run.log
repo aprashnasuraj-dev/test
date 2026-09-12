@@ -1,0 +1,11 @@
+finding_id=7835a3e0-4887-403f-b1b6-14bf6e49ecb5
+severity=Medium
+asset=transaction-manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-eip712-domain-missing-binding
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:315
+source_line=expect(typedData.domain.version).toBe('2')
+scanner_evidence=EIP-712 domain construction requires review for chainId and verifyingContract binding.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

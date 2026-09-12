@@ -1,0 +1,11 @@
+finding_id=720349ab-fa0b-4c89-8d8f-653a7a6e1ebb
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/register-v2/state/registrationUi.machine.ts:120
+source_line=* Standalone-HCA session-enable payload, pre-resolved by the caller
+scanner_evidence=payload,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=6b21cf45-8279-48f8-ab59-2ef79d6ea128
+severity=Medium
+asset=workers
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/app/routes/names/index.test.ts:55
+source_line=POSTHOG_PERSONAL_API_KEY: 'secret',
+scanner_evidence=detector=Secret Keyword
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=90a5763f-2eac-41c1-9813-c456fbde704b
+severity=Medium
+asset=transaction-manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/helpers/transaction-persistence.ts:250
+source_line=? JSON.parse(data, (_key, value) =>
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

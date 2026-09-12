@@ -1,0 +1,11 @@
+finding_id=d2a6d056-620a-4373-a97f-4896cbaaeccb
+severity=Medium
+asset=transaction-manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-request-from-not-validated
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/actors/eoa-transport.actor.ts:40
+source_line=if (!walletAddress || !isAddressEqual(walletAddress, eoaRequest.from)) {
+scanner_evidence=request.from reaches a signing/account path; verify equality with the connected signer.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

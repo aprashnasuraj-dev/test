@@ -1,0 +1,11 @@
+finding_id=1dbc47cf-d6d1-4b3d-bebb-33ef1e67149d
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/commemorative-nft/eligibility.ts:118
+source_line=const parsed = v.safeParse(payloadSchema, params.payload)
+scanner_evidence=payload)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

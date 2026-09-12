@@ -1,0 +1,11 @@
+finding_id=70c332d5-b2c8-4198-9b13-458fedf01430
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/notifications/notifications/name-transferred.tsx:6
+source_line=payload,
+scanner_evidence=payload,
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

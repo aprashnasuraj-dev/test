@@ -1,0 +1,26 @@
+{
+  "asset": "explorer",
+  "confidence": 0.55,
+  "cwe": "CWE-20",
+  "description": "RPC-capable code uses a raw request/body payload at a call boundary. This requires method and parameter schema validation.",
+  "evidence": "Body,",
+  "id": "f4b0a737-f969-4e89-9765-3e665667fd7a",
+  "impact": "Malformed or over-privileged JSON-RPC data may reach privileged provider operations if validation is incomplete.",
+  "location": {
+    "column": 0,
+    "file": "src/routes/$name/token.tsx",
+    "function": null,
+    "line": 28
+  },
+  "notes": "",
+  "recommendation": "Validate JSON-RPC version, method allowlist, parameter count/types/ranges, chain context, and request size before dispatch.",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "rpc_payload_boundary_requires_schema",
+  "rule_id": "rpc-unbounded-jsonrpc-body",
+  "severity": "Medium",
+  "stage": "rpc",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Raw request payload reaches RPC-capable code"
+}

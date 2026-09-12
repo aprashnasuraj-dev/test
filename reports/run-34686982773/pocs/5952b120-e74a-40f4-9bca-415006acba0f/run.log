@@ -1,0 +1,11 @@
+finding_id=5952b120-e74a-40f4-9bca-415006acba0f
+severity=Medium
+asset=workers
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/delivery/templates/telegram.ts:28
+source_line='name-expiry': (payload) => {
+scanner_evidence=payload)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=da601c70-018e-4996-b9ec-62226aea52a7
+severity=Medium
+asset=workers
+rule_id=detect-secrets:Hex High Entropy String
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:11059
+source_line=* @example "acf77cf37b4156a2708e34c4eb755f9b5dbbe5ebb55adfec8f11493438d19e6ad3f157f81fa3b98278453d5652b0c1fd1d71e5695ae4d709803a4d3f39de9dea"
+scanner_evidence=detector=Hex High Entropy String
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

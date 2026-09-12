@@ -1,0 +1,11 @@
+finding_id=d1c4e268-3495-4ccd-baf4-5abc5f1fe2d8
+severity=Medium
+asset=workers
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:13543
+source_line=public sendEvent({ type, payload, }: {
+scanner_evidence=payload,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

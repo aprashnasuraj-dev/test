@@ -1,0 +1,11 @@
+finding_id=5896e1b3-b32d-4924-bf3b-5a58e35e7e36
+severity=Medium
+asset=explorer
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/features/roles/components/RoleHistoryTable.tsx:16
+source_line=TableBody,
+scanner_evidence=Body,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

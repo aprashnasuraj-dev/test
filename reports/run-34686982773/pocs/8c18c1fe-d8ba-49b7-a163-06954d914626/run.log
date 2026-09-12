@@ -1,0 +1,11 @@
+finding_id=8c18c1fe-d8ba-49b7-a163-06954d914626
+severity=Medium
+asset=explorer
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/worker/ens.test.ts:31
+source_line=return new Response(body, { headers: { 'content-type': contentType } })
+scanner_evidence=body,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

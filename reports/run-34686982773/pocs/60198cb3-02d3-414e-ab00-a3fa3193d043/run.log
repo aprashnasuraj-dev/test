@@ -1,0 +1,11 @@
+finding_id=60198cb3-02d3-414e-ab00-a3fa3193d043
+severity=Medium
+asset=transaction-manager
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/TRANSACTION_MANAGER_SPEC.md:618
+source_line=rhinestoneApiKey: 'your-api-key'
+scanner_evidence=detector=Secret Keyword
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

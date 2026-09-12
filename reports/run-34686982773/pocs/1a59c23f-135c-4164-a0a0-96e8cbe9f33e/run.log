@@ -1,0 +1,11 @@
+finding_id=1a59c23f-135c-4164-a0a0-96e8cbe9f33e
+severity=Medium
+asset=workers
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/expiry-discovery/index.test.ts:19
+source_line=if (type === 'json') return JSON.parse(raw)
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

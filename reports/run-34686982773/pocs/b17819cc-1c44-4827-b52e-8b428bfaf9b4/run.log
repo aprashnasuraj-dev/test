@@ -1,0 +1,11 @@
+finding_id=b17819cc-1c44-4827-b52e-8b428bfaf9b4
+severity=Medium
+asset=transaction-manager
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/helpers/getSmartAccountAddress.test.ts:23
+source_line=rhinestoneApiKey: 'test-key',
+scanner_evidence=detector=Secret Keyword
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

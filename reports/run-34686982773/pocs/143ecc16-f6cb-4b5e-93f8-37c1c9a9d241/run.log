@@ -1,0 +1,11 @@
+finding_id=143ecc16-f6cb-4b5e-93f8-37c1c9a9d241
+severity=Medium
+asset=explorer
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/worker-configuration.d.ts:1914
+source_line=send(message: Body, options?: QueueSendOptions): Promise<QueueSendResponse>;
+scanner_evidence=Body,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

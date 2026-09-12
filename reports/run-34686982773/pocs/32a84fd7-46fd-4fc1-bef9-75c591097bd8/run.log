@@ -1,0 +1,11 @@
+finding_id=32a84fd7-46fd-4fc1-bef9-75c591097bd8
+severity=Medium
+asset=workers
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/notifications/email-verification-rate-limit.test.ts:83
+source_line=expect(JSON.parse(raw!)).toMatchObject({ count: 1 })
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

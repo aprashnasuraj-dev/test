@@ -1,0 +1,11 @@
+finding_id=3840d05c-f9f1-4412-bef8-3ca0d72250eb
+severity=Medium
+asset=explorer
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/features/roles/hooks/useNameRoleAccounts.ts:100
+source_line=const data = JSON.parse(event.data) as EACRolesChangedPayload
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

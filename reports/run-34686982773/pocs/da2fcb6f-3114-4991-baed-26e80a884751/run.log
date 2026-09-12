@@ -1,0 +1,11 @@
+finding_id=da2fcb6f-3114-4991-baed-26e80a884751
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-local-revoke-without-chain-revoke
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/lib/wallet/WalletLifecycle.tsx:20
+source_line=const clearAppLocalStorage = () => {
+scanner_evidence=Local session clearing may not revoke on-chain authority.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

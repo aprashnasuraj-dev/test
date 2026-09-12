@@ -1,0 +1,11 @@
+finding_id=2de44e50-a3e5-404a-b5f3-d211422ba9f1
+severity=Medium
+asset=workers
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/posthog/name-search-stats.test.ts:26
+source_line=POSTHOG_PERSONAL_API_KEY: 'secret',
+scanner_evidence=detector=Secret Keyword
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

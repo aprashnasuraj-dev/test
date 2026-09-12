@@ -1,0 +1,11 @@
+finding_id=d0befb7a-4aa6-4730-8a72-1123443e88a2
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/migration/service/decodeMigrationError.ts:246
+source_line=if (!payload) return []
+scanner_evidence=payload)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

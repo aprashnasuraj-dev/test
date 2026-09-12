@@ -1,0 +1,11 @@
+finding_id=52470c3c-32c5-42a1-9dc5-f02efd923242
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/worker-configuration.gen.d.ts:1662
+source_line=/* [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/body) */
+scanner_evidence=body)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

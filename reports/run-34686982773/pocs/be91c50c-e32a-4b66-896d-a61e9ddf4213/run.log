@@ -1,0 +1,11 @@
+finding_id=be91c50c-e32a-4b66-896d-a61e9ddf4213
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/utils/xstate-store.test.ts:93
+source_line=expect(JSON.parse(stored)).toEqual({ count: 1 })
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=7b0cb984-b9b5-401f-980b-e7cf340d78d6
+severity=Medium
+asset=transaction-manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-eip712-domain-missing-binding
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/registration/registration.hca.actors.ts:641
+source_line=// reverts), and its EIP-712 domain version is "2" — so the fallback MUST
+scanner_evidence=EIP-712 domain construction requires review for chainId and verifyingContract binding.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

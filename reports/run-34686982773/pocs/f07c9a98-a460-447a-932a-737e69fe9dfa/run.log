@@ -1,0 +1,11 @@
+finding_id=f07c9a98-a460-447a-932a-737e69fe9dfa
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/lib/smart-account/SmartAccountContext.tsx:838
+source_line=getSessionEnablePayload,
+scanner_evidence=Payload,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=8f3a1a60-7cf0-40c4-b668-e1acb4887e73
+severity=High
+asset=explorer
+rule_id=rpc-dynamic-fetch-url
+matched_known_id=None
+escape_reason=None
+source=apps/portal/worker-configuration.d.ts:306
+source_line=fetch(input: RequestInfo | URL, init?: RequestInit<RequestInitCfProperties>): Promise<Response>;
+scanner_evidence=fetch(input
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

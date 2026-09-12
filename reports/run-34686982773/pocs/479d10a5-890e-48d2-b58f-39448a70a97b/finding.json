@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "detect-secrets identified credential-like material.",
+  "evidence": "detector=Secret Keyword",
+  "id": "479d10a5-890e-48d2-b58f-39448a70a97b",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "api-worker/src/services/telegram/README.md",
+    "function": null,
+    "line": 109
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "detect-secrets:Secret Keyword",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Secret Keyword"
+}

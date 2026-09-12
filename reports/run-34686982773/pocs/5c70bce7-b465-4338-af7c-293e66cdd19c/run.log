@@ -1,0 +1,11 @@
+finding_id=5c70bce7-b465-4338-af7c-293e66cdd19c
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/lib/smart-account/SmartAccountContext.tsx:7
+source_line=type HcaSessionEnablePayload,
+scanner_evidence=Payload,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

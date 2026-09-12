@@ -1,0 +1,26 @@
+{
+  "asset": "explorer",
+  "confidence": 0.75,
+  "cwe": "CWE-918",
+  "description": "A request/input-derived variable appears to select an outbound network destination.",
+  "evidence": "fetch(input",
+  "id": "9ad8e48f-5c77-421b-8ea5-8de33a876c07",
+  "impact": "An attacker may redirect a server-side RPC proxy toward unintended hosts or metadata/internal services.",
+  "location": {
+    "column": 0,
+    "file": "worker-configuration.d.ts",
+    "function": null,
+    "line": 1841
+  },
+  "notes": "",
+  "recommendation": "Resolve upstreams from a fixed allowlist and reject arbitrary schemes, hosts, ports, redirects, and credentials.",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "request_controlled_rpc_upstream",
+  "rule_id": "rpc-dynamic-fetch-url",
+  "severity": "High",
+  "stage": "rpc",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Request-derived value is used as an outbound fetch target"
+}

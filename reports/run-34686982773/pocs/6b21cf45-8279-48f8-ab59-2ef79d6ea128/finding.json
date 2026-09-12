@@ -1,0 +1,26 @@
+{
+  "asset": "workers",
+  "confidence": 0.7,
+  "cwe": null,
+  "description": "detect-secrets identified credential-like material.",
+  "evidence": "detector=Secret Keyword",
+  "id": "6b21cf45-8279-48f8-ab59-2ef79d6ea128",
+  "impact": "",
+  "location": {
+    "column": 0,
+    "file": "api-worker/src/app/routes/names/index.test.ts",
+    "function": null,
+    "line": 55
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "committed_credentials",
+  "rule_id": "detect-secrets:Secret Keyword",
+  "severity": "Medium",
+  "stage": "secrets",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Potential secret detected: Secret Keyword"
+}

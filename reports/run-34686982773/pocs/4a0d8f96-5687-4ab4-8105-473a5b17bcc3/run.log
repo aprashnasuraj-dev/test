@@ -1,0 +1,11 @@
+finding_id=4a0d8f96-5687-4ab4-8105-473a5b17bcc3
+severity=Medium
+asset=manager
+rule_id=ui-message-origin-check
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/notifications/utils/telegram/auth.ts:117
+source_line=window.addEventListener('message', onMessage)
+scanner_evidence=addEventListener('message'
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

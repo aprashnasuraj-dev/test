@@ -1,0 +1,11 @@
+finding_id=20eeb409-fbe6-4aab-9e5b-fd04880f77ab
+severity=High
+asset=workers
+rule_id=rpc-dynamic-fetch-url
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:524
+source_line=fetch(request: Request): Response | Promise<Response>;
+scanner_evidence=fetch(request
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

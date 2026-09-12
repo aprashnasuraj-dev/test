@@ -1,0 +1,11 @@
+finding_id=96d6bd8e-b9d1-451c-a55a-a89d9896c3d5
+severity=Medium
+asset=explorer
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/features/forward-resolution/components/AddressResolution/AddressResolutionTable.tsx:11
+source_line=TableBody,
+scanner_evidence=Body,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

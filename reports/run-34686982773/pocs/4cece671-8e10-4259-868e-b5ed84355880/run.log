@@ -1,0 +1,11 @@
+finding_id=4cece671-8e10-4259-868e-b5ed84355880
+severity=Medium
+asset=workers
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/compose.yaml:10
+source_line=POSTGRES_PASSWORD: postgres
+scanner_evidence=detector=Secret Keyword
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

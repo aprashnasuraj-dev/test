@@ -1,0 +1,11 @@
+finding_id=5a3e1f2c-9645-4dea-9477-9a44f20438f2
+severity=Medium
+asset=transaction-manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-request-from-not-validated
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/actors/eoa-transport.actor.ts:46
+source_line=new SignerAddressMismatchError(eoaRequest.from, walletAddress),
+scanner_evidence=request.from reaches a signing/account path; verify equality with the connected signer.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,11 @@
+finding_id=51c93a86-5f5c-42cb-ab13-d5c855be5c28
+severity=Medium
+asset=explorer
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/worker/safe-fetch.ts:111
+source_line=if (!res.body) return null
+scanner_evidence=body)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

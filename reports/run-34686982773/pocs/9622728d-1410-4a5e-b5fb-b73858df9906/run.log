@@ -1,0 +1,11 @@
+finding_id=9622728d-1410-4a5e-b5fb-b73858df9906
+severity=Medium
+asset=smart-account
+rule_id=ui-sensitive-web-storage
+matched_known_id=None
+escape_reason=None
+source=packages/smart-account/src/providers/rhinestone/session-storage.test.ts:62
+source_line=localStorage.setItem('ens-sessions-v7', JSON.stringify([makeSession()]))
+scanner_evidence=localStorage.setItem('ens-sessions-v7'
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

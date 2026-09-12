@@ -1,0 +1,11 @@
+finding_id=ac2818c6-e9c1-438a-b2d2-48c53119d8aa
+severity=Medium
+asset=workers
+rule_id=trufflehog:Postgres
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/compose.yaml:24
+source_line=- PG_CONNECTION_STRING=postgres://postgres:postgres@postgres:5432/postgres
+scanner_evidence=detector=Postgres; verified=False
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

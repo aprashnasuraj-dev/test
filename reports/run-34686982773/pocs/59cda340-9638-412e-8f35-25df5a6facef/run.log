@@ -1,0 +1,11 @@
+finding_id=59cda340-9638-412e-8f35-25df5a6facef
+severity=Medium
+asset=explorer
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/portal/src/routes/resolver/$address/aliases.tsx:30
+source_line=TableBody,
+scanner_evidence=Body,
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

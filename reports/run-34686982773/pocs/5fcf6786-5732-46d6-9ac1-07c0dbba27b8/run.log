@@ -1,0 +1,11 @@
+finding_id=5fcf6786-5732-46d6-9ac1-07c0dbba27b8
+severity=Medium
+asset=smart-account
+rule_id=detect-secrets:Secret Keyword
+matched_known_id=None
+escape_reason=None
+source=packages/smart-account/src/providers/rhinestone/initialize-account.test.ts:473
+source_line=rhinestoneApiKey: 'test-api-key',
+scanner_evidence=detector=Secret Keyword
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

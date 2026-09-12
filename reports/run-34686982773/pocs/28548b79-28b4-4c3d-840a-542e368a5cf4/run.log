@@ -1,0 +1,11 @@
+finding_id=28548b79-28b4-4c3d-840a-542e368a5cf4
+severity=Medium
+asset=workers
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/delivery/templates/telegram.ts:51
+source_line='name-transferred': (payload) => {
+scanner_evidence=payload)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

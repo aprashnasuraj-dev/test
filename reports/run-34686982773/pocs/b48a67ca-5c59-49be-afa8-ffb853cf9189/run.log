@@ -1,0 +1,11 @@
+finding_id=b48a67ca-5c59-49be-afa8-ffb853cf9189
+severity=Medium
+asset=manager
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/lib/posthog/provider.tsx:61
+source_line=(payload) => {
+scanner_evidence=payload)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

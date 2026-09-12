@@ -1,0 +1,11 @@
+finding_id=ec124452-b0d8-4240-b425-e3e0db0095c9
+severity=Medium
+asset=workers
+rule_id=rpc-unbounded-jsonrpc-body
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/worker-configuration.gen.d.ts:1681
+source_line=/* [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/body) */
+scanner_evidence=body)
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

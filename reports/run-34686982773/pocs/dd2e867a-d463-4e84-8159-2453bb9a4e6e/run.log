@@ -1,0 +1,11 @@
+finding_id=dd2e867a-d463-4e84-8159-2453bb9a4e6e
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/profile/utils/transformRecords.ts:54
+source_line=raw = JSON.parse(rawValue)
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

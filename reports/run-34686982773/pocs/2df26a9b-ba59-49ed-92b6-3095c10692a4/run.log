@@ -1,0 +1,11 @@
+finding_id=2df26a9b-ba59-49ed-92b6-3095c10692a4
+severity=High
+asset=manager
+rule_id=custom-ssrf:dynamic-url-sink
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/utils/backend-client.ts:131
+source_line=? await fetch(new Request(resolvedUrl, input), init)
+scanner_evidence=? await fetch(new Request(resolvedUrl, input), init)
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

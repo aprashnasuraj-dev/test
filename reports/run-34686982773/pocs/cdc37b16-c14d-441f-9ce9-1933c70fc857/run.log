@@ -1,0 +1,11 @@
+finding_id=cdc37b16-c14d-441f-9ce9-1933c70fc857
+severity=Medium
+asset=workers
+rule_id=detect-secrets:Hex High Entropy String
+matched_known_id=None
+escape_reason=None
+source=workers/api-worker/src/services/notifications/helpers.test.ts:55
+source_line='c1858014ce0f52b202f1c8e38d6f0220c7de57d0ee157b8da1d9c08ca4a253a6',
+scanner_evidence=detector=Hex High Entropy String
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

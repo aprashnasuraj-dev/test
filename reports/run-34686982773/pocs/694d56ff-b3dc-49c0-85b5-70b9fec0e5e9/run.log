@@ -1,0 +1,11 @@
+finding_id=694d56ff-b3dc-49c0-85b5-70b9fec0e5e9
+severity=High
+asset=manager
+rule_id=rpc-dynamic-fetch-url
+matched_known_id=None
+escape_reason=None
+source=apps/manager/src/features/profile/service/profileImageUpload.ts:150
+source_line=const response = await fetch(endpoint, {
+scanner_evidence=fetch(endpoint
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced
