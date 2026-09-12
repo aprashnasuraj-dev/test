@@ -1,0 +1,55 @@
+rules:
+  - id: ens-bearer-configurable-base-url
+    message: Bearer authorization is used near a configurable base URL; verify destination binding.
+    severity: ERROR
+    languages: [typescript, javascript]
+    metadata:
+      root_cause: bearer_token_cross_origin
+    patterns:
+      - pattern-regex: '(?i)(baseURL|baseUrl|apiUrl|apiURL).{0,500}(Authorization|Bearer)|(Authorization|Bearer).{0,500}(baseURL|baseUrl|apiUrl|apiURL)'
+
+  - id: ens-unvalidated-open-url
+    message: URL passed to open/postMessage requires scheme and origin validation.
+    severity: WARNING
+    languages: [typescript, javascript]
+    metadata:
+      root_cause: unvalidated_navigation_url
+    pattern-either:
+      - pattern: open($URL, ...)
+      - pattern: window.open($URL, ...)
+      - pattern: clients.openWindow($URL)
+      - pattern: $TARGET.postMessage($DATA, $ORIGIN)
+
+  - id: ens-json-parse-without-schema
+    message: Parsed persisted JSON should be schema-validated before trusted use.
+    severity: WARNING
+    languages: [typescript, javascript]
+    metadata:
+      root_cause: unvalidated_persisted_state
+    pattern-either:
+      - pattern: JSON.parse($VALUE)
+      - pattern: JSON.parse($VALUE, ...)
+
+  - id: ens-eip712-domain-missing-binding
+    message: EIP-712 domain construction requires review for chainId and verifyingContract binding.
+    severity: INFO
+    languages: [typescript, javascript]
+    metadata:
+      root_cause: underspecified_eip712_domain
+    pattern-regex: '(?i)(eip.?712|typedData|signTypedData).{0,800}(domain|name|version)'
+
+  - id: ens-chainid-not-validated
+    message: Chain selection or fallback requires comparison with the connected wallet chain.
+    severity: ERROR
+    languages: [typescript, javascript]
+    metadata:
+      root_cause: chain_id_not_bound_to_wallet
+    pattern-regex: '(?i)(chainId|chain\.id).{0,250}(sepolia|fallback|default)|(?:sepolia|fallback|default).{0,250}(chainId|chain\.id)'
+
+  - id: ens-request-from-not-validated
+    message: request.from reaches a signing/account path; verify equality with the connected signer.
+    severity: ERROR
+    languages: [typescript, javascript]
+    metadata:
+      root_cause: request_from_not_bound_to_signer
+    pattern-regex: '(?i)request\.from.{0,400}(sign|account|wallet)|(sign|account|wallet).{0,400}request\.from'
