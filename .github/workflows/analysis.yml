@@ -13,16 +13,21 @@ on:
         description: 'Repository URL to analyze'
         required: true
         default: 'https://github.com/immunefi-team/audit-comp-ens.git'
-      assets:
-        description: 'Configured audit assets'
-        required: true
-        default: 'manager,portal,workers,transaction-manager,smart-account'
       stages:
-        description: 'Implemented analysis stages to execute'
+        description: 'Pipeline stages to request'
         required: true
-        default: 'sast,symbolic,fuzz,deps,secrets,known-filter,report'
+        default: 'sast,symbolic,fuzz,deps,secrets,ui,rpc,diff,known-filter,report'
+      assets:
+        description: 'Configured audit assets or all'
+        required: true
+        default: 'all'
+      publish:
+        description: 'Persist validated staging output to the reports branch'
+        type: boolean
+        required: true
+        default: true
       final_audit:
-        description: 'Install and require the full external analyzer toolchain; fail closed on analyzer errors'
+        description: 'Install and require the full external analyzer toolchain'
         type: boolean
         required: true
         default: false
@@ -38,7 +43,7 @@ on:
         default: false
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: ens-analysis-${{ github.ref }}
@@ -47,6 +52,7 @@ concurrency:
 env:
   PYTHONUNBUFFERED: '1'
   QT_QPA_PLATFORM: offscreen
+  DEFAULT_STAGES: 'sast,symbolic,fuzz,deps,secrets,ui,rpc,diff,known-filter,report'
 
 jobs:
   analysis:
@@ -56,6 +62,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Setup Python 3.12
         uses: actions/setup-python@v7
@@ -64,14 +72,14 @@ jobs:
           cache: pip
           cache-dependency-path: ens-audit-runner/requirements.txt
 
-      - name: Install Qt runtime dependency
+      - name: Install runtime requirements
         run: |
+          set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y libegl1
-
-      - name: Install runner
-        working-directory: ens-audit-runner
-        run: python -m pip install -e '.[dev]'
+          sudo apt-get install -y \
+            libegl1 ca-certificates curl jq unzip tar gzip build-essential z3 git
+          python -m pip install --upgrade pip
+          python -m pip install -e './ens-audit-runner[dev]'
 
       - name: Verify engine wiring
         working-directory: ens-audit-runner
@@ -82,15 +90,19 @@ jobs:
             tests/test_stage_fuzz.py \
             tests/test_stage_deps.py \
             tests/test_stage_secrets.py \
+            tests/test_stage_report.py \
             tests/test_pipeline.py
 
       - name: Prepare output
         run: mkdir -p "$GITHUB_WORKSPACE/out/runs"
 
-      - name: Validate final-audit runner glue
+      - name: Validate pipeline scripts
         run: |
           bash -n .github/scripts/install-final-audit-tools.sh
           bash -n .github/scripts/verify-final-audit-tools.sh
+          bash -n .github/scripts/generate-pocs.sh
+          bash -n .github/scripts/stage-output.sh
+          bash -n .github/scripts/verify-submissions.sh
 
       - name: Install final-audit analyzer toolchain
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.final_audit }}
@@ -108,7 +120,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: bash .github/scripts/verify-final-audit-tools.sh
 
-      - name: Snapshot lightweight runner toolchain
+      - name: Snapshot available analyzer toolchain
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.final_audit != true }}
         env:
           STRICT_TOOLCHAIN: '0'
@@ -117,9 +129,9 @@ jobs:
 
       - name: Run analysis
         env:
-          TARGET_REPO: ${{ github.event.inputs.repo || 'https://github.com/immunefi-team/audit-comp-ens.git' }}
-          TARGET_ASSETS: ${{ github.event.inputs.assets || 'manager,portal,workers,transaction-manager,smart-account' }}
-          TARGET_STAGES: ${{ github.event.inputs.stages || 'sast,symbolic,fuzz,deps,secrets,known-filter,report' }}
+          TARGET_REPO: ${{ inputs.repo || 'https://github.com/immunefi-team/audit-comp-ens.git' }}
+          TARGET_ASSETS: ${{ inputs.assets || 'all' }}
+          TARGET_STAGES: ${{ inputs.stages || env.DEFAULT_STAGES }}
           AUDIT_STRICT: ${{ github.event_name == 'workflow_dispatch' && inputs.final_audit }}
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         working-directory: ens-audit-runner
@@ -147,13 +159,15 @@ jobs:
                   f"workflow repo mismatch: requested={requested_repo!r} configured={UPSTREAM_REPOSITORY!r}"
               )
 
-          aliases = {"portal": "explorer"}
-          requested_assets = {
-              aliases.get(value.strip(), value.strip())
-              for value in os.environ["TARGET_ASSETS"].split(",")
-              if value.strip()
-          }
           configured_assets = {spec.name for spec in ASSETS}
+          asset_tokens = {
+              value.strip() for value in os.environ["TARGET_ASSETS"].split(",") if value.strip()
+          }
+          if asset_tokens == {"all"}:
+              requested_assets = configured_assets
+          else:
+              aliases = {"portal": "explorer"}
+              requested_assets = {aliases.get(value, value) for value in asset_tokens}
           if requested_assets != configured_assets:
               raise SystemExit(
                   "current runner executes its fixed configured asset set; "
@@ -168,7 +182,9 @@ jobs:
           available = set(PipelineOrchestrator.ANALYSIS_STAGES) | {"known_filter", "report"}
           unavailable = [stage for stage in requested_stages if stage not in available]
           for stage in unavailable:
-              print(f"::warning::stage '{stage}' is not implemented by the current runner; skipping")
+              print(
+                  f"::warning::stage '{stage}' has no analyzer implementation in the current runner; skipping"
+              )
 
           selected = [
               stage for stage in PipelineOrchestrator.ANALYSIS_STAGES if stage in requested_stages
@@ -179,6 +195,7 @@ jobs:
           strict = os.environ.get("AUDIT_STRICT", "false").lower() in {"1", "true", "yes"}
           print(f"configured repository: {UPSTREAM_REPOSITORY}")
           print(f"configured assets: {', '.join(sorted(configured_assets))}")
+          print(f"requested stages: {', '.join(requested_stages)}")
           print(f"analysis stages: {', '.join(selected)}")
           print(f"strict analyzer failures: {strict}")
 
@@ -281,13 +298,15 @@ jobs:
         if: success()
         run: bash .github/scripts/generate-pocs.sh
 
-      - name: Verify submission artifacts
-        if: always()
-        run: bash .github/scripts/verify-submissions.sh
-
       - name: Stage output
         if: always()
         run: bash .github/scripts/stage-output.sh
+
+      - name: Validate staged submission format
+        if: success()
+        env:
+          OUT_DIR: ${{ github.workspace }}/staging
+        run: bash .github/scripts/verify-submissions.sh
 
       - name: Upload artifact
         if: always()
@@ -295,6 +314,7 @@ jobs:
         with:
           name: ens-audit-submissions-${{ github.run_id }}
           path: |
+            staging/INDEX.md
             staging/README.md
             staging/findings/
             staging/runs/
@@ -305,3 +325,94 @@ jobs:
             staging/insights/
           if-no-files-found: error
           retention-days: 14
+
+      - name: Publish reports branch
+        if: ${{ success() && (github.event_name != 'workflow_dispatch' || inputs.publish) }}
+        env:
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          TMPDIR="$(mktemp -d)"
+          REPORT_TREE="$TMPDIR/reports-worktree"
+          if git ls-remote --exit-code --heads origin reports >/dev/null 2>&1; then
+            git fetch origin reports:refs/remotes/origin/reports
+            git worktree add -B reports "$REPORT_TREE" refs/remotes/origin/reports
+          else
+            git worktree add -B reports "$REPORT_TREE" HEAD
+          fi
+
+          DEST="$REPORT_TREE/reports/run-${RUN_ID}"
+          mkdir -p "$DEST"
+          cp -a "$GITHUB_WORKSPACE/staging/." "$DEST/"
+
+          export DEST
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          dest = Path(os.environ["DEST"])
+          repo = os.environ["REPO"]
+          run_id = os.environ["RUN_ID"]
+          raw = f"https://raw.githubusercontent.com/{repo}/reports/reports/run-{run_id}"
+
+          lines = [
+              "# Export",
+              "",
+              f"- INDEX.md: {raw}/INDEX.md",
+              f"- MANIFEST.json: {raw}/MANIFEST.json",
+              f"- SUBMISSION-CHECKLIST.md: {raw}/SUBMISSION-CHECKLIST.md",
+              f"- findings/findings_escaped.json: {raw}/findings/findings_escaped.json",
+              f"- submissions/ directory: {raw}/submissions/",
+              f"- pocs/ directory: {raw}/pocs/",
+              f"- insights/ directory: {raw}/insights/",
+              "",
+              "## Non-duplicate findings",
+              "",
+          ]
+
+          def load(name):
+              path = dest / "findings" / name
+              if not path.is_file():
+                  return []
+              data = json.loads(path.read_text(encoding="utf-8"))
+              items = data if isinstance(data, list) else data.get("findings", [])
+              return items if isinstance(items, list) else []
+
+          seen = set()
+          for bucket_name in ("findings_new.json", "findings_escaped.json"):
+              for finding in load(bucket_name):
+                  status = str(finding.get("status", "open")).lower()
+                  if status in {"suppressed", "false_positive", "duplicate"} or finding.get("duplicate") is True:
+                      continue
+                  fid = str(
+                      finding.get("id") or finding.get("finding_id") or finding.get("rule_id") or "unknown"
+                  )
+                  if fid in seen:
+                      continue
+                  seen.add(fid)
+                  severity = finding.get("severity", "?")
+                  asset = finding.get("asset", "?")
+                  submission = dest / "submissions" / f"{fid}.md"
+                  url = (
+                      f"{raw}/submissions/{fid}.md"
+                      if submission.is_file()
+                      else f"{raw}/findings/{bucket_name}"
+                  )
+                  lines.append(f"- {fid} | {severity} | {asset} | {url}")
+
+          (dest / "EXPORT.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+          PY
+
+          git -C "$REPORT_TREE" add reports/
+          if git -C "$REPORT_TREE" diff --cached --quiet; then
+            echo "No report changes to commit."
+          else
+            git -C "$REPORT_TREE" commit -m "reports: publish run ${RUN_ID}"
+            git -C "$REPORT_TREE" push origin reports
+          fi
+          echo "EXPORT=https://raw.githubusercontent.com/${REPO}/reports/reports/run-${RUN_ID}/EXPORT.md"
