@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
+from typing import cast
 from uuid import uuid4
 
 import pytest
@@ -98,6 +99,14 @@ class _FailingStage:
         raise RuntimeError("scanner crashed")
 
 
+class _InvalidSchemaStage:
+    async def run(self, asset: Asset) -> list[Finding]:
+        """Return a deliberately invalid payload through the typed stage boundary."""
+
+        del asset
+        return cast(list[Finding], [{"not": "a Finding"}])
+
+
 @pytest.mark.asyncio
 async def test_run_stage_reports_success(tmp_path: Path) -> None:
     """Successful analyzer execution returns findings with success=true."""
@@ -107,6 +116,22 @@ async def test_run_stage_reports_success(tmp_path: Path) -> None:
     findings, succeeded = await orchestrator._run_stage("sast", _SuccessStage(), asset)
     assert succeeded is True
     assert len(findings) == 1
+
+
+@pytest.mark.asyncio
+async def test_run_stage_rejects_non_finding_payload(tmp_path: Path) -> None:
+    """Every engine must cross the orchestrator boundary as unified Finding objects."""
+
+    messages: list[str] = []
+    orchestrator = PipelineOrchestrator(
+        store=AnalysisStore(tmp_path / "audit.sqlite3"),
+        logger=messages.append,
+    )
+    asset = Asset("manager", tmp_path, "d" * 40)
+    findings, succeeded = await orchestrator._run_stage("sast", _InvalidSchemaStage(), asset)
+    assert findings == []
+    assert succeeded is False
+    assert any("non-Finding" in message for message in messages)
 
 
 @pytest.mark.asyncio

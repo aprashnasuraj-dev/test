@@ -64,6 +64,7 @@ class SASTStage:
         output_dir.mkdir(parents=True, exist_ok=True)
         sarif_files: list[Path] = []
         findings = self._run_local_analyzers(asset)
+        bandit_json: Path | None = None
 
         if self.tool_runner.available("codeql"):
             if not self.codeql_config.is_file():
@@ -136,6 +137,8 @@ class SASTStage:
 
         for sarif_path in sarif_files:
             findings.extend(self._parse_sarif(sarif_path, asset))
+        if bandit_json is not None:
+            findings.extend(self._parse_bandit(bandit_json, asset))
         return self._dedupe(findings)
 
     def _run_local_analyzers(self, asset: Asset) -> list[Finding]:
@@ -219,6 +222,55 @@ class SASTStage:
                         evidence=message,
                     )
                 )
+        return findings
+
+    @staticmethod
+    def _parse_bandit(path: Path, asset: Asset) -> list[Finding]:
+        """Normalize Bandit JSON into the shared finding schema."""
+
+        if not path.exists() or not path.read_text(encoding="utf-8").strip():
+            return []
+        data: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
+        results = data.get("results", [])
+        if not isinstance(results, list):
+            return []
+        findings: list[Finding] = []
+        for result in results:
+            if not isinstance(result, dict):
+                continue
+            test_id = str(result.get("test_id") or "unknown")
+            message = str(result.get("issue_text") or test_id)
+            level = str(result.get("issue_severity") or "MEDIUM").lower()
+            severity = {
+                "high": Severity.HIGH,
+                "medium": Severity.MEDIUM,
+                "low": Severity.LOW,
+            }.get(level, Severity.MEDIUM)
+            filename = str(result.get("filename") or "").replace("\\", "/")
+            source = Path(filename)
+            if source.is_absolute():
+                try:
+                    filename = source.resolve().relative_to(asset.path.resolve()).as_posix()
+                except ValueError:
+                    filename = source.as_posix()
+            rule_id = f"bandit:{test_id}"
+            findings.append(
+                Finding(
+                    title=message.splitlines()[0][:200],
+                    severity=severity,
+                    asset=asset.name,
+                    stage="sast",
+                    rule_id=rule_id,
+                    root_cause=rule_id,
+                    location=Location(
+                        file=filename,
+                        line=int(result.get("line_number", 0) or 0),
+                        column=int(result.get("col_offset", 0) or 0),
+                    ),
+                    description=message,
+                    evidence=message,
+                )
+            )
         return findings
 
     @staticmethod

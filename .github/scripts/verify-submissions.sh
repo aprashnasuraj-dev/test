@@ -17,9 +17,8 @@ ESC="$OUT/findings_escaped.json"
 [[ -f "$ESC" ]] || ESC="$OUT/findings/findings_escaped.json"
 
 if [[ ! -f "$ESC" ]]; then
-  echo "::warning::findings_escaped.json not produced; skipping submission check"
-  echo "This is acceptable if the run only executed a subset of stages."
-  exit 0
+  echo "::error::findings_escaped.json not produced; submission completeness cannot be verified"
+  exit 1
 fi
 
 export ESC_PATH="$ESC"
@@ -60,6 +59,7 @@ required = [f for f in items
 
 subs_dir = out / "submissions"
 pocs_dir = out / "pocs"
+required_poc_files = ("README.md", "run.ps1", "run.sh", "run.log")
 missing = []
 for finding in required:
     fid = finding.get("id") or finding.get("finding_id") or finding.get("rule_id")
@@ -68,10 +68,17 @@ for finding in required:
         continue
     sub = subs_dir / f"{fid}.md"
     poc = pocs_dir / str(fid)
-    if not sub.exists():
+    if not sub.is_file():
         missing.append((fid, f"missing submissions/{fid}.md"))
     if not poc.is_dir():
         missing.append((fid, f"missing pocs/{fid}/"))
+        continue
+    for name in required_poc_files:
+        if not (poc / name).is_file():
+            missing.append((fid, f"missing pocs/{fid}/{name}"))
+    log = poc / "run.log"
+    if log.is_file() and "POC_OK" not in log.read_text(encoding="utf-8", errors="replace"):
+        missing.append((fid, f"pocs/{fid}/run.log does not contain POC_OK"))
 
 if missing:
     print("::error::Submission artifacts incomplete:")
@@ -79,5 +86,5 @@ if missing:
         print(f"  - {fid}: {why}")
     sys.exit(1)
 
-print(f"OK — {len(required)} escaped findings have submission + PoC artifacts.")
+print(f"OK — {len(required)} escaped findings have submission + runnable PoC artifacts.")
 PY

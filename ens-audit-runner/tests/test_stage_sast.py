@@ -1,4 +1,4 @@
-"""Coverage tests for SAST orchestration and SARIF normalization."""
+"""Coverage tests for SAST orchestration and scanner normalization."""
 
 from __future__ import annotations
 
@@ -81,6 +81,39 @@ def test_parse_sarif_maps_severity_and_root_cause(
     assert finding.title == "unsafe binding"
 
 
+def test_parse_bandit_normalizes_finding_without_source_code(tmp_path: Path) -> None:
+    """Bandit JSON contributes a Finding while avoiding source-code persistence in evidence."""
+
+    asset_root = tmp_path / "asset"
+    asset_root.mkdir()
+    asset = Asset("manager", asset_root, "c" * 40)
+    path = tmp_path / "bandit.json"
+    path.write_text(
+        json.dumps(
+            {
+                "results": [
+                    {
+                        "filename": str(asset_root / "tool.py"),
+                        "line_number": 8,
+                        "col_offset": 4,
+                        "issue_severity": "HIGH",
+                        "issue_text": "subprocess call may be unsafe",
+                        "test_id": "B603",
+                        "code": "SECRET_SHOULD_NOT_BE_EVIDENCE",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    [finding] = SASTStage._parse_bandit(path, asset)
+    assert finding.rule_id == "bandit:B603"
+    assert finding.severity is Severity.HIGH
+    assert finding.location == Location("tool.py", 8, 4)
+    assert finding.evidence == "subprocess call may be unsafe"
+    assert "SECRET_SHOULD_NOT_BE_EVIDENCE" not in finding.evidence
+
+
 def test_dedupe_normalizes_path_separators(tmp_path: Path) -> None:
     """Duplicate tool reports at the same logical source location collapse to one record."""
 
@@ -119,7 +152,7 @@ def test_tool_accepts_configured_codes_and_rejects_failure(tmp_path: Path) -> No
 
 
 def test_run_sync_exercises_all_external_sast_paths(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """CodeQL, Semgrep, Slither, and Bandit orchestration produces normalized SARIF findings."""
+    """CodeQL, Semgrep, Slither, and Bandit all contribute normalized findings."""
 
     asset_root = tmp_path / "asset"
     asset_root.mkdir()
@@ -139,8 +172,32 @@ def test_run_sync_exercises_all_external_sast_paths(tmp_path: Path, monkeypatch:
                 Path(token.split("=", 1)[1]).write_text(json.dumps(_sarif()), encoding="utf-8")
         if "--sarif" in argv and argv[0] == "slither":
             Path(argv[-1]).write_text(json.dumps(_sarif("slither-rule", "warning")), encoding="utf-8")
+        if argv[0] == "bandit":
+            output = Path(argv[argv.index("-o") + 1])
+            output.write_text(
+                json.dumps(
+                    {
+                        "results": [
+                            {
+                                "filename": str(asset_root / "a.py"),
+                                "line_number": 1,
+                                "issue_severity": "LOW",
+                                "issue_text": "Bandit test issue",
+                                "test_id": "B101",
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
         return subprocess.CompletedProcess(argv, 0, "", "")
 
     monkeypatch.setattr(stage, "_tool", fake_tool)
     findings = stage._run_sync(asset)
-    assert {finding.rule_id for finding in findings} >= {"rule", "ens-chainid-not-validated", "slither-rule"}
+    assert {finding.rule_id for finding in findings} >= {
+        "rule",
+        "ens-chainid-not-validated",
+        "slither-rule",
+        "bandit:B101",
+    }
+    assert all(isinstance(finding, Finding) for finding in findings)

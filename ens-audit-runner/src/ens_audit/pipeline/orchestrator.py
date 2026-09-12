@@ -246,10 +246,17 @@ class PipelineOrchestrator:
         stage: AnalysisStage,
         asset: Asset,
     ) -> tuple[list[Finding], bool]:
-        """Run one analyzer and return findings plus an explicit success state."""
+        """Run one analyzer and enforce the unified finding schema at the stage boundary."""
 
         try:
             findings = await stage.run(asset)
+            if not isinstance(findings, list):
+                raise TypeError(f"{name} returned {type(findings).__name__}; expected list[Finding]")
+            invalid = [type(finding).__name__ for finding in findings if not isinstance(finding, Finding)]
+            if invalid:
+                raise TypeError(
+                    f"{name} returned non-Finding result(s): {', '.join(sorted(set(invalid)))}"
+                )
             self._log(f"complete {asset.name}:{name}; findings={len(findings)}")
             return findings, True
         except PipelineCancelled:
