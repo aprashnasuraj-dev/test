@@ -47,7 +47,7 @@ permissions:
 
 concurrency:
   group: ens-analysis-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
   PYTHONUNBUFFERED: '1'
@@ -414,4 +414,11 @@ jobs:
             git -C "$REPORT_TREE" commit -m "reports: publish run ${RUN_ID}"
             git -C "$REPORT_TREE" push origin reports
           fi
-          echo "EXPORT=https://raw.githubusercontent.com/${REPO}/reports/reports/run-${RUN_ID}/EXPORT.md"
+
+          RAW="https://raw.githubusercontent.com/${REPO}/reports/reports/run-${RUN_ID}"
+          echo "Reports branch: https://github.com/${REPO}/tree/reports/reports/run-${RUN_ID}"
+          echo "Raw INDEX: ${RAW}/INDEX.md"
+          echo "Raw MANIFEST: ${RAW}/MANIFEST.json"
+          echo "Raw checklist: ${RAW}/SUBMISSION-CHECKLIST.md"
+          echo "Raw escaped findings: ${RAW}/findings/findings_escaped.json"
+          echo "Raw export: ${RAW}/EXPORT.md"
