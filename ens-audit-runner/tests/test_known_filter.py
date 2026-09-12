@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from ens_audit.known_issues import load_known_issues
+from ens_audit.known_issues import KnownIssue, MatchPattern, load_known_issues
 from ens_audit.models import Finding, FindingStatus, Location, Severity
 from ens_audit.pipeline.stage_known_filter import KnownIssueFilterStage
 
@@ -14,6 +14,11 @@ def _finding(
     asset: str = "transaction-manager",
     rule_id: str = "ens-xstate-missing-complete",
     root_cause: str = "xstate_subscription_missing_completion",
+    file: str = "src/machines/example.ts",
+    function: str | None = "waitForActor",
+    cwe: str | None = "CWE-754",
+    description: str = "subscription has next without complete",
+    evidence: str = "actor.subscribe({ next: resolve })",
 ) -> Finding:
     """Build a representative analyzer finding for filter tests."""
 
@@ -24,10 +29,23 @@ def _finding(
         stage="sast",
         rule_id=rule_id,
         root_cause=root_cause,
-        location=Location("src/machines/example.ts", 42, 1, "waitForActor"),
-        description="subscription has next without complete",
-        evidence="actor.subscribe({ next: resolve })",
-        cwe="CWE-754",
+        location=Location(file, 42, 1, function),
+        description=description,
+        evidence=evidence,
+        cwe=cwe,
+    )
+
+
+def _issue(*patterns: MatchPattern, root_cause: str = "example_root") -> KnownIssue:
+    """Build one tightly scoped known issue for matcher branch tests."""
+
+    return KnownIssue(
+        id="TEST-01",
+        severity="Medium",
+        asset=("transaction-manager",),
+        title="test issue",
+        root_cause=root_cause,
+        match_patterns=patterns,
     )
 
 
@@ -98,3 +116,63 @@ def test_fingerprint_is_stable_across_path_separator_case() -> None:
         cwe=left.cwe,
     )
     assert KnownIssueFilterStage.fingerprint(left) == KnownIssueFilterStage.fingerprint(right)
+
+
+@pytest.mark.parametrize(
+    ("pattern", "finding"),
+    [
+        (MatchPattern(file_glob="src/machines/*.ts"), _finding(root_cause="example_root")),
+        (MatchPattern(rule_id="ens-*"), _finding(root_cause="example_root")),
+        (MatchPattern(cwe="cwe-754"), _finding(root_cause="example_root")),
+        (MatchPattern(function="waitForActor"), _finding(root_cause="example_root")),
+        (
+            MatchPattern(content_regex=r"next without complete"),
+            _finding(root_cause="example_root"),
+        ),
+    ],
+)
+def test_each_narrow_matcher_can_match(pattern: MatchPattern, finding: Finding) -> None:
+    """Each supported structural matcher can independently identify the disclosed mechanism."""
+
+    stage = KnownIssueFilterStage((_issue(pattern),))
+    assert stage._matches_any_pattern(finding, stage.issues[0]) is True
+
+
+def test_empty_match_patterns_never_suppress() -> None:
+    """Root-cause equality alone is insufficient when a disclosure has no structural matcher."""
+
+    finding = _finding(root_cause="example_root")
+    stage = KnownIssueFilterStage((_issue(),))
+    assert stage._matches_any_pattern(finding, stage.issues[0]) is False
+    assert stage._filter_one(finding).status is FindingStatus.OPEN
+
+
+def test_nonmatching_structural_patterns_remain_open() -> None:
+    """A same-root finding stays open when none of the narrow structural matchers apply."""
+
+    finding = _finding(
+        root_cause="example_root",
+        file="src/other.ts",
+        rule_id="different-rule",
+        function="differentFunction",
+        cwe=None,
+        description="different behavior",
+        evidence="no disclosed pattern",
+    )
+    issue = _issue(
+        MatchPattern(file_glob="src/machines/*.ts"),
+        MatchPattern(rule_id="ens-*"),
+        MatchPattern(cwe="CWE-754"),
+        MatchPattern(function="waitForActor"),
+        MatchPattern(content_regex=r"next without complete"),
+    )
+    stage = KnownIssueFilterStage((issue,))
+    assert stage._filter_one(finding).status is FindingStatus.OPEN
+
+
+def test_root_cause_normalization_is_format_insensitive() -> None:
+    """Punctuation/case differences in the same root-cause label normalize identically."""
+
+    assert KnownIssueFilterStage._normalize_root("Actor Subscribe-Missing Completion") == (
+        KnownIssueFilterStage._normalize_root("actor_subscribe_missing_completion")
+    )
