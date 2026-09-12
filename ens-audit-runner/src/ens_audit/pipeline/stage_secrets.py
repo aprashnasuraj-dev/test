@@ -37,12 +37,18 @@ class SecretStage:
         sanitized: list[dict[str, Any]] = []
 
         if self.tool_runner.available("trufflehog"):
+            # Each configured asset is a directory inside the pinned monorepo, not its own
+            # Git repository. Filesystem mode keeps TruffleHog constrained to this asset
+            # instead of trying (and failing) to clone the subdirectory as a Git source.
             completed = self._tool(
-                ["trufflehog", "git", asset.path.as_uri(), "--json"],
+                ["trufflehog", "filesystem", ".", "--json"],
                 cwd=asset.path,
                 timeout_s=900,
             )
-            scanner_findings, scanner_metadata = self._parse_trufflehog_text(completed.stdout, asset)
+            scanner_findings, scanner_metadata = self._parse_trufflehog_text(
+                completed.stdout,
+                asset,
+            )
             findings.extend(scanner_findings)
             sanitized.extend(scanner_metadata)
 
@@ -102,9 +108,15 @@ class SecretStage:
             verified = bool(record.get("Verified", False))
             source = record.get("SourceMetadata") or {}
             data = source.get("Data") if isinstance(source, dict) else {}
-            git_data = data.get("Git") if isinstance(data, dict) else {}
-            file_name = str(git_data.get("file", "")) if isinstance(git_data, dict) else ""
-            line_number = int(git_data.get("line", 0) or 0) if isinstance(git_data, dict) else 0
+            source_data: dict[str, Any] = {}
+            if isinstance(data, dict):
+                for source_kind in ("Filesystem", "Git"):
+                    candidate = data.get(source_kind)
+                    if isinstance(candidate, dict):
+                        source_data = candidate
+                        break
+            file_name = str(source_data.get("file") or source_data.get("path") or "")
+            line_number = int(source_data.get("line", 0) or 0)
             metadata.append(
                 {
                     "scanner": "trufflehog",
