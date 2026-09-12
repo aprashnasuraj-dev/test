@@ -1,0 +1,102 @@
+name: ENS Submission Analysis
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ens-audit-runner/**'
+      - '.github/workflows/analysis.yml'
+      - '.github/scripts/**'
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: 'Repository URL to analyze'
+        required: true
+        default: 'https://github.com/immunefi-team/audit-comp-ens.git'
+      assets:
+        description: 'Assets accepted by ens_audit --assets'
+        required: true
+        default: 'manager,portal,workers,transaction-manager,smart-account'
+      stages:
+        description: 'Stages accepted by ens_audit --stages'
+        required: true
+        default: 'sast,symbolic,fuzz,deps,secrets,ui,rpc,diff,known-filter,report'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ens-analysis-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONUNBUFFERED: '1'
+  QT_QPA_PLATFORM: offscreen
+
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: ens-audit-runner/requirements.txt
+
+      - name: Install Qt runtime dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1
+
+      - name: Install runner
+        working-directory: ens-audit-runner
+        run: python -m pip install -e '.[dev]'
+
+      - name: Prepare output
+        run: mkdir -p "$GITHUB_WORKSPACE/out/runs"
+
+      - name: Run analysis
+        env:
+          TARGET_REPO: ${{ github.event.inputs.repo || 'https://github.com/immunefi-team/audit-comp-ens.git' }}
+          TARGET_ASSETS: ${{ github.event.inputs.assets || 'manager,portal,workers,transaction-manager,smart-account' }}
+          TARGET_STAGES: ${{ github.event.inputs.stages || 'sast,symbolic,fuzz,deps,secrets,ui,rpc,diff,known-filter,report' }}
+        working-directory: ens-audit-runner
+        run: |
+          set -euo pipefail
+          python -m ens_audit \
+            --repo "$TARGET_REPO" \
+            --assets "$TARGET_ASSETS" \
+            --stages "$TARGET_STAGES" \
+            --out "$GITHUB_WORKSPACE/out" \
+            --verbose 2>&1 | tee "$GITHUB_WORKSPACE/out/runs/analysis.log"
+
+      - name: Verify submission artifacts
+        if: always()
+        run: bash .github/scripts/verify-submissions.sh
+
+      - name: Stage output
+        if: always()
+        run: bash .github/scripts/stage-output.sh
+
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ens-audit-submissions-${{ github.run_id }}
+          path: |
+            staging/README.md
+            staging/findings/
+            staging/runs/
+            staging/MANIFEST.json
+            staging/SUBMISSION-CHECKLIST.md
+            staging/submissions/
+            staging/pocs/
+            staging/insights/
+          if-no-files-found: error
+          retention-days: 14
