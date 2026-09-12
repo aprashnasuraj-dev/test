@@ -70,7 +70,7 @@ Require-Command -Name "py" -Help "Install Python 3.12+ from python.org or the Mi
 & py -3.12 -c "import sys; assert sys.version_info >= (3, 11)"
 & py -3.12 -m pip install --upgrade pip
 & py -3.12 -m pip install .
-& py -3.12 -m pip install pip-audit detect-secrets
+& py -3.12 -m pip install pip-audit detect-secrets bandit
 
 if (-not $SkipCodeQL) {
     if (-not $AcceptCodeQLTerms) {
@@ -111,7 +111,10 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     Write-Warning "Git is required for pinned repository checkout. Install Git for Windows before running an audit."
 }
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
-    Write-Warning "Node.js/npm are required for JavaScript dependency and property tests. Install Node.js LTS before running those stages."
+    Write-Warning "Node.js/npm are required for JavaScript dependency analysis. Install Node.js LTS before running that stage."
+}
+elseif (-not (Get-Command snyk -ErrorAction SilentlyContinue)) {
+    Write-Host "Optional Snyk CLI is not installed. Official npm install command: npm install -g snyk" -ForegroundColor Yellow
 }
 
 Write-Host "Windows-native setup complete." -ForegroundColor Green
