@@ -9,7 +9,6 @@ from pathlib import Path
 import pytest
 
 from ens_audit.models import Asset, Severity
-from ens_audit.pipeline import stage_secrets as secrets_module
 from ens_audit.pipeline.stage_secrets import SecretStage
 
 
@@ -111,7 +110,10 @@ async def test_run_scans_both_tools_and_persists_only_metadata(
 ) -> None:
     """End-to-end stage orchestration sanitizes both scanner outputs before disk persistence."""
 
-    monkeypatch.setattr(secrets_module, "RESULTS_DIR", tmp_path / "results")
+    monkeypatch.setattr(
+        "ens_audit.pipeline.stage_secrets.RESULTS_DIR",
+        tmp_path / "results",
+    )
 
     class _Runner:
         def available(self, _tool: str) -> bool:
