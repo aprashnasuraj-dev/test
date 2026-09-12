@@ -39,7 +39,7 @@ include-package-data = true
 where = ["src"]
 
 [tool.setuptools.package-data]
-ens_audit = ["known_issues/*.yaml", "rules/*.yaml"]
+ens_audit = ["known_issues/*.yaml", "rules/*.yaml", "rules/*.yml"]
 
 [tool.pytest.ini_options]
 addopts = "-q --strict-markers"
