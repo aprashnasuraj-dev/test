@@ -114,3 +114,132 @@
   match_patterns:
     - content_regex: "(?i)cached.*smart.?account.*address|sdk.*derived.*address"
   notes: "The missing live-address cross-check is confirmed; a concrete attack path was not."
+
+- id: "R2-03"
+  severity: "Medium"
+  asset: ["smart-account"]
+  title: "Session key is an unscoped full account owner for 7 days"
+  root_cause: "unscoped_session_owner"
+  match_patterns:
+    - rule_id: "ens-unscoped-session-authority"
+    - content_regex: "(?i)session key.*owner|co-owner.*7 day|unscoped.*session"
+  notes: "Broad authority and browser-storage exposure within the stated lifetime are accepted design residuals."
+
+- id: "R2-06"
+  severity: "Low"
+  asset: ["smart-account"]
+  title: "Session revocation is local-only; no on-chain revoke exists"
+  root_cause: "local_only_session_revocation"
+  match_patterns:
+    - rule_id: "ens-local-revoke-without-chain-revoke"
+    - content_regex: "(?i)revok.*localstorage|local-only.*revok|no on-chain revok"
+  notes: "The co-owner permission persists until expiry after local storage is cleared."
+
+- id: "EXP-GAP-006"
+  severity: "Medium"
+  asset: ["manager", "explorer", "workers", "transaction-manager", "smart-account"]
+  title: "Telemetry forwards full transaction context to a third party"
+  root_cause: "excessive_telemetry_payload"
+  match_patterns:
+    - content_regex: "(?i)telemetry.*calldata|analytics.*wallet address|full transaction context"
+  notes: "Known issue is privacy and data minimization with a third-party processor."
+
+- id: "R2-04"
+  severity: "Low"
+  asset: ["explorer"]
+  title: "OG-image worker fetches an attacker-controlled avatar URL"
+  root_cause: "server_side_fetch_of_untrusted_avatar_url"
+  match_patterns:
+    - rule_id: "ens-ssrf-untrusted-url"
+    - content_regex: "(?i)og.?image.*avatar.*fetch|attacker-controlled.*avatar.*url"
+  notes: "Known limited SSRF primitive in the Explorer OG-image worker."
+
+- id: "R2-05"
+  severity: "Low"
+  asset: ["workers"]
+  title: "SendGrid event webhook fails open when the verification key is unset"
+  root_cause: "webhook_signature_fail_open"
+  match_patterns:
+    - rule_id: "ens-webhook-fail-open"
+    - content_regex: "(?i)sendgrid.*verification key.*unset|webhook.*fail.?open"
+  notes: "Unauthenticated bodies are processed when the verification key is absent."
+
+- id: "R3-01"
+  severity: "High"
+  asset: ["transaction-manager"]
+  title: "Telemetry trimming loop cannot terminate and freezes the tab"
+  root_cause: "nonterminating_telemetry_trim_loop"
+  match_patterns:
+    - rule_id: "ens-telemetry-trim-nontermination"
+    - content_regex: "(?i)telemetry.*trim.*loop|event list.*never.*shrink"
+  notes: "At two oversized events the loop rebuilds the same list and never exits."
+
+- id: "R3-02"
+  severity: "High"
+  asset: ["transaction-manager"]
+  title: "Awaiting a stopped transaction actor never settles"
+  root_cause: "xstate_subscription_missing_completion"
+  match_patterns:
+    - rule_id: "ens-xstate-missing-complete"
+    - content_regex: "(?i)subscribe.*onnext.*no.*complete|stopped.*actor.*never.*settle"
+  notes: "Multiple individual sites share this root cause and are duplicates of R3-02."
+
+- id: "R3-03"
+  severity: "High"
+  asset: ["transaction-manager"]
+  title: "Registration machine strands when a polled actor is stopped"
+  root_cause: "registration_poller_missing_completion"
+  match_patterns:
+    - rule_id: "ens-registration-poller-stall"
+    - content_regex: "(?i)registration.*poll.*actor.*stopp|permanent spinner"
+  notes: "Stopped actor leaves the registration waiting state with no timeout or exit."
+
+- id: "R3-04"
+  severity: "High"
+  asset: ["transaction-manager"]
+  title: "Commitment retry resumes at the wrong step and loops on an error"
+  root_cause: "retry_resumes_without_regenerating_commitment"
+  match_patterns:
+    - rule_id: "ens-commitment-retry-wrong-step"
+    - content_regex: "(?i)commitment.*retry.*submission|undefined.*commitment.*retry"
+  notes: "Retry submits an undefined commitment and routes back into the same failure path."
+
+- id: "R3-05"
+  severity: "High"
+  asset: ["transaction-manager"]
+  title: "Clearing active transactions also deletes the archived history"
+  root_cause: "localstorage_prefix_collision"
+  match_patterns:
+    - rule_id: "ens-transaction-history-prefix-collision"
+    - content_regex: "(?i)active transaction.*history.*prefix|clear.*transaction.*archive"
+  notes: "The active-record key scan also matches the history key."
+
+- id: "R3-06"
+  severity: "High"
+  asset: ["transaction-manager"]
+  title: "Archived transactions drop chainId, so history reporting discards them"
+  root_cause: "archive_chain_id_not_preserved"
+  match_patterns:
+    - rule_id: "ens-archive-chainid-loss"
+    - content_regex: "(?i)archive.*chainid.*drop|history.*without.*chain"
+  notes: "Archive code omits fallback to the chain id already present on the request."
+
+- id: "R3-07"
+  severity: "Medium"
+  asset: ["transaction-manager"]
+  title: "A reused transaction id skips archiving, history and telemetry"
+  root_cause: "transaction_completion_id_never_cleared"
+  match_patterns:
+    - rule_id: "ens-reused-transaction-id"
+    - content_regex: "(?i)reused transaction id|already completed.*archiv|fixed id.*telemetry"
+  notes: "Completion tracking is retained per id across retries."
+
+- id: "R3-08"
+  severity: "Medium"
+  asset: ["transaction-manager"]
+  title: "A stale error is attached to a transaction that later succeeded"
+  root_cause: "stale_error_not_cleared_on_success"
+  match_patterns:
+    - rule_id: "ens-stale-error-after-success"
+    - content_regex: "(?i)stale error.*success|confirmed transaction.*error"
+  notes: "The earlier failure message is retained after a later successful attempt."
