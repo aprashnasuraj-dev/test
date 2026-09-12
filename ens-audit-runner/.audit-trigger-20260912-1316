@@ -1,0 +1,1 @@
+Trigger full ENS audit on all configured scopes with stages: sast,symbolic,fuzz,deps,secrets,ui,rpc,diff,known-filter,report.
