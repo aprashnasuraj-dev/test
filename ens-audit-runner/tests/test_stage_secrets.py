@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 import subprocess
+from pathlib import Path
 
 import pytest
 
 from ens_audit.models import Asset, Severity
 from ens_audit.pipeline.stage_secrets import SecretStage
-
 
 _TRUFFLE_SECRET = "TRUFFLE_SECRET_MUST_NOT_PERSIST"
 _DETECT_SECRET = "DETECT_SECRET_MUST_NOT_PERSIST"
