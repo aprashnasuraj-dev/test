@@ -31,14 +31,25 @@ def _finding(
     )
 
 
-def test_registry_loads_public_security_issues() -> None:
-    """Packaged registry must parse safely and retain unique disclosed identifiers."""
+def test_registry_loads_complete_public_disclosure() -> None:
+    """Packaged registry must retain security, QA, Manager WEB, and Explorer WEB IDs."""
 
     issues = load_known_issues()
     ids = {issue.id for issue in issues}
-    assert len(issues) >= 25
+    assert len(issues) >= 60
     assert len(ids) == len(issues)
-    assert {"R2-01", "SEC-MGR-003", "R3-02", "R3-08"} <= ids
+    assert {
+        "R2-01",
+        "SEC-MGR-003",
+        "R3-02",
+        "R3-08",
+        "QA-01",
+        "QA-10",
+        "WEB-806",
+        "WEB-1304",
+        "WEB-1257",
+        "WEB-580",
+    } <= ids
 
 
 @pytest.mark.asyncio
