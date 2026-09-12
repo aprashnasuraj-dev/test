@@ -1,24 +1,28 @@
-"""Stage 3: bounded property fuzzing for Solidity and TypeScript assets."""
+"""Stage 3: bounded property fuzzing for Solidity-bearing assets."""
 
 from __future__ import annotations
 
 import asyncio
 import json
-import shutil
 import subprocess
 from pathlib import Path
 from typing import Any
 
 from ens_audit.config import RESULTS_DIR
 from ens_audit.models import Asset, Finding, Location, Severity
+from ens_audit.tooling import DEFAULT_TOOL_RUNNER
 
 
 class FuzzStage:
     """Run available property fuzzers with deterministic, bounded settings.
 
     Security invariant: fuzzers execute only inside the checked-out asset directory with
-    fixed argv tokens and no shell interpretation.
+    fixed argv tokens and no shell interpretation. TypeScript fast-check is intentionally
+    not invoked unless the target repository provides a real property-test harness.
     """
+
+    def __init__(self) -> None:
+        self.tool_runner = DEFAULT_TOOL_RUNNER
 
     async def run(self, asset: Asset) -> list[Finding]:
         """Execute applicable fuzzers and return normalized invariant failures."""
@@ -32,7 +36,7 @@ class FuzzStage:
         output_dir.mkdir(parents=True, exist_ok=True)
         findings: list[Finding] = []
 
-        if asset.has_solidity and shutil.which("forge"):
+        if asset.has_solidity and self.tool_runner.available("forge"):
             forge_output = output_dir / "foundry-fuzz.json"
             completed = self._tool(
                 [
@@ -51,7 +55,7 @@ class FuzzStage:
             forge_output.write_text(completed.stdout, encoding="utf-8")
             findings.extend(self._parse_forge(forge_output, asset))
 
-        if asset.has_solidity and shutil.which("echidna"):
+        if asset.has_solidity and self.tool_runner.available("echidna"):
             config_path = output_dir / "echidna-config.yaml"
             config_path.write_text(
                 "testLimit: 50000\nseqLen: 100\nshrinkLimit: 5000\n",
@@ -77,47 +81,23 @@ class FuzzStage:
                     )
                 )
 
-        if (asset.path / "package.json").is_file() and shutil.which("npx"):
-            completed = self._tool(
-                ["npx", "fast-check", "--seed", "42", "--num-runs", "10000", "--verbose"],
-                cwd=asset.path,
-                timeout_s=1800,
-                accepted_codes={0, 1},
-            )
-            (output_dir / "fast-check.txt").write_text(
-                completed.stdout + completed.stderr,
-                encoding="utf-8",
-            )
-            if completed.returncode == 1:
-                findings.append(
-                    self._failure(
-                        asset,
-                        "fast-check reported a property failure",
-                        "fast-check-property-failure",
-                        completed.stdout + completed.stderr,
-                    )
-                )
-
         return findings
 
-    @staticmethod
     def _tool(
+        self,
         argv: list[str],
         *,
         cwd: Path,
         timeout_s: int,
         accepted_codes: set[int],
     ) -> subprocess.CompletedProcess[str]:
-        """Run one fuzzer as an argv-only subprocess."""
+        """Run one fuzzer natively or through WSL as an argv-only subprocess."""
 
-        completed = subprocess.run(
-            argv,
+        completed = self.tool_runner.run(
+            argv[0],
+            argv[1:],
             cwd=cwd,
-            shell=False,
-            check=False,
-            capture_output=True,
-            text=True,
-            timeout=timeout_s,
+            timeout_s=timeout_s,
         )
         if completed.returncode not in accepted_codes:
             detail = completed.stderr.strip() or completed.stdout.strip() or "tool failed"
@@ -144,7 +124,12 @@ class FuzzStage:
                 continue
             name = str(record.get("name", record.get("test", "Foundry invariant")))
             findings.append(
-                FuzzStage._failure(asset, f"Foundry invariant failed: {name}", "foundry-invariant", json.dumps(record))
+                FuzzStage._failure(
+                    asset,
+                    f"Foundry invariant failed: {name}",
+                    "foundry-invariant",
+                    json.dumps(record),
+                )
             )
         return findings
 
