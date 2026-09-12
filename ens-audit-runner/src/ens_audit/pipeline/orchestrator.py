@@ -29,64 +29,37 @@ class PipelineCancelled(RuntimeError):
 
 
 class PipelineControl:
-    """Thread-safe pause/resume/cancel state shared with a GUI worker.
-
-    Security invariant: control methods affect only stage-boundary scheduling and never kill
-    arbitrary processes or threads asynchronously.
-    """
+    """Thread-safe pause/resume/cancel state shared with a GUI worker."""
 
     def __init__(self) -> None:
-        """Initialize the pipeline in running, non-cancelled state.
-
-        Security invariant: execution starts unpaused and requires an explicit cancel request
-        before cancellation can occur.
-        """
-
         self._resume_gate = threading.Event()
         self._resume_gate.set()
         self._cancelled = threading.Event()
 
     def pause(self) -> None:
-        """Pause before the next stage boundary.
-
-        Security invariant: an in-flight external scanner is not force-terminated.
-        """
+        """Pause before the next stage boundary without terminating an in-flight scanner."""
 
         self._resume_gate.clear()
 
     def resume(self) -> None:
-        """Allow execution to proceed past the next stage boundary.
-
-        Security invariant: resume changes only the cooperative gate state.
-        """
+        """Allow execution to proceed past the next stage boundary."""
 
         self._resume_gate.set()
 
     def cancel(self) -> None:
-        """Request cancellation at the next cooperative boundary.
-
-        Security invariant: cancellation unblocks a paused waiter but does not terminate
-        unrelated processes or threads.
-        """
+        """Request cancellation at the next cooperative boundary."""
 
         self._cancelled.set()
         self._resume_gate.set()
 
     def reset(self) -> None:
-        """Reset control state for a new or retried run.
-
-        Security invariant: stale cancellation state cannot leak into a subsequent run.
-        """
+        """Reset control state for a new or retried run."""
 
         self._cancelled.clear()
         self._resume_gate.set()
 
     async def checkpoint(self) -> None:
-        """Wait while paused and raise if cancellation was requested.
-
-        Security invariant: blocking occurs in a worker thread so the asyncio loop remains
-        responsive.
-        """
+        """Wait while paused and raise if cancellation was requested."""
 
         await asyncio.to_thread(self._resume_gate.wait)
         if self._cancelled.is_set():
@@ -112,11 +85,7 @@ class PipelineOrchestrator:
         logger: LogCallback | None = None,
         control: PipelineControl | None = None,
     ) -> None:
-        """Initialize pipeline stages and cooperative execution state.
-
-        Security invariant: analyzer instances are fixed at construction and operate only on
-        downloader-validated assets.
-        """
+        """Initialize pipeline stages and cooperative execution state."""
 
         self.store = store or AnalysisStore(DATABASE_PATH)
         self.strict = strict
@@ -134,45 +103,41 @@ class PipelineOrchestrator:
         self.stage_report = ReportStage()
 
     async def run_full_audit(self) -> AuditReport:
-        """Download the pinned source and execute all seven stages end to end.
-
-        Security invariant: every new run begins with a reset cooperative-control state and a
-        freshly recorded immutable commit identifier.
-        """
+        """Download the pinned source and execute all seven stages end to end."""
 
         return await self.run_selected(list(self.ANALYSIS_STAGES))
 
     async def run_selected(self, stages: list[str]) -> AuditReport:
-        """Run a validated subset of analysis stages, then filter and report.
-
-        Security invariant: caller-supplied stage names must belong to the closed analysis-stage
-        vocabulary; unknown names cannot select arbitrary functions.
-        """
+        """Run a validated subset of analysis stages, then filter and report."""
 
         selected = self._validate_stage_selection(stages)
         self.control.reset()
         assets = await download_all_repos()
-        run_id = self.store.begin_run(ACTIVE_UPSTREAM_COMMIT)
+        run_id = self.store.begin_run(ACTIVE_UPSTREAM_COMMIT, selected)
         self.current_run_id = run_id
         return await self._run_assets(run_id, assets, selected_stages=selected)
 
     async def resume(self, run_id: UUID) -> AuditReport:
-        """Resume a prior run, skipping only successful per-asset checkpoints.
+        """Resume exactly the source commit and analysis stages recorded for a prior run.
 
-        Security invariant: resume uses the caller-supplied UUID only as a parameterized SQLite
-        key and still reacquires downloader-validated assets.
+        Security invariant: source revision drift is rejected before repository acquisition, so
+        findings from different commits can never be merged into one audit run.
         """
 
+        stored_commit = self.store.run_commit(run_id)
+        if stored_commit != ACTIVE_UPSTREAM_COMMIT:
+            raise RuntimeError(
+                "cannot resume audit run after source commit changed: "
+                f"stored={stored_commit} active={ACTIVE_UPSTREAM_COMMIT}"
+            )
+        selected = self._validate_stage_selection(list(self.store.run_analysis_stages(run_id)))
         self.control.reset()
         self.current_run_id = run_id
         assets = await download_all_repos()
-        return await self._run_assets(run_id, assets)
+        return await self._run_assets(run_id, assets, selected_stages=selected)
 
     async def retry_failed(self) -> AuditReport:
-        """Retry incomplete stages for the current run identifier.
-
-        Security invariant: a retry can only target the orchestrator's own current run.
-        """
+        """Retry incomplete stages for the current run identifier."""
 
         if self.current_run_id is None:
             raise RuntimeError("no audit run is available to retry")
@@ -185,10 +150,7 @@ class PipelineOrchestrator:
         *,
         selected_stages: tuple[str, ...] | None = None,
     ) -> AuditReport:
-        """Execute selected analyzers, filter known issues, and generate reports.
-
-        Security invariant: stage selection is validated before this method receives it.
-        """
+        """Execute selected analyzers, filter known issues, and generate reports."""
 
         selected = selected_stages or self.ANALYSIS_STAGES
         results: dict[str, list[Finding]] = {}
@@ -215,7 +177,9 @@ class PipelineOrchestrator:
                     succeeded=succeeded,
                 )
             persisted = [
-                finding for finding in self.store.load_findings(run_id) if finding.asset == asset.name
+                finding
+                for finding in self.store.load_findings(run_id)
+                if finding.asset == asset.name
             ]
             if persisted:
                 findings = self._dedupe_by_id([*persisted, *findings])
@@ -241,11 +205,7 @@ class PipelineOrchestrator:
         return report
 
     def _analysis_stages(self, selected: tuple[str, ...]) -> tuple[tuple[str, object], ...]:
-        """Return selected analyzer stages in mandatory dependency order.
-
-        Security invariant: dependency order is fixed in code and cannot be supplied by scan
-        output or reordered by caller input.
-        """
+        """Return selected analyzer stages in mandatory dependency order."""
 
         available: tuple[tuple[str, object], ...] = (
             ("sast", self.stage_sast),
@@ -259,11 +219,7 @@ class PipelineOrchestrator:
 
     @classmethod
     def _validate_stage_selection(cls, stages: list[str]) -> tuple[str, ...]:
-        """Validate and canonicalize caller-selected analysis stages.
-
-        Security invariant: empty, duplicate, or unknown input cannot escape the closed stage
-        registry or alter execution order.
-        """
+        """Validate and canonicalize caller-selected analysis stages."""
 
         requested = {stage.strip().lower() for stage in stages if stage.strip()}
         unknown = requested - set(cls.ANALYSIS_STAGES)
@@ -279,11 +235,7 @@ class PipelineOrchestrator:
         stage: object,
         asset: Asset,
     ) -> tuple[list[Finding], bool]:
-        """Run one analyzer and return findings plus an explicit success state.
-
-        Security invariant: an isolated exception can never be represented as a successful
-        empty scan.
-        """
+        """Run one analyzer and return findings plus an explicit success state."""
 
         try:
             run_method = getattr(stage, "run")
@@ -300,28 +252,19 @@ class PipelineOrchestrator:
 
     @staticmethod
     def _dedupe_by_id(findings: list[Finding]) -> list[Finding]:
-        """Keep the latest representation for each immutable finding id.
-
-        Security invariant: deduplication keys use generated UUIDs rather than untrusted text.
-        """
+        """Keep the latest representation for each immutable finding id."""
 
         by_id = {finding.id: finding for finding in findings}
         return list(by_id.values())
 
     def _emit_progress(self, asset: str, stage: str, current: int, total: int) -> None:
-        """Emit progress data to the GUI callback when configured.
-
-        Security invariant: callbacks receive scalar progress metadata only.
-        """
+        """Emit progress data to the GUI callback when configured."""
 
         if self.progress is not None:
             self.progress(asset, stage, current, total)
 
     def _log(self, message: str) -> None:
-        """Emit a pipeline log line without evaluating its contents.
-
-        Security invariant: log callbacks receive inert strings only.
-        """
+        """Emit a pipeline log line without evaluating its contents."""
 
         if self.logger is not None:
             self.logger(message)
