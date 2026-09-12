@@ -33,6 +33,7 @@ class ToolRunner:
 
     session_environment: dict[str, str] = field(default_factory=dict)
     _cache: dict[str, ResolvedTool | None] = field(default_factory=dict, init=False)
+    _wsl_path_cache: dict[str, str | None] = field(default_factory=dict, init=False)
 
     def set_session_environment(self, values: Mapping[str, str]) -> None:
         """Replace in-memory tool credentials without persisting or logging their values."""
@@ -43,6 +44,35 @@ class ToolRunner:
         """Discard executable discovery results after tools are installed or PATH changes."""
 
         self._cache.clear()
+        self._wsl_path_cache.clear()
+
+    @staticmethod
+    def native_path(tool: str) -> str | None:
+        """Return the native PATH resolution for a tool without executing it."""
+
+        return shutil.which(tool)
+
+    def wsl_path(self, tool: str) -> str | None:
+        """Return the executable path inside the default WSL distribution, if installed."""
+
+        if tool in self._wsl_path_cache:
+            return self._wsl_path_cache[tool]
+        wsl = shutil.which("wsl.exe") or shutil.which("wsl")
+        if not wsl:
+            self._wsl_path_cache[tool] = None
+            return None
+        probe = subprocess.run(
+            [wsl, "-e", "which", tool],
+            shell=False,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        path = probe.stdout.strip() if probe.returncode == 0 else ""
+        result = path if path.startswith("/") else None
+        self._wsl_path_cache[tool] = result
+        return result
 
     def resolve(self, tool: str) -> ResolvedTool | None:
         """Resolve a command on native PATH or inside the default WSL distribution."""
@@ -50,26 +80,17 @@ class ToolRunner:
         if tool in self._cache:
             return self._cache[tool]
 
-        native = shutil.which(tool)
+        native = self.native_path(tool)
         if native:
             resolved = ResolvedTool(tool, "native", native)
             self._cache[tool] = resolved
             return resolved
 
         wsl = shutil.which("wsl.exe") or shutil.which("wsl")
-        if wsl:
-            probe = subprocess.run(
-                [wsl, "-e", "which", tool],
-                shell=False,
-                check=False,
-                capture_output=True,
-                text=True,
-                timeout=15,
-            )
-            if probe.returncode == 0 and probe.stdout.strip().startswith("/"):
-                resolved = ResolvedTool(tool, "wsl", wsl)
-                self._cache[tool] = resolved
-                return resolved
+        if wsl and self.wsl_path(tool):
+            resolved = ResolvedTool(tool, "wsl", wsl)
+            self._cache[tool] = resolved
+            return resolved
 
         self._cache[tool] = None
         return None
