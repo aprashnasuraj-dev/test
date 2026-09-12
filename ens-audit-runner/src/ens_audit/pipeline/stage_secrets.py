@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import asyncio
 import json
-import shutil
 import subprocess
 from pathlib import Path
 from typing import Any
 
 from ens_audit.config import RESULTS_DIR
 from ens_audit.models import Asset, Finding, Location, Severity
+from ens_audit.tooling import DEFAULT_TOOL_RUNNER
 
 
 class SecretStage:
@@ -19,6 +19,9 @@ class SecretStage:
     Security invariant: raw scanner output is parsed only in memory; persisted artifacts,
     normalized findings, logs, evidence, and reports never contain matched secret material.
     """
+
+    def __init__(self) -> None:
+        self.tool_runner = DEFAULT_TOOL_RUNNER
 
     async def run(self, asset: Asset) -> list[Finding]:
         """Scan one asset for committed or present secret material."""
@@ -33,7 +36,7 @@ class SecretStage:
         findings: list[Finding] = []
         sanitized: list[dict[str, Any]] = []
 
-        if shutil.which("trufflehog"):
+        if self.tool_runner.available("trufflehog"):
             completed = self._tool(
                 ["trufflehog", "git", asset.path.as_uri(), "--json"],
                 cwd=asset.path,
@@ -43,7 +46,7 @@ class SecretStage:
             findings.extend(scanner_findings)
             sanitized.extend(scanner_metadata)
 
-        if shutil.which("detect-secrets"):
+        if self.tool_runner.available("detect-secrets"):
             completed = self._tool(
                 ["detect-secrets", "scan", str(asset.path), "--all-files"],
                 cwd=asset.path,
@@ -62,18 +65,20 @@ class SecretStage:
         )
         return findings
 
-    @staticmethod
-    def _tool(argv: list[str], *, cwd: Path, timeout_s: int) -> subprocess.CompletedProcess[str]:
-        """Run a secret scanner without shell interpretation."""
+    def _tool(
+        self,
+        argv: list[str],
+        *,
+        cwd: Path,
+        timeout_s: int,
+    ) -> subprocess.CompletedProcess[str]:
+        """Run a secret scanner natively or through WSL without shell interpretation."""
 
-        completed = subprocess.run(
-            argv,
+        completed = self.tool_runner.run(
+            argv[0],
+            argv[1:],
             cwd=cwd,
-            shell=False,
-            check=False,
-            capture_output=True,
-            text=True,
-            timeout=timeout_s,
+            timeout_s=timeout_s,
         )
         if completed.returncode != 0:
             detail = completed.stderr.strip() or "secret scanner failed"
