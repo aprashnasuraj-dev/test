@@ -23,6 +23,8 @@ dev = [
   "pytest-cov",
   "ruff",
   "mypy",
+  "types-PyYAML",
+  "types-networkx",
   "bandit",
   "pip-audit",
   "pyinstaller",

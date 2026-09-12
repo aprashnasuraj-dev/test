@@ -149,9 +149,9 @@ class XStateAnalyzer:
                 for target_match in _TARGET.finditer(line):
                     pending.append((current, target_match.group("target").lstrip(".#"), number))
         unknown: list[tuple[str, str, int]] = []
-        for source, target, line in pending:
+        for source, target, line_number in pending:
             if target in graph:
                 graph.add_edge(source, target)
             else:
-                unknown.append((source, target, line))
+                unknown.append((source, target, line_number))
         return graph, initial, line_by_state, unknown
