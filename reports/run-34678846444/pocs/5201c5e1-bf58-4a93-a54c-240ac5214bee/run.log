@@ -1,0 +1,11 @@
+finding_id=5201c5e1-bf58-4a93-a54c-240ac5214bee
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-unvalidated-open-url
+matched_known_id=None
+escape_reason=None
+source=apps/manager//home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/notifications/utils/telegram/auth.ts:48
+source_line=const popup = window.open(
+scanner_evidence=URL passed to open/postMessage requires scheme and origin validation.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

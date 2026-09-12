@@ -1,0 +1,11 @@
+finding_id=3b9a5d32-2e10-4dc9-8c3e-d113b3f3f678
+severity=Medium
+asset=manager
+rule_id=custom-ts:untrusted-navigation-url
+matched_known_id=EXP-INPUT-009
+escape_reason=severity_escalation
+source=apps/manager/public/push-sw.js:76
+source_line=return sw.clients.openWindow(url);
+scanner_evidence=return sw.clients.openWindow(url);
+evidence_exact_line_match=True
+POC_OK offline source trace reproduced

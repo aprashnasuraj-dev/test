@@ -1,0 +1,11 @@
+finding_id=906d7363-2cb7-4899-a418-e52306b0106a
+severity=Medium
+asset=explorer
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=apps/portal//home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/worker/avatar.ts:265
+source_line=return avatarFromMetadata(JSON.parse(raw))
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

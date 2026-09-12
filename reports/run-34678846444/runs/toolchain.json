@@ -1,0 +1,101 @@
+{
+  "missing_required": [
+    "codeql"
+  ],
+  "require_snyk": false,
+  "snyk_auth_configured": false,
+  "strict": false,
+  "tools": [
+    {
+      "available": false,
+      "name": "codeql",
+      "path": "",
+      "required": true,
+      "stage": "sast"
+    },
+    {
+      "available": true,
+      "name": "semgrep",
+      "path": "/opt/pipx_bin/semgrep",
+      "required": true,
+      "stage": "sast"
+    },
+    {
+      "available": true,
+      "name": "slither",
+      "path": "/opt/pipx_bin/slither",
+      "required": true,
+      "stage": "sast"
+    },
+    {
+      "available": true,
+      "name": "bandit",
+      "path": "/opt/hostedtoolcache/Python/3.12.14/x64/bin/bandit",
+      "required": true,
+      "stage": "sast"
+    },
+    {
+      "available": true,
+      "name": "myth",
+      "path": "/home/runner/.local/bin/myth",
+      "required": true,
+      "stage": "symbolic"
+    },
+    {
+      "available": true,
+      "name": "halmos",
+      "path": "/home/runner/.local/bin/halmos",
+      "required": true,
+      "stage": "symbolic"
+    },
+    {
+      "available": true,
+      "name": "forge",
+      "path": "/home/runner/.config/.foundry/bin/forge",
+      "required": true,
+      "stage": "fuzz"
+    },
+    {
+      "available": true,
+      "name": "echidna",
+      "path": "/home/runner/.local/bin/echidna",
+      "required": true,
+      "stage": "fuzz"
+    },
+    {
+      "available": true,
+      "name": "npm",
+      "path": "/usr/local/bin/npm",
+      "required": true,
+      "stage": "deps"
+    },
+    {
+      "available": true,
+      "name": "pip-audit",
+      "path": "/opt/hostedtoolcache/Python/3.12.14/x64/bin/pip-audit",
+      "required": true,
+      "stage": "deps"
+    },
+    {
+      "available": false,
+      "name": "snyk",
+      "path": "",
+      "required": false,
+      "stage": "deps"
+    },
+    {
+      "available": true,
+      "name": "trufflehog",
+      "path": "/home/runner/.local/bin/trufflehog",
+      "required": true,
+      "stage": "secrets"
+    },
+    {
+      "available": true,
+      "name": "detect-secrets",
+      "path": "/opt/pipx_bin/detect-secrets",
+      "required": true,
+      "stage": "secrets"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+finding_id=695acca5-a886-46e2-a692-e3259c86297b
+severity=Medium
+asset=transaction-manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-request-from-not-validated
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager//home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/actors/eoa-transport.actor.test.ts:51
+source_line=it('submits when request.from matches the wallet account', async () => {
+scanner_evidence=request.from reaches a signing/account path; verify equality with the connected signer.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

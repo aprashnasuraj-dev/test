@@ -1,0 +1,11 @@
+finding_id=82ad666e-4602-4d06-b6e4-d66526442fc4
+severity=Medium
+asset=transaction-manager
+rule_id=custom-xstate:undefined-target
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/transaction.machine.ts:482
+source_line=target: 'error.submission',
+scanner_evidence=submitting -> error.submission
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

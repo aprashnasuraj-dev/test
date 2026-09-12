@@ -1,0 +1,26 @@
+{
+  "asset": "manager",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Parsed persisted JSON should be schema-validated before trusted use.",
+  "evidence": "Parsed persisted JSON should be schema-validated before trusted use.",
+  "id": "7032aba5-66db-4c3b-bb46-0e7e04a3f697",
+  "impact": "",
+  "location": {
+    "column": 21,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/apps/manager/public/push-sw.js",
+    "function": null,
+    "line": 37
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Parsed persisted JSON should be schema-validated before trusted use."
+}

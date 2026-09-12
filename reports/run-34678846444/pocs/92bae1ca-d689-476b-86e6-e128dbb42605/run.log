@@ -1,0 +1,11 @@
+finding_id=92bae1ca-d689-476b-86e6-e128dbb42605
+severity=Medium
+asset=workers
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-json-parse-without-schema
+matched_known_id=None
+escape_reason=None
+source=workers//home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/notifications/email-verification-rate-limit.ts:42
+source_line=state = JSON.parse(raw) as RateLimitWindow
+scanner_evidence=Parsed persisted JSON should be schema-validated before trusted use.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

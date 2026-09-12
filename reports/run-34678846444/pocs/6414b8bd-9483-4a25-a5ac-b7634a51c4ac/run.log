@@ -1,0 +1,15 @@
+finding_id=6414b8bd-9483-4a25-a5ac-b7634a51c4ac
+severity=Medium
+asset=explorer
+rule_id=custom-llm:prompt-injection-surface
+matched_known_id=None
+escape_reason=None
+source=apps/portal/worker-configuration.d.ts:4819
+source_line=* Reference: https://github.com/openai/openai-node/blob/master/src/resources/responses/responses.ts
+scanner_evidence=service_tier?: "auto" | "default" | "flex" | "scale" | "priority" | null;
+};
+/**
+ * Workers AI support for OpenAI's Responses API
+ * Reference: https://github.com/openai/openai-node/blob/master/src/resources/responses/responses.ts
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

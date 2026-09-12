@@ -1,0 +1,11 @@
+finding_id=27147580-2bcd-4737-b604-949846e24106
+severity=Medium
+asset=manager
+rule_id=home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-chainid-not-validated
+matched_known_id=None
+escape_reason=None
+source=apps/manager//home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/register-v2/state/registrationUi.machine.ts:533
+source_line=chainId: defaultPublicClient.chain.id,
+scanner_evidence=Chain selection or fallback requires comparison with the connected wallet chain.
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,220 @@
+# Submission Checklist
+
+- Run: https://github.com/aprashnasuraj-dev/test/actions/runs/34678846444
+- Commit: `bcf8d8bfc2a32caa3b8c636c3533c53a7b5f7bee`
+- Generated: 2026-09-12T06:44:59.619582+00:00
+
+## Non-duplicate Critical / High / Medium findings
+
+- [x] **019b956b-9bbe-40cf-aa42-649c0300457e** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/posthog/name-search-stats.ts:95
+- [x] **022dfaeb-5082-4aa1-95c7-e4b7a7bcaaca** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/telegram/utils.ts:117
+- [x] **03209649-cf7b-4216-ad9c-78937b2fd9c3** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/notifications/utils/telegram/auth.ts:136
+- [x] **0330998a-4192-4fa0-8ce3-1463cee9b7d6** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/lib/reverseRegistrarChainId.test.ts:63
+- [x] **042d7640-a8d4-4cad-9e1e-a7eb09a00989** — High — `workers` — api-worker/worker-configuration.gen.d.ts:334
+- [x] **0610812d-5b87-4321-9cc0-bee14f6fdfb1** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.ts:641
+- [x] **063191b4-591a-4ba3-bd5d-f8155f17bcb0** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/components/dialogs/edit-profile/tabs/general/GeneralTab.test.tsx:75
+- [x] **06e2aa1c-bd09-496c-9835-3de280aee7b8** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/registry/hooks/useGrantRegistryRoles.ts:27
+- [x] **06e98524-4743-461b-8430-7f7a96a951f2** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/utils/records/validateRecord.ts:118
+- [x] **076a127a-b9a6-4060-b20b-8a734675d51d** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/history/summarize/decodeRawData.ts:20
+- [x] **07d456d5-09e3-475b-aee7-e1fb280115aa** — High — `manager` — worker-configuration.gen.d.ts:1850
+- [x] **099145d3-2df5-4172-94fe-9a5c4b26ff3d** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.ts:52
+- [x] **0b3ac39d-5fa9-4068-a563-e28fe36e23b6** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/routes/resolver/$address/create-alias.tsx:88
+- [x] **0b4f3808-9f8a-4594-a8c3-7cc40d5b69cd** — Medium — `manager` — worker-configuration.gen.d.ts:4847
+- [x] **0bf41fd6-81f4-48ba-8bc8-cbb2a6dbeba7** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/lib/reverseRegistrarChainId.test.ts:29
+- [x] **0c286846-d542-4693-b8a9-1b92d7452c7e** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/session.test.ts:95
+- [x] **0dd664f7-bad7-4a99-b60c-07fe8936fc21** — High — `explorer` — worker-configuration.d.ts:306
+- [x] **0debd388-5691-4f64-b70c-162f0ac2d237** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/actors/eoa-transport.actor.ts:40
+- [x] **0fdcee5f-bcd4-4f31-8030-08245989a15c** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/hooks/useFundWallet.ts:12
+- [x] **11ed9536-90d4-4d15-a726-313241190c38** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/lib/wallet/WalletLifecycle.tsx:20
+- [x] **14d7457f-3af9-451a-b181-c14d7e923e48** — High — `workers` — api-worker/worker-configuration.gen.d.ts:430
+- [x] **158e543c-1b17-42d3-8d9f-809148d47d64** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/worker-configuration.gen.d.ts:42
+- [x] **182eed95-7e87-45d4-8625-9bd4bba5ffdb** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/transfer/hooks/useTransferName.ts:55
+- [x] **193e6b30-04fa-4d92-a893-2993489662af** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/utils/blockExplorer/verifyProxyContract.ts:79
+- [x] **1a80497d-26aa-4833-b997-74a44cecab49** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:293
+- [x] **1c1c8a3a-b41d-42e1-bdda-67a4338f9636** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/app/routes/wallet/index.ts:275
+- [x] **1e2f6f84-932c-48b7-a8d5-0e017d6bc976** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/lib/wallet/WalletLifecycle.tsx:50
+- [x] **1f74aa76-fdc8-4887-a403-2acb3179745c** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/registration-calls.test.ts:50
+- [x] **21707259-8559-427c-bfbb-3f35fe1f4ba4** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/renew/hooks/useRenewalTransactions.ts:215
+- [x] **258b3d11-2e06-4f22-bcf7-5c848240e79a** — High — `manager` — src/utils/backend-client.ts:132
+- [x] **263a6fb8-3d65-4210-8d70-7ef3882f00fe** — Medium — `transaction-manager` — src/machines/transaction.machine.ts:602
+- [x] **27147580-2bcd-4737-b604-949846e24106** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/register-v2/state/registrationUi.machine.ts:533
+- [x] **2761ec52-55f2-4bb7-8361-b063af594af5** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/register/hooks/useRegistrationTransactions.ts:70
+- [x] **2796c9e4-e670-41ea-84fd-65500b72ceca** — High — `explorer` — src/worker/avatar.test.ts:163
+- [x] **2a8cfa10-5d31-4f5c-8675-13cb2cf3bc4a** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.actors.ts:936
+- [x] **2bbe1f89-38e4-4fda-b5bb-f78396915014** — High — `workers` — api-worker/src/services/delivery/push.ts:111
+- [x] **2c07de0a-435a-464d-986f-ddbc3f80df00** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/hooks/useSmartSessions.test.ts:57
+- [x] **2d77eef1-2bcc-454e-ae1a-9a71376a507d** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/service/v1SubgraphClient.ts:89
+- [x] **2e5a5126-4dcf-44e4-8114-2d15feb24ea2** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/renew/hooks/useRenewalTransactions.ts:169
+- [x] **30802ebe-2629-417c-bf8f-c1952abd8a46** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/service/buildAtomicMigrationBatches.test.ts:249
+- [x] **32105eaa-4f5c-417f-b179-98cfbc14c38f** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/sendgrid/contacts.ts:189
+- [x] **325f9ddf-5260-4aa4-a975-5a84b1823364** — Medium — `manager` — worker-configuration.gen.d.ts:4848
+- [x] **3420de4a-f37d-4227-ac66-f598a0f270b1** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/utils/blockExplorer/verifyProxyContract.ts:79
+- [x] **358db667-9c21-46ee-9d41-a87d65658478** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/reverse-resolution/hooks/useSetL2ReverseName.ts:82
+- [x] **36a68c90-d56d-46cd-a638-f88e1fa561af** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/actors/eoa-transport.actor.ts:53
+- [x] **36bf9ab6-4c12-4562-9c81-8536aeb6adbd** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/transaction-manager/components/EstimatedGasCost.tsx:92
+- [x] **38260b78-fffb-469e-a9cc-4698b2d0a80a** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/v1-names/index.ts:73
+- [x] **3830c1b5-f1b3-4b2d-8f95-80b281b9d193** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/service/v1SubgraphClient.test.ts:22
+- [x] **397531f2-0312-4300-9887-eb76f193859b** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.ts:972
+- [x] **3a8e7e09-0522-4a6c-bcfc-69335c30685e** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/roles/hooks/useGrantRoles.ts:27
+- [x] **3b9a5d32-2e10-4dc9-8c3e-d113b3f3f678** — Medium — `manager` — public/push-sw.js:76
+- [x] **3cbddefa-1e42-4932-9e4f-65794fea5b5e** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/utils/transformRecords.test.ts:202
+- [x] **3d360e41-2519-4a9e-8389-cb1538ed41b9** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/service/profileNfts.ts:229
+- [x] **400afdf6-727b-4573-a22d-5aa1c70faa69** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.ts:791
+- [x] **4107f242-541a-4a6e-8355-c22fc037e30d** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/forward-resolution/components/AddressResolution/networks.ts:45
+- [x] **4147ccf0-b2f3-4a31-a357-a02abff027b1** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.ts:652
+- [x] **42142072-6843-46db-9dba-fa91b8522730** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/service/v1SubgraphClient.ts:178
+- [x] **4514173c-d357-4b65-bf2e-625cfaba9998** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/worker/og-render.ts:15
+- [x] **4691b1bc-3ca2-4ec3-bee3-574b1662451c** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/session.test.ts:124
+- [x] **46eb11a5-13db-4671-966f-5e0c41422dd6** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/telegram/utils.ts:62
+- [x] **4897e974-4f98-4986-8bfc-b8b2d187d171** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:330
+- [x] **49dee830-688a-4bc7-8e19-e647c7a4bbb5** — High — `explorer` — worker-configuration.d.ts:402
+- [x] **4aec4cfb-ef5d-41f0-8421-1ae2598e8070** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/utils/transformRecords.ts:54
+- [x] **4b083668-26b7-471e-a639-bac52416e577** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/lib/reverseRegistrarChainId.test.ts:82
+- [x] **4cbf281d-709f-47af-bf01-29240ba8afa4** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/session-storage.ts:48
+- [x] **4eee4df4-2d85-4b83-a352-07514aae39ef** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/helpers/transaction-persistence.ts:215
+- [x] **5201c5e1-bf58-4a93-a54c-240ac5214bee** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/notifications/utils/telegram/auth.ts:48
+- [x] **526ae3e1-6f67-464b-ac6c-96415c973c02** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/forward-resolution/components/AddressResolution/AddressResolutionSidebar.tsx:461
+- [x] **52f64342-678c-450a-ad3f-ebd00e0dbf4b** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/helpers/hca-intent-funding.test.ts:77
+- [x] **54694fc7-ae99-44ab-a7dc-a20296531fa1** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/initialize-account.test.ts:50
+- [x] **5694e2bb-bc21-4940-9cbc-8f3b517ec9e1** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/initialize-account.test.ts:430
+- [x] **56cbd109-00b8-4eb9-8763-0d00cd6cceea** — Medium — `explorer` — worker-configuration.d.ts:4818
+- [x] **56d7691a-dd60-4951-be3e-11a9f8928f77** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/sendgrid/contacts.ts:231
+- [x] **588a59ff-49de-467c-82bb-db5ac9f8a2bc** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/service/migrationInvariants.ts:254
+- [x] **5a349b72-dfc3-431b-bdd1-9a99f871c0ba** — High — `manager` — worker-configuration.gen.d.ts:313
+- [x] **5b7028d5-3aba-4122-b69a-a9134f5ad78c** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/service/buildAtomicMigrationBatches.test.ts:101
+- [x] **5bfb84e7-7699-457a-8fb8-381c777d4dce** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/roles/hooks/useNameRoleAccounts.ts:100
+- [x] **5cc3fb86-8291-4640-bfab-f42b35f81a3c** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/registration-calls.test.ts:60
+- [x] **5ed8bdaf-e735-4a48-88ee-7832329c5dc7** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/utils/xstate-store.ts:28
+- [x] **60696e5c-caa7-4e65-b3ae-9c02fb2a885b** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/registration-calls.test.ts:41
+- [x] **61479628-9b38-4184-92d1-3a57a9e39f1d** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.ts:920
+- [x] **61e01e87-3b5e-4e68-827f-fcf2497fa5d0** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.actors.ts:361
+- [x] **62fe78c6-27aa-45df-a4de-6f55eba207a7** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/utils/blockExplorer/getBlockExplorerBaseUrl.ts:8
+- [x] **6383f4c9-9ef0-41f9-a4a0-53d00dcfb294** — Medium — `workers` — api-worker/worker-configuration.gen.d.ts:4846
+- [x] **639f19f1-5307-4151-97a5-7af07fb14dd5** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/lib/reverseRegistrarChainId.test.ts:60
+- [x] **6414b8bd-9483-4a25-a5ac-b7634a51c4ac** — Medium — `explorer` — worker-configuration.d.ts:4819
+- [x] **6497cb09-a14e-495d-9999-ce0d09ad18aa** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/initialize-account.ts:363
+- [x] **682b7a56-d625-4693-9375-a3cb1579bb5d** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/service/profileNfts.ts:198
+- [x] **691295fc-051d-4971-8a4e-d61ae40804bf** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/v1-names/index.test.ts:37
+- [x] **695acca5-a886-46e2-a692-e3259c86297b** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/actors/eoa-transport.actor.test.ts:51
+- [x] **6a0358bd-3369-4db2-9460-9cd6a8f1cd2c** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/lib/smart-account/rhinestone.ts:100
+- [x] **6aa43acf-0e5e-4c62-9db5-fb50c8b70734** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/routes/$name/fuses/burn.tsx:54
+- [x] **6c38297a-865b-416c-89bd-dab8c8cc51c0** — Medium — `transaction-manager` — src/machines/transaction.machine.ts:519
+- [x] **6df48a2b-c2d8-440a-84b4-f9c653ec88f9** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/lib/reverseRegistrarChainId.test.ts:54
+- [x] **6f182646-5141-45f3-8c58-20112b6ff3de** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:307
+- [x] **7032aba5-66db-4c3b-bb46-0e7e04a3f697** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/public/push-sw.js:37
+- [x] **7262d582-e0a5-4d5b-b17a-d0c6db3c8137** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.actors.ts:1051
+- [x] **7299b3e1-862c-4ec8-8981-6d3c557d9f60** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/session.ts:85
+- [x] **736096a3-3874-4aa4-968f-cbbd8cd71ff2** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/components/dialogs/edit-profile/tabs/contact/records.ts:156
+- [x] **7366ce05-e73f-4c74-a81e-6c4ad0d71377** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/routes/$name/edit-records.tsx:294
+- [x] **77d213d8-9268-4cce-96b0-4d44fa706459** — High — `manager` — src/features/migration/service/v1SubgraphClient.ts:178
+- [x] **79285505-6ee4-4117-9675-90567b5fcdb3** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/resolver/components/ResolverAddUserSheet.tsx:108
+- [x] **7a0822f3-85fa-4ca3-b3ab-0093266f9ad8** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/email/utils.ts:30
+- [x] **7c2af595-eb82-4c7e-88d6-29698dbe77ce** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/register-v2/data/queries/hcaBudget.query.ts:127
+- [x] **7d24f7da-623c-4706-a60f-21c753e145c5** — High — `explorer` — src/worker/avatar.ts:10
+- [x] **7d47e729-12d6-4c9c-b4b5-1f319456c0c2** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:38
+- [x] **7d6c0b1d-75e7-4961-9baf-2a5327fbfdca** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/utils/blockExplorer/verifyProxyContract.ts:45
+- [x] **7e5b5bbf-febb-40b2-855c-33b4fc0f20eb** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/transaction.machine.ts:270
+- [x] **80b95832-9e75-4f63-9169-9392c86b627d** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/notifications/utils/telegram/auth.ts:79
+- [x] **8290ccaa-317e-4d74-abe3-06588be69280** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:341
+- [x] **82a77fa8-4e31-4be0-b066-60bda7478503** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:90
+- [x] **82ad666e-4602-4d06-b6e4-d66526442fc4** — Medium — `transaction-manager` — src/machines/transaction.machine.ts:482
+- [x] **87bde052-08aa-42b6-a67f-d93fd4409344** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/notifications/email-verification-rate-limit.test.ts:83
+- [x] **880bc8df-ca0f-445a-abda-03daf6379a85** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/resolver/components/ResolverRolesSidebar.tsx:156
+- [x] **8b44bca6-69f7-4373-93b9-663c3b6c0c5d** — High — `manager` — worker-configuration.gen.d.ts:411
+- [x] **8fcffcf2-afd7-4b8c-82e9-8dcbe32bbee6** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/utils/xstate-store.test.ts:127
+- [x] **9045072b-669c-40f5-a3aa-aff71eab1cb8** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/routes/resolver/$address/aliases.tsx:143
+- [x] **906d7363-2cb7-4899-a418-e52306b0106a** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/worker/avatar.ts:265
+- [x] **913f5543-652d-4800-b5fd-47fdc33af677** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/dashboard/utils/formatActivityEvent.ts:109
+- [x] **92259d86-94f2-4117-b376-02357dec3154** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/budget.test.ts:20
+- [x] **92bae1ca-d689-476b-86e6-e128dbb42605** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/notifications/email-verification-rate-limit.ts:42
+- [x] **9328f7d5-3526-4b8b-aa56-654afeec4941** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/registry/utils/create-subname.helpers.test.ts:36
+- [x] **9372a195-d023-4831-bd68-64952dc7a805** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/commemorative-nft/eligibility.test.ts:147
+- [x] **94041bdf-c440-4d02-a2a6-3e754b326c19** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:289
+- [x] **94fcdf25-5852-46fc-ae86-2d62db3bf1bb** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.actors.ts:498
+- [x] **95f4f4e4-9666-4ade-ac53-7acabd8e8ed3** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/lib/reverseRegistrarChainId.test.ts:57
+- [x] **9604bda4-439c-40c2-987f-74515c7e9616** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/expiry-discovery/index.test.ts:19
+- [x] **994d54b1-86b6-4ad7-964d-d9dff7b48439** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/helpers/transaction-persistence.ts:250
+- [x] **9a45ee01-a93b-4bdb-bbc7-710f3cf3c6f7** — High — `manager` — src/features/profile/service/profileImageUpload.ts:150
+- [x] **9bea9060-3679-45c4-9219-a116b264177f** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/hooks/useSmartSessions.test.ts:76
+- [x] **9d54f8ca-ff21-423c-b737-bff5fe42b09a** — High — `workers` — api-worker/worker-configuration.gen.d.ts:1869
+- [x] **9e6d8cc4-9bb3-4f98-85c1-6bd793dbe55d** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/registry/hooks/useSetSubregistry.ts:31
+- [x] **9f2bb4fd-436e-461d-bacb-1608632442cc** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/utils/blockExplorer/getBlockExplorerAddressUrl.ts:9
+- [x] **a21506e1-c135-477e-a6d9-a72b9af5193f** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/expiry-discovery/cursors.test.ts:90
+- [x] **a2c89d7f-2920-44bf-ba3c-b8f30460a01f** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:206
+- [x] **a3332d64-ab7c-49c2-b5d8-166bef4fd443** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/roles/hooks/useRevokeRoles.ts:27
+- [x] **a3b9c114-1626-43cb-bb30-daf72a91849b** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/registry/components/v2/RegistryTree.tsx:9
+- [x] **a420f523-0127-46f0-a865-129dc163db11** — Medium — `transaction-manager` — src/machines/transaction.machine.ts:574
+- [x] **a55a94b2-8975-4770-9a81-0ad38d022c8e** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.machine.test.ts:87
+- [x] **a59934e1-4fb3-4a2c-8acf-8470be7a222a** — High — `workers` — api-worker/src/services/v1-names/index.ts:73
+- [x] **a74e897d-1b06-4ecc-a545-b9ef33e295a5** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/records/hooks/useSaveRecords.ts:40
+- [x] **a7c0a382-5801-4140-9d9b-74764d21d631** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/expiry-discovery/cursors.test.ts:11
+- [x] **a90de410-dbe7-482f-aad7-ea23bf5799ff** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/roles/components/RoleHistoryTable.tsx:42
+- [x] **a9120b96-d57f-46b8-9cfd-f73a1ba2d4db** — High — `explorer` — worker-configuration.d.ts:1841
+- [x] **a9140ece-e439-44b3-b9b2-3879eece2f4f** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/session-storage.ts:122
+- [x] **a9bc27d8-7d51-4de0-a6c7-3acce656c25c** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/actors/eoa-transport.actor.test.ts:64
+- [x] **aa47f71f-a452-4f1c-888d-0f2e986c214e** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/worker/safe-fetch.ts:214
+- [x] **ab4fd84b-29e2-4819-b3bb-9454eb21ca13** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/commemorative-nft/config.ts:37
+- [x] **ab7f6b2b-d593-4d43-96b3-0e4a9c7166a5** — Medium — `smart-account` — /home/runner/ens-audit/repos/audit-comp-ens/packages/smart-account/src/providers/rhinestone/session-storage.ts:133
+- [x] **acc2d84c-421b-448a-9fdf-10a57478f4e5** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/service/profileNfts.ts:281
+- [x] **af742eed-7604-45a8-b8df-5d6fddab72ea** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:316
+- [x] **b286a109-3b7e-4673-b5d9-ee3502a2a69b** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/lib/reverseRegistrarChainId.test.ts:66
+- [x] **b2de9c31-56dc-486a-bfe1-383659828d4f** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/helpers/transaction-persistence.ts:309
+- [x] **b4516df9-2371-490d-9b7e-8f05781b55d9** — High — `manager` — src/features/migration/service/v1SubgraphClient.ts:89
+- [x] **b57ecdce-814b-4f7a-8573-cd38873d09c3** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:268
+- [x] **b6b7df06-49bd-462c-ac06-d9e935342cb8** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/service/migrationInvariants.ts:279
+- [x] **b7bcb73a-9c00-47ff-b3a4-291a9878ae2f** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.actors.ts:858
+- [x] **baaaa6b4-8a30-4d4c-8949-77f74ce3127c** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/lib/smart-account/SmartAccountContext.tsx:268
+- [x] **bc89ab71-eced-4bfd-9c10-1d2af4c2e25f** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/delivery/push.ts:111
+- [x] **bd43d46d-bdaf-4847-bd79-fc2601a051fc** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/registry/hooks/useRevokeRegistryRoles.ts:26
+- [x] **c125a437-8797-48e1-8403-6d28552833db** — High — `explorer` — src/hooks/useFundWallet.ts:12
+- [x] **c276a945-d835-4e09-afd8-081e789da94b** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:315
+- [x] **c30c8381-fa8f-4d4a-9470-dde5f187e3e6** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/lib/reverseRegistrarChainId.test.ts:83
+- [x] **c3c339b3-47b5-4ef7-b9c0-b02fdb9989e2** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/service/profileNfts.ts:73
+- [x] **c7948e86-f4a9-4a06-98b5-bc9b0efe7849** — Medium — `transaction-manager` — src/machines/transaction.machine.ts:412
+- [x] **c9743652-2c0e-4e1e-acea-2ef0cbc045f5** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/service/profileRecordTransactions.ts:251
+- [x] **c9c2840e-5379-48d9-9a39-2b8cdff28527** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/lib/roles/filterEventsByResource.ts:59
+- [x] **cb542236-2942-4f02-adbb-f78f2ad1f547** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/renew/hooks/useRenewalTransactions.ts:158
+- [x] **cd04e79a-0bcd-4bd1-8e85-4d9c1439e5f4** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:33
+- [x] **cd7ced79-0f35-4c95-9ecc-fd29e375ba46** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/sendgrid/contacts.ts:61
+- [x] **cefbe3f0-1c2d-4f7a-98cc-194347e50455** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/worker/avatar.ts:235
+- [x] **d285752b-1740-495f-83a3-7c7049148e7a** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/resolver/hooks/useChangeResolver.ts:37
+- [x] **d5b87db9-f1e7-4b46-a293-4125f90969b4** — Medium — `workers` — api-worker/worker-configuration.gen.d.ts:4847
+- [x] **d6705198-58d0-421b-9c1c-8d61b2165c74** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/records/helpers/transformPendingChanges.ts:68
+- [x] **d856fd35-829c-44b0-bc75-a56b50dd7dc6** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/service/profileImageUpload.ts:150
+- [x] **d8ef7cc9-5201-4c1b-9960-2a5b3a7f3069** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/resolver/components/EventDetailSheet.tsx:53
+- [x] **da1747ad-419e-4e42-8d84-d3df7ef37ded** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/register-v2/data/queries/hcaBudget.query.ts:113
+- [x] **da85f398-c2e0-4451-88bb-ff09bd3d5358** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/utils/xstate-store.test.ts:93
+- [x] **dcc4e054-e7f9-4c8d-b97d-6f884dfd1964** — Medium — `workers` — /home/runner/ens-audit/repos/audit-comp-ens/workers/api-worker/src/services/sendgrid/contacts.ts:120
+- [x] **deed9b36-c91f-4daa-a68a-9fb5dd644574** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/hooks/useSmartSessions.test.ts:35
+- [x] **e06b1fc1-f97c-4aab-bff5-5241b322d896** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/utils/blockExplorer/verifyProxyContract.ts:45
+- [x] **e0783dd7-1c73-4618-8bc9-55cfe0c85700** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/actors/eoa-transport.actor.ts:46
+- [x] **e2d2338a-d522-481c-9a36-1f5c48e63405** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/registry/hooks/useCreateSubname.ts:25
+- [x] **e3b89d83-8c1c-4e23-9434-feec2755a29d** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/utils/blockExplorer/getBlockExplorerTxUrl.ts:9
+- [x] **e41ced31-52c0-481b-b079-96b1913a13e0** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/resolver/hooks/useDeployPermissionedResolver.ts:125
+- [x] **e74363ff-3c14-4047-8765-05ea5f40ae77** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/migration/service/migrationBatchJournal.ts:126
+- [x] **e74721e0-d79f-43b4-8e4a-6c016143c3e2** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.ts:639
+- [x] **e8c0fe1f-205e-400b-bf5c-e5f8a5e09f28** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/utils/backend-client.ts:132
+- [x] **e9d3ae1a-9b31-493c-a232-606593f86d31** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:501
+- [x] **ea7d5a1b-ea59-42f7-ae50-9a5194bd8d81** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/registry/hooks/useDeploySubregistry.ts:21
+- [x] **eac9bf75-16c3-4e88-aa33-dcd3fc304b45** — Medium — `explorer` — /home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/features/registry/hooks/useDeleteSubname.ts:62
+- [x] **ecfed7ef-4846-4bc1-8da7-052c681832f8** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/types/signer.types.ts:39
+- [x] **ed79ec9f-0174-4032-8b86-7904d97cb0d6** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/features/profile/utils/validateAbi.ts:21
+- [x] **f4a0ce3f-d3b2-4cdd-9596-f20467ee36b7** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/lib/smart-account/SmartAccountContext.tsx:538
+- [x] **f6966872-ee53-4d69-8a66-97ae94d9ea16** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/utils/xstate-store.test.ts:43
+- [x] **f6cb638d-9bb8-4430-a9f5-039b81d8a570** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/machines/registration/registration.hca.actors.test.ts:283
+- [x] **f7bbbd6f-1bb1-4664-a601-f5820f282c57** — Medium — `transaction-manager` — /home/runner/ens-audit/repos/audit-comp-ens/packages/transaction-manager/src/helpers/transaction-persistence.ts:394
+- [x] **fa727e40-9feb-4ae9-b4c9-d484b54000a5** — High — `manager` — src/utils/backend-client.ts:131
+- [x] **fc56b97e-26f3-4c41-b18d-d336e28867fa** — Medium — `manager` — /home/runner/ens-audit/repos/audit-comp-ens/apps/manager/src/utils/backend-client.ts:131
+
+## Insights
+
+
+## Counts
+
+- New: 193
+- Escaped: 7
+- Suppressed: 0
+- Informational: 0
+- Rejected: 0
+- Submission ready: 199
+- Submission incomplete: 0

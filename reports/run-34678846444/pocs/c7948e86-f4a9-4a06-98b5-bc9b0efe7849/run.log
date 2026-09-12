@@ -1,0 +1,11 @@
+finding_id=c7948e86-f4a9-4a06-98b5-bc9b0efe7849
+severity=Medium
+asset=transaction-manager
+rule_id=custom-xstate:undefined-target
+matched_known_id=None
+escape_reason=None
+source=packages/transaction-manager/src/machines/transaction.machine.ts:412
+source_line=target: 'error.preparation',
+scanner_evidence=preparing -> error.preparation
+evidence_exact_line_match=False
+POC_OK offline source trace reproduced

@@ -1,0 +1,29 @@
+{
+  "asset": "manager",
+  "confidence": 0.65,
+  "cwe": null,
+  "description": "A modeled untrusted source reaches a sensitive sink without an observed sanitizer.",
+  "escape_reason": "severity_escalation",
+  "evidence": "return sw.clients.openWindow(url);",
+  "id": "3b9a5d32-2e10-4dc9-8c3e-d113b3f3f678",
+  "impact": "",
+  "known_severity": "Low",
+  "location": {
+    "column": 0,
+    "file": "public/push-sw.js",
+    "function": null,
+    "line": 76
+  },
+  "matched_known_id": "EXP-INPUT-009",
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "unvalidated_navigation_url",
+  "rule_id": "custom-ts:untrusted-navigation-url",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Tainted input reaches untrusted navigation url"
+}

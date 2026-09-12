@@ -1,0 +1,26 @@
+{
+  "asset": "explorer",
+  "confidence": 1.0,
+  "cwe": null,
+  "description": "Child process execution uses shell mode or a constructed command string.",
+  "evidence": "Child process execution uses shell mode or a constructed command string.",
+  "id": "4514173c-d357-4b65-bf2e-625cfaba9998",
+  "impact": "",
+  "location": {
+    "column": 33,
+    "file": "/home/runner/ens-audit/repos/audit-comp-ens/apps/portal/src/worker/og-render.ts",
+    "function": null,
+    "line": 15
+  },
+  "notes": "",
+  "recommendation": "",
+  "references": [],
+  "reproducer": null,
+  "root_cause": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-shell-true-or-interpolated-command",
+  "rule_id": "home.runner.work.test.test.ens-audit-runner.src.ens_audit.rules.ens-shell-true-or-interpolated-command",
+  "severity": "Medium",
+  "stage": "sast",
+  "status": "open",
+  "suppressed_by": null,
+  "title": "Child process execution uses shell mode or a constructed command string."
+}
