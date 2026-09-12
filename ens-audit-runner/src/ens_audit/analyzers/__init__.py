@@ -8,8 +8,8 @@ from .xstate_analyzer import XStateAnalyzer
 
 __all__ = [
     "PromptInjectionAnalyzer",
-    "SolidityAnalyzer",
     "SSRFAnalyzer",
+    "SolidityAnalyzer",
     "TypeScriptAnalyzer",
     "XStateAnalyzer",
 ]
