@@ -27,9 +27,18 @@ install_pipx_tool() {
 
 install_pipx_tool "semgrep" "semgrep"
 install_pipx_tool "slither-analyzer" "slither"
-install_pipx_tool "mythril" "myth"
+install_pipx_tool "bandit" "bandit"
 install_pipx_tool "pip-audit" "pip-audit"
 install_pipx_tool "detect-secrets" "detect-secrets"
+
+if ! command -v myth >/dev/null 2>&1; then
+  if command -v python3.10 >/dev/null 2>&1; then
+    pipx install --python "$(command -v python3.10)" mythril
+  else
+    echo "Mythril skipped: upstream PyPI guidance supports Python 3.7-3.10 and python3.10 is not installed." >&2
+    echo "Install a Python 3.10 interpreter in WSL, then run: pipx install --python python3.10 mythril" >&2
+  fi
+fi
 
 if ! command -v uv >/dev/null 2>&1; then
   curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -101,6 +110,10 @@ PY
   install -m 0755 "$echidna_path" "$HOME/.local/bin/echidna"
 fi
 
+if command -v npm >/dev/null 2>&1 && ! command -v snyk >/dev/null 2>&1; then
+  echo "Optional Snyk CLI is not installed. Official npm install command: npm install -g snyk"
+fi
+
 cat <<'EOF'
 
 WSL analyzer setup complete.
@@ -110,7 +123,7 @@ Ensure this line is present in your shell profile if a new terminal cannot find 
 Installed/verified commands:
 EOF
 
-for command_name in semgrep slither myth halmos forge echidna pip-audit detect-secrets; do
+for command_name in semgrep slither bandit myth halmos forge echidna pip-audit detect-secrets; do
   if command -v "$command_name" >/dev/null 2>&1; then
     printf '  %-16s %s\n' "$command_name" "$(command -v "$command_name")"
   else
