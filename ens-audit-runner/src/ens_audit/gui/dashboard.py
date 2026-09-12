@@ -6,7 +6,7 @@ from collections import Counter
 from typing import ClassVar
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QColor, QPaintEvent, QPainter
+from PySide6.QtGui import QColor, QPainter, QPaintEvent
 from PySide6.QtWidgets import (
     QGridLayout,
     QGroupBox,
