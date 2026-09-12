@@ -1,0 +1,11 @@
+{
+  "name": "ens-audit-tooling",
+  "private": true,
+  "packageManager": "pnpm@10.27.0",
+  "scripts": {
+    "check": "pnpm -r --if-present typecheck && pnpm -r --if-present test",
+    "mutate:userop": "pnpm --filter @audit/userop-mutator start",
+    "stress:ens": "pnpm --filter @audit/ens-normalizer start",
+    "hydrate": "pnpm --filter @audit/state-hydrator start"
+  }
+}
