@@ -6,6 +6,7 @@ import asyncio
 import threading
 from collections.abc import Callable
 from pathlib import Path
+from typing import Protocol
 from uuid import UUID
 
 from ens_audit.config import ACTIVE_UPSTREAM_COMMIT, DATABASE_PATH
@@ -22,6 +23,13 @@ from ens_audit.pipeline.store import AnalysisStore
 
 ProgressCallback = Callable[[str, str, int, int], None]
 LogCallback = Callable[[str], None]
+
+
+class AnalysisStage(Protocol):
+    """Structural interface implemented by every per-asset analysis stage."""
+
+    async def run(self, asset: Asset) -> list[Finding]:
+        """Analyze one validated asset and return normalized findings."""
 
 
 class PipelineCancelled(RuntimeError):
@@ -204,10 +212,13 @@ class PipelineOrchestrator:
         self.store.save_stage(run_id, "__all__", "report", [], succeeded=True)
         return report
 
-    def _analysis_stages(self, selected: tuple[str, ...]) -> tuple[tuple[str, object], ...]:
+    def _analysis_stages(
+        self,
+        selected: tuple[str, ...],
+    ) -> tuple[tuple[str, AnalysisStage], ...]:
         """Return selected analyzer stages in mandatory dependency order."""
 
-        available: tuple[tuple[str, object], ...] = (
+        available: tuple[tuple[str, AnalysisStage], ...] = (
             ("sast", self.stage_sast),
             ("symbolic", self.stage_symbolic),
             ("fuzz", self.stage_fuzz),
@@ -232,14 +243,13 @@ class PipelineOrchestrator:
     async def _run_stage(
         self,
         name: str,
-        stage: object,
+        stage: AnalysisStage,
         asset: Asset,
     ) -> tuple[list[Finding], bool]:
         """Run one analyzer and return findings plus an explicit success state."""
 
         try:
-            run_method = getattr(stage, "run")
-            findings: list[Finding] = await run_method(asset)
+            findings = await stage.run(asset)
             self._log(f"complete {asset.name}:{name}; findings={len(findings)}")
             return findings, True
         except PipelineCancelled:
